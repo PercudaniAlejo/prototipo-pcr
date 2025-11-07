@@ -52,14 +52,12 @@ dotnet build
 dotnet test
 ```
 
-## 🐛 Debug en VS Code (RECOMENDADO)
+## 🐛 Debug en VS Code
 
 **Opción más fácil - Todo automático:**
 1. Presiona `F5` en VS Code
 2. Selecciona "🚀 Full Stack Debug (Blazor + Tailwind)"
 3. ¡Listo! Ambos procesos (Blazor + Tailwind) inician automáticamente
-
-Ver [.vscode/README-DEBUG.md](.vscode/README-DEBUG.md) para más detalles.
 
 **Opción manual (dos terminales):**
 
@@ -85,24 +83,9 @@ dotnet watch --project src/Presentation/PCR.Web.Server
    ```
 3. **Tailwind CSS**: El CSS se compila automáticamente en desarrollo
 
-## 📝 Próximos Pasos
-
-1. Configurar MudBlazor en `Program.cs`
-2. Crear primeras entidades de dominio
-3. Implementar casos de uso con MediatR
-4. Configurar DbContext y migraciones
-5. Crear componentes reutilizables con MudBlazor + Tailwind
-
 ## 📚 Documentación Completa
 
 ### 📖 Guías Principales
 
 - **[Stack Tecnológico](docs/TECHNICAL-STACK.md)** - Tecnologías, librerías y versiones utilizadas
 - **[Guía de Desarrollo](docs/DEVELOPMENT-GUIDE.md)** - Setup, convenciones y workflow de desarrollo
-
-### 🎯 Inicio Rápido
-
-1. **Tecnologías**: Ver [TECHNICAL-STACK.md](docs/TECHNICAL-STACK.md) para conocer el stack completo
-2. **Arquitectura**: Entender la estructura en [ARCHITECTURE.md](docs/ARCHITECTURE.md)
-3. **Desarrollo**: Configurar entorno con [DEVELOPMENT-GUIDE.md](docs/DEVELOPMENT-GUIDE.md)
-4. **Features**: Conocer funcionalidades en [FEATURES.md](docs/FEATURES.md)

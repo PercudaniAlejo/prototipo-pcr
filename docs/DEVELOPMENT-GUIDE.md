@@ -167,42 +167,6 @@ prototipo-pcr-blazor/
 
 ---
 
-### Organización de Archivos
-
-#### Features (Vertical Slices)
-
-Cada feature debe contener:
-
-```
-Features/
-└── Contracts/
-    ├── Commands/
-    │   ├── CreateContractCommand.cs
-    │   └── UpdateContractCommand.cs
-    ├── Queries/
-    │   ├── GetAllContractsQuery.cs
-    │   └── GetContractByIdQuery.cs
-    ├── DTOs/
-    │   └── ContractDto.cs
-    └── Validators/
-        └── CreateContractValidator.cs
-```
-
-#### Componentes Blazor
-
-```
-Components/
-└── Pages/
-    └── Contracts/
-        ├── ContractList.razor          # Página principal
-        ├── ContractList.razor.cs       # Code-behind (si es necesario)
-        ├── ContractForm.razor          # Formulario
-        └── _Shared/                    # Componentes compartidos
-            └── ContractCard.razor
-```
-
----
-
 ### Comandos EF Core
 
 ```powershell
