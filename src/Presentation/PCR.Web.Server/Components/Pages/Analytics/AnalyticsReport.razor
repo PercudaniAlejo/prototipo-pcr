@@ -1,0 +1,91 @@
+@page "/analytics"
+@inject IJSRuntime JS
+
+<h1 class="text-2xl font-bold text-gray-800 mb-6">Análisis Gráfico de Facturación (MWh)</h1>
+
+<div class="bg-white rounded-lg shadow-md p-4 mb-6 flex items-center gap-4">
+    <div class="flex items-center gap-2">
+        <label for="period-select-mwh" class="text-sm font-medium text-gray-700">Comparar Meses:</label>
+        <select @bind="selectedPeriod" @bind:after="UpdateCharts" class="border border-gray-300 rounded-md px-3 py-1 text-sm focus:ring-blue-500 focus:border-blue-500">
+            <option value="3">Últimos 3 meses</option>
+            <option value="6">Últimos 6 meses</option>
+            <option value="12">Últimos 12 meses</option>
+        </select>
+    </div>
+</div>
+
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+    <div class="lg:col-span-2 bg-white rounded-xl shadow-lg p-6">
+        <h2 class="text-xl font-semibold text-gray-800 mb-4">MWh Facturados - Total Mensual</h2>
+        <div style="height: 400px;">
+            <canvas id="mwhBarChart"></canvas>
+        </div>
+    </div>
+
+    <div class="bg-white rounded-xl shadow-lg p-6">
+        <h2 class="text-xl font-semibold text-gray-800 mb-4">Proporción por Cliente (MWh Acumulado)</h2>
+        <div class="relative flex justify-center" style="height: 400px;">
+            <canvas id="clientDonutChart"></canvas>
+        </div>
+    </div>
+</div>
+
+@code {
+    private int selectedPeriod = 3;
+
+    // Datos históricos de MWh para Analytics
+    private List<AnalyticsDataDto> fullAnalyticsData = new List<AnalyticsDataDto>
+    {
+        new AnalyticsDataDto { Month = "2024-07", C1 = 1500, C2 = 800, C3 = 3500, C4 = 1000, Total = 6800 },
+        new AnalyticsDataDto { Month = "2024-08", C1 = 1800, C2 = 900, C3 = 4000, C4 = 1100, Total = 7800 },
+        new AnalyticsDataDto { Month = "2024-09", C1 = 2000, C2 = 1000, C3 = 4200, C4 = 1300, Total = 8500 },
+        new AnalyticsDataDto { Month = "2024-10", C1 = 2200, C2 = 1100, C3 = 4400, C4 = 1400, Total = 9100 },
+        new AnalyticsDataDto { Month = "2024-11", C1 = 2150, C2 = 1150, C3 = 4450, C4 = 1450, Total = 9200 },
+        new AnalyticsDataDto { Month = "2024-12", C1 = 2100, C2 = 1200, C3 = 4500, C4 = 1500, Total = 9300 },
+        new AnalyticsDataDto { Month = "2025-01", C1 = 2000, C2 = 1300, C3 = 4600, C4 = 1600, Total = 9500 },
+        new AnalyticsDataDto { Month = "2025-02", C1 = 1900, C2 = 1400, C3 = 4700, C4 = 1700, Total = 9700 },
+        new AnalyticsDataDto { Month = "2025-03", C1 = 2100, C2 = 1500, C3 = 4800, C4 = 1800, Total = 10200 },
+        new AnalyticsDataDto { Month = "2025-04", C1 = 2200, C2 = 1600, C3 = 4900, C4 = 1900, Total = 10600 },
+        new AnalyticsDataDto { Month = "2025-05", C1 = 2300, C2 = 1700, C3 = 5000, C4 = 2000, Total = 11000 },
+        new AnalyticsDataDto { Month = "2025-06", C1 = 2400, C2 = 1800, C3 = 5100, C4 = 2100, Total = 11400 }
+    };
+
+    private string[] clientNames = new[] { "Cliente 1 (C1)", "Cliente 2 (C2)", "Cliente 3 (C3)", "Cliente 4 (C4)" };
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await UpdateCharts();
+        }
+    }
+
+    private async Task UpdateCharts()
+    {
+        var slicedData = fullAnalyticsData.Take(selectedPeriod).ToList();
+        var monthlyLabels = slicedData.Select(d => d.Month).ToArray();
+        var monthlyData = slicedData.Select(d => d.Total).ToArray();
+
+        var clientTotals = new Dictionary<string, int>
+        {
+            ["Cliente 1 (C1)"] = slicedData.Sum(d => d.C1),
+            ["Cliente 2 (C2)"] = slicedData.Sum(d => d.C2),
+            ["Cliente 3 (C3)"] = slicedData.Sum(d => d.C3),
+            ["Cliente 4 (C4)"] = slicedData.Sum(d => d.C4)
+        };
+
+        var clientData = clientNames.Select(name => clientTotals[name]).ToArray();
+
+        await JS.InvokeVoidAsync("updateAnalyticsCharts", monthlyLabels, monthlyData, clientNames, clientData, selectedPeriod);
+    }
+
+    public class AnalyticsDataDto
+    {
+        public string Month { get; set; } = string.Empty;
+        public int C1 { get; set; }
+        public int C2 { get; set; }
+        public int C3 { get; set; }
+        public int C4 { get; set; }
+        public int Total { get; set; }
+    }
+}

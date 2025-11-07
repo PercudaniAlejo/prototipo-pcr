@@ -1,0 +1,43 @@
+using PCR.Web.Server.Components;
+using PCR.Core.Application.Features.Auth.Commands;
+using Flowbite.Services;
+
+var builder = WebApplication.CreateBuilder(args);
+
+// Add MediatR - Escanear el assembly de Application
+builder.Services.AddMediatR(cfg =>
+{
+    cfg.RegisterServicesFromAssembly(typeof(LoginCommand).Assembly);
+});
+
+// Add Flowbite services
+builder.Services.AddFlowbite();
+
+// Add services to the container with Auto render mode support
+builder.Services.AddRazorComponents()
+    .AddInteractiveServerComponents()
+    .AddInteractiveWebAssemblyComponents();
+
+var app = builder.Build();
+
+// Configure the HTTP request pipeline.
+if (!app.Environment.IsDevelopment())
+{
+    app.UseExceptionHandler("/Error", createScopeForErrors: true);
+    app.UseHsts();
+}
+
+app.UseStatusCodePagesWithReExecute("/not-found", createScopeForStatusCodePages: true);
+app.UseHttpsRedirection();
+
+app.UseAntiforgery();
+
+
+app.MapStaticAssets();
+
+// Configure Razor Components with Auto render mode
+app.MapRazorComponents<App>()
+    .AddInteractiveServerRenderMode()
+    .AddInteractiveWebAssemblyRenderMode();
+
+app.Run();

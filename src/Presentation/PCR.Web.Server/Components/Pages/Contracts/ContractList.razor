@@ -1,0 +1,100 @@
+@page "/contracts"
+@inject IMediator Mediator
+@inject NavigationManager Navigation
+
+<div class="bg-white rounded-lg shadow-md p-6">
+    <div class="flex justify-between items-center mb-4">
+        <h1 class="text-xl font-bold text-gray-800">Administrar Contratos</h1>
+        <button @onclick="CreateNewContract" 
+                class="px-4 py-2 rounded-md font-semibold text-sm flex items-center justify-center transition-colors bg-green-600 text-white hover:bg-green-700">
+            <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+            </svg>
+            Nuevo Contrato
+        </button>
+    </div>
+    
+    <div class="overflow-x-auto">
+
+		<Table Hoverable="true" Striped="true">
+			<TableHead>
+				<TableRow>
+					<CustomTableHeadCell>Código</CustomTableHeadCell>
+					<CustomTableHeadCell>Cliente</CustomTableHeadCell>
+					<CustomTableHeadCell>Nombre</CustomTableHeadCell>
+					<CustomTableHeadCell>Inicio</CustomTableHeadCell>
+					<CustomTableHeadCell>Finalización</CustomTableHeadCell>
+					<CustomTableHeadCell>MWh Mensual</CustomTableHeadCell>
+					<CustomTableHeadCell>Estado</CustomTableHeadCell>
+					<CustomTableHeadCell>Acciones</CustomTableHeadCell>
+				</TableRow>
+			</TableHead>
+			<TableBody class="divide-y">
+				@foreach (var contract in contracts)
+				{
+					<TableRow class="bg-white">
+						<TableCell class="whitespace-nowrap font-medium text-gray-900">@contract.Code</TableCell>
+						<TableCell>@contract.ClientName</TableCell>
+						<TableCell>@contract.Name</TableCell>
+						<TableCell>@contract.StartDate.ToString("dd/MM/yyyy")</TableCell>
+						<TableCell>@contract.EndDate.ToString("dd/MM/yyyy")</TableCell>
+						<TableCell>@contract.MonthlyEnergy.ToString("N0")</TableCell>
+						<TableCell>
+							<span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full @GetStatusClass(contract.Status)">
+								@contract.Status
+							</span>
+						</TableCell>
+						<TableCell>
+							<TableActions OnEdit="@(() => EditContract(contract))"
+										  OnDelete="@(() => DeleteContract(contract))" />
+						</TableCell>
+					</TableRow>
+				}
+			</TableBody>
+		</Table>
+    </div>
+</div>
+
+@code {
+    private List<ContractDto> contracts = new();
+    private bool isLoading = true;
+
+    protected override async Task OnInitializedAsync()
+    {
+        isLoading = true;
+        var query = new GetAllContractsQuery();
+        var result = await Mediator.Send(query);
+        
+        if (result.Succeeded)
+        {
+            contracts = result.Data!;
+        }
+        isLoading = false;
+    }
+
+    private string GetStatusClass(string status) => status switch
+    {
+        "Activo" => "bg-green-100 text-green-800",
+        "Draft" => "bg-yellow-100 text-yellow-800",
+        "Vencido" => "bg-red-100 text-red-800",
+        _ => "bg-gray-100 text-gray-800"
+    };
+
+    private void CreateNewContract()
+    {
+        // Navegar a la pantalla de nuevo contrato
+        Navigation.NavigateTo("/contracts/new");
+    }
+
+    private void EditContract(ContractDto contract)
+    {
+        // Navegar a la pantalla de edición con el ID del contrato
+        Navigation.NavigateTo($"/contracts/edit/{contract.Id}");
+    }
+
+    private void DeleteContract(ContractDto contract)
+    {
+        // TODO: Implementar lógica de eliminación
+        Console.WriteLine($"Eliminando contrato: {contract.Code}");
+    }
+}

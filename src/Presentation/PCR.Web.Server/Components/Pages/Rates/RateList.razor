@@ -1,0 +1,73 @@
+@page "/rates"
+@inject IMediator Mediator
+
+<div class="card bg-white rounded-lg shadow-md p-6">
+    <div class="flex justify-between items-center mb-4">
+        <h1 class="text-xl font-bold text-gray-800">Administrar Tasas y Divisas</h1>
+        <button class="btn-primary">
+            Exportar a Excel
+        </button>
+    </div>
+
+	<Table Hoverable="true" Striped="true">
+		<TableHead>
+			<TableRow>
+				<CustomTableHeadCell>Nombre</CustomTableHeadCell>
+				<CustomTableHeadCell>Valor</CustomTableHeadCell>
+				<CustomTableHeadCell>Vigencia Hasta</CustomTableHeadCell>
+				<CustomTableHeadCell>Acciones</CustomTableHeadCell>
+			</TableRow>
+		</TableHead>
+		<TableBody class="divide-y">
+			@foreach (var rate in rates)
+			{
+				<TableRow class="bg-white">
+					<TableCell class="whitespace-nowrap font-medium text-gray-900">@rate.Name</TableCell>
+					<TableCell>@rate.Value.ToString("N2")</TableCell>
+					<TableCell>@rate.ValidUntil?.ToString("dd/MM/yyyy")</TableCell>
+					<TableCell>
+						<TableActions OnEdit="@(() => EditRate(rate))" ShowDelete="false" />
+					</TableCell>
+				</TableRow>
+			}
+		</TableBody>
+	</Table>
+</div>
+
+@code {
+    private List<RateDto> rates = new();
+	private bool isLoading = true;
+
+	protected override async Task OnInitializedAsync()
+	{
+		isLoading = true;
+		var query = new GetAllRatesQuery();
+		var result = await Mediator.Send(query);
+
+		if (result.Succeeded)
+		{
+			rates = result.Data!;
+		}
+
+		isLoading = false;
+	}
+
+
+	private string GetActiveClass(bool status)
+	{
+		return status ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800";
+	}
+
+    private void EditRate(RateDto rate)
+    {
+        // TODO: Implementar lógica de edición
+        Console.WriteLine($"Editando tarifa: {rate.Name}");
+    }
+
+    private void DeleteRate(RateDto rate)
+    {
+        // TODO: Implementar lógica de eliminación
+        Console.WriteLine($"Eliminando tarifa: {rate.Name}");
+    }
+}
+

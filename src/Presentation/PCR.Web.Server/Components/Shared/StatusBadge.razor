@@ -1,0 +1,25 @@
+@* Componente para mostrar estado habilitado/deshabilitado *@
+
+<span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full @GetColor()">
+    @GetText()
+</span>
+
+@code {
+    [Parameter]
+    public bool IsEnabled { get; set; }
+
+    [Parameter]
+    public string EnabledText { get; set; } = "Si";
+
+    [Parameter]
+    public string DisabledText { get; set; } = "No";
+
+    [Parameter]
+	public string EnabledColor { get; set; } = "bg-green-100 text-green-800";
+
+    [Parameter]
+	public string DisabledColor { get; set; } = "bg-green-100 text-green-800";
+
+    private string GetColor() => IsEnabled ? EnabledColor : DisabledColor;
+    private string GetText() => IsEnabled ? EnabledText : DisabledText;
+}

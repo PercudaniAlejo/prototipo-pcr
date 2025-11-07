@@ -1,0 +1,47 @@
+<header class="bg-white shadow-sm z-10">
+    <div class="mx-auto px-4">
+        <div class="flex justify-between items-center h-16">
+            <div class="flex items-center">
+                <button
+                    @onclick="@(async () => await OnMenuToggle.InvokeAsync())"
+                    type="button"
+                    class="text-gray-500 focus:outline-none"
+                    title="@(IsCollapsed ? "Expandir menú" : "Colapsar menú")">
+                    <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                    </svg>
+                </button>
+            </div>
+            
+            <div class="flex items-center">
+                <div class="text-right mr-4">
+                    <p class="font-semibold text-sm text-gray-800">@UserDisplayName</p>
+                    <p class="text-xs text-gray-500">Administrador</p>
+                </div>
+                <div class="w-10 h-10 rounded-full bg-blue-500 flex items-center justify-center text-white font-bold">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
+                        <circle cx="12" cy="7" r="4" />
+                    </svg>
+                </div>
+                <button
+                    @onclick="@(async () => await OnLogout.InvokeAsync())"
+                    type="button"
+                    class="ml-4 text-gray-500 hover:text-red-500">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+                        <polyline points="16 17 21 12 16 7" />
+                        <line x1="21" y1="12" x2="9" y2="12" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </div>
+</header>
+
+@code { 
+    [Parameter] public EventCallback OnMenuToggle { get; set; } 
+    [Parameter] public EventCallback OnLogout { get; set; } 
+    [Parameter] public string UserDisplayName { get; set; } = "Usuario";
+    [Parameter] public bool IsCollapsed { get; set; }
+}

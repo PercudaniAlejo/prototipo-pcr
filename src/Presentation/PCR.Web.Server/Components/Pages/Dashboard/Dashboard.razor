@@ -1,0 +1,92 @@
+@page "/dashboard"
+@inject IMediator Mediator
+@inject IJSRuntime JS
+
+<h1 class="text-2xl font-bold text-gray-800 mb-4">Resumen del Proceso de Facturación</h1>
+
+<div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+    <KpiCard Title="MWh TOTALES (Dic 2024)" Value="@kpis.MwhTotalLastMonth.ToString("N0")" Icon="lightning" Color="blue" />
+    <KpiCard Title="MONTO TOTAL (Dic 2024)" Value="@($"${kpis.BilledAmountLastMonth:N0}")" Icon="cash" Color="cyan" />
+    <KpiCard Title="CLIENTES ACTIVOS" Value="@kpis.ActiveClients.ToString()" Icon="users" Color="gray" />
+    <KpiCard Title="DÍAS RESTANTES (Cierre)" Value="@kpis.DaysToCammesaClose.ToString()" Icon="calendar" Color="yellow" />
+</div>
+
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+    <div class="lg:col-span-2 bg-white rounded-xl shadow-lg p-6">
+        <h2 class="text-xl font-semibold text-gray-800 mb-4">Tendencia de MWh Facturados (Últimos 6 Meses)</h2>
+        <div style="height: 300px;">
+            <canvas id="dashboardLineChart"></canvas>
+        </div>
+    </div>
+
+    <div class="bg-white rounded-xl shadow-lg p-6">
+        <h2 class="text-xl font-semibold text-gray-800 mb-4">Recomendaciones Clave</h2>
+        <div class="space-y-4">
+            <div class="p-3 border-l-4 border-blue-500 bg-blue-50 rounded-md">
+                <p class="text-xs font-semibold uppercase text-gray-600">CON001 - PRONÓSTICO MWH</p>
+                <p class="text-lg font-bold text-gray-800 mb-1">62.000 MWh <span class="text-xs font-normal text-blue-600">(Óptimo)</span></p>
+                <p class="text-sm text-gray-700 italic">Mantener precio y buscar extensión del plazo.</p>
+            </div>
+
+            <div class="p-3 border-l-4 border-yellow-500 bg-yellow-50 rounded-md">
+                <p class="text-xs font-semibold uppercase text-gray-600">CON002 - RIESGO DE VENCIMIENTO</p>
+                <p class="text-lg font-bold text-gray-800 mb-1">Alto (Vence 2026-01) <span class="text-xs font-normal text-yellow-600">(Advertencia)</span></p>
+                <p class="text-sm text-gray-700 italic">Iniciar re-negociación con +12 meses de antelación.</p>
+            </div>
+
+            <div class="p-3 border-l-4 border-red-500 bg-red-50 rounded-md">
+                <p class="text-xs font-semibold uppercase text-gray-600">CON003 - PRECIO ARS VS INFLACIÓN</p>
+                <p class="text-lg font-bold text-gray-800 mb-1">Pérdida (15%) <span class="text-xs font-normal text-red-600">(Crítico)</span></p>
+                <p class="text-sm text-gray-700 italic">Revisar cláusula de ajuste o pasar a precio DÓLAR link.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    private DashboardKpisDto kpis = new(0, 0, 0, 0);
+
+    // Datos históricos de MWh para el gráfico de tendencia (últimos 6 meses)
+    private List<DashboardTrendDto> trendData = new List<DashboardTrendDto>
+    {
+        new DashboardTrendDto { Month = "2024-07", Total = 6800 },
+        new DashboardTrendDto { Month = "2024-08", Total = 7800 },
+        new DashboardTrendDto { Month = "2024-09", Total = 8500 },
+        new DashboardTrendDto { Month = "2024-10", Total = 9100 },
+        new DashboardTrendDto { Month = "2024-11", Total = 9200 },
+        new DashboardTrendDto { Month = "2024-12", Total = 9300 }
+    };
+
+    protected override async Task OnInitializedAsync()
+    {
+        var query = new GetDashboardKpisQuery();
+        var result = await Mediator.Send(query);
+
+        if (result.Succeeded)
+        {
+            kpis = result.Data!;
+        }
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await DrawDashboardLineChart();
+        }
+    }
+
+    private async Task DrawDashboardLineChart()
+    {
+        var labels = trendData.Select(d => d.Month).ToArray();
+        var values = trendData.Select(d => d.Total).ToArray();
+
+        await JS.InvokeVoidAsync("drawDashboardLineChart", labels, values);
+    }
+
+    public class DashboardTrendDto
+    {
+        public string Month { get; set; } = string.Empty;
+        public int Total { get; set; }
+    }
+}

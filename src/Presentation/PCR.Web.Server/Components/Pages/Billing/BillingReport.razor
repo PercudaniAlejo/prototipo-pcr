@@ -1,0 +1,182 @@
+@page "/billing"
+@inject IMediator Mediator
+
+
+<div class="bg-white p-6 rounded-xl shadow-lg">
+	<h1 class="text-2xl font-bold text-gray-800 mb-6">Simulación de Facturación (Mock)</h1>
+    <div class="mb-4 grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div>
+            <label class="block text-sm font-medium text-gray-700">Contrato</label>
+            <select @bind="selectedContract" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                <option value="">Seleccionar Contrato</option>
+                <option value="CON001">CON001 - Cliente 1</option>
+                <option value="CON002">CON002 - Cliente 2</option>
+                <option value="CON003">CON003 - Cliente 3</option>
+                <option value="CON004">CON004 - Cliente 4</option>
+            </select>
+        </div>
+        <div>
+            <label class="block text-sm font-medium text-gray-700">Período</label>
+            <input type="month" value="@selectedPeriod" @onchange="@((ChangeEventArgs e) => selectedPeriod = e.Value?.ToString() ?? "2024-12")" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+        </div>
+        <div style="display: flex; justify-content: flex-end; align-items: center; gap: 1rem;">
+            <button @onclick="ExportToExcel" class="bg-blue-600 text-white px-4 py-2 rounded-lg shadow-md hover:bg-blue-700 transition duration-150 ease-in-out">
+                Exportar a Excel
+            </button>
+            <button @onclick="SendToJDE" disabled="@jdeSent" class="@(jdeSent ? "bg-gray-400 cursor-not-allowed" : "bg-green-600 hover:bg-green-700") text-white px-4 py-2 rounded-lg shadow-md transition duration-150 ease-in-out">
+                @(jdeSent ? "Enviado" : "Enviar a JDE")
+            </button>
+        </div>
+    </div>
+
+    @if (showReport)
+    {
+        <h2 class="text-xl font-semibold text-gray-700 mb-4 border-t pt-4">Detalle de Ítems a Facturar</h2>
+
+        <div class="overflow-x-auto">
+			<Table Hoverable="true" Striped="true">
+				<TableHead>
+					<TableRow>
+						<CustomTableHeadCell>Némen Cliente</CustomTableHeadCell>
+						<CustomTableHeadCell>Descripción</CustomTableHeadCell>
+						<CustomTableHeadCell>Némen Generador</CustomTableHeadCell>
+						<CustomTableHeadCell>Cantidad</CustomTableHeadCell>
+						<CustomTableHeadCell>P. Unitario</CustomTableHeadCell>
+						<CustomTableHeadCell>Monto</CustomTableHeadCell>
+						<CustomTableHeadCell>Moneda</CustomTableHeadCell>
+					</TableRow>
+				</TableHead>
+				<TableBody class="divide-y">
+					@foreach (var item in billingItems)
+					{
+						<TableRow class="bg-white">
+							<TableCell Class="whitespace-nowrap font-medium text-gray-900">@item.NemoCliente</TableCell>
+							<TableCell>@item.Description</TableCell>
+							<TableCell>@(item.NemoGenerador ?? "-")</TableCell>
+							<TableCell>@item.Cantidad</TableCell>
+							<TableCell>@item.Unitario</TableCell>
+							<TableCell Class="whitespace-nowrap text-gray-900 font-bold">@item.Monto</TableCell>
+							<TableCell>@item.Moneda</TableCell>
+						</TableRow>
+					}
+				</TableBody>
+			</Table>
+
+
+        </div>
+
+        <div class="mt-6 flex justify-end">
+            <div class="text-right p-4 border rounded-lg bg-gray-50">
+                <p class="text-lg font-bold text-gray-800">Total a Facturar:</p>
+                <p class="text-2xl font-extrabold text-blue-600">USD 351.500,00</p>
+                <p class="text-sm text-gray-500">(+ ARS 10.000,00)</p>
+            </div>
+        </div>
+
+        @if (jdeSent)
+        {
+            <div class="mt-4 p-4 bg-green-100 border-l-4 border-green-500 text-green-700 rounded-md">
+                <div class="flex">
+                    <div class="flex-shrink-0">
+                        <svg class="h-5 w-5 text-green-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                        </svg>
+                    </div>
+                    <div class="ml-3">
+                        <p class="text-sm font-medium">
+                            Datos enviados a JDE con éxito.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        }
+    }
+    else
+    {
+        <div class="text-center py-12">
+            <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+            </svg>
+            <p class="mt-2 text-sm text-gray-500">Seleccione un contrato y período para ver los detalles de facturación</p>
+        </div>
+    }
+</div>
+
+@code {
+    private string selectedContract = "";
+    private string selectedPeriod = "2024-12";
+    private bool showReport = true;
+    private bool jdeSent = false;
+
+    // Datos mock de facturación
+    private List<BillingItemDto> billingItems = new List<BillingItemDto>
+    {
+        new BillingItemDto
+        {
+            NemoCliente = "SANLUISNORT",
+            Description = "Energía Activa",
+            NemoGenerador = "PESLUIS",
+            Cantidad = "5.000,00",
+            Unitario = "52,40",
+            Monto = "262.000,00",
+            Moneda = "USD"
+        },
+        new BillingItemDto
+        {
+            NemoCliente = "SANLUISNORT",
+            Description = "Dev. Anticipo",
+            NemoGenerador = "PESLUIS",
+            Cantidad = "1,00",
+            Unitario = "-500,00",
+            Monto = "-500,00",
+            Moneda = "USD"
+        },
+        new BillingItemDto
+        {
+            NemoCliente = "IRENEC",
+            Description = "FNNE",
+            NemoGenerador = "IRENEC",
+            Cantidad = "1.500,00",
+            Unitario = "60,00",
+            Monto = "90.000,00",
+            Moneda = "USD"
+        },
+        new BillingItemDto
+        {
+            NemoCliente = "PESANLUING",
+            Description = "Sobrecostos MEM",
+            NemoGenerador = "",
+            Cantidad = "1,00",
+            Unitario = "10.000,00",
+            Monto = "10.000,00",
+            Moneda = "ARS"
+        }
+    };
+
+    private void ExportToExcel()
+    {
+        // TODO: Implementar exportación a Excel
+        Console.WriteLine("Exportando a Excel...");
+    }
+
+    private void SendToJDE()
+    {
+        jdeSent = true;
+        StateHasChanged();
+        
+        // TODO: Implementar envío a JDE
+        Console.WriteLine("Enviando datos a JDE...");
+    }
+
+    public class BillingItemDto
+    {
+        public string NemoCliente { get; set; } = string.Empty;
+        public string Description { get; set; } = string.Empty;
+        public string? NemoGenerador { get; set; }
+        public string Cantidad { get; set; } = string.Empty;
+        public string Unitario { get; set; } = string.Empty;
+        public string Monto { get; set; } = string.Empty;
+        public string Moneda { get; set; } = string.Empty;
+    }
+}
+

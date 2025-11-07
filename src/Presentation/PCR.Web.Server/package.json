@@ -1,0 +1,24 @@
+{
+  "name": "pcr.web.server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "css:build": "npx @tailwindcss/cli -i ./Styles/input.css -o ./wwwroot/tailwind.css ",
+    "css:watch": "npx @tailwindcss/cli -i ./Styles/input.css -o ./wwwroot/tailwind.css  --watch",
+    "css:prod": "npx @tailwindcss/cli -i ./Styles/input.css -o ./wwwroot/tailwind.css --minify"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "autoprefixer": "^10.4.21",
+    "eslint": "^9.39.1",
+    "postcss": "^8.5.6",
+    "tailwindcss": "^4.1.16"
+  },
+  "dependencies": {
+    "@tailwindcss/cli": "^4.1.16"
+  }
+}

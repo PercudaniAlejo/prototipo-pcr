@@ -1,0 +1,63 @@
+﻿@import "tailwindcss";
+@custom-variant dark (&:where(.dark, .dark *));
+
+@layer components {
+  /* Buttons */
+  .btn-primary {
+    @apply px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors font-medium;
+  }
+
+  .btn-secondary {
+    @apply px-4 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-700 transition-colors font-medium;
+  }
+
+  .btn-success {
+    @apply px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors font-medium;
+  }
+
+  .btn {
+    @apply px-4 py-2 rounded-md transition-colors font-medium;
+  }
+
+  /* Action buttons for tables */
+  .btn-action-edit {
+    @apply text-blue-600 hover:text-blue-800 font-medium transition-colors;
+  }
+
+  .btn-action-remove {
+    @apply text-red-600 hover:text-red-800 font-medium transition-colors;
+  }
+
+  /* Cards */
+  .card {
+    @apply bg-white rounded-xl shadow-lg p-6;
+  }
+
+  /* Input fields */
+  .input-field {
+    @apply w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500;
+  }
+
+  /* Status badges */
+  .status-active {
+    @apply inline-block px-2 py-1 text-xs font-semibold text-green-800 bg-green-100 rounded;
+  }
+
+  .status-expired {
+    @apply inline-block px-2 py-1 text-xs font-semibold text-red-800 bg-red-100 rounded;
+  }
+
+  .status-draft {
+    @apply inline-block px-2 py-1 text-xs font-semibold text-yellow-800 bg-yellow-100 rounded;
+  }
+
+  /* Table header */
+  .table-header {
+    @apply bg-gray-800 text-white;
+  }
+}
+
+/* Global styles */
+body {
+  font-family: "Inter", sans-serif;
+}

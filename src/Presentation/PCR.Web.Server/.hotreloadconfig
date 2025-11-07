@@ -1,0 +1,15 @@
+{
+  "version": "1.0",
+  "capabilities": [
+    "Baseline",
+    "AddMethodToExistingType",
+    "AddStaticFieldToExistingType",
+    "AddInstanceFieldToExistingType",
+    "NewTypeDefinition"
+  ],
+  "fileExtensions": [
+    ".razor",
+    ".cshtml",
+    ".cs"
+  ]
+}

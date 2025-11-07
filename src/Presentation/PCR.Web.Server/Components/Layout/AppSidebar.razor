@@ -1,0 +1,104 @@
+<div class="@GetSidebarClasses()">
+    <!-- Logo -->
+    <div class="flex items-center justify-center h-16 border-b border-gray-700">
+        <h1 id="sidebar-logo" class="text-2xl font-bold transition-all duration-300">
+            @(IsCollapsed ? "P" : "PCR")
+        </h1>
+    </div>
+
+    <!-- Navigation -->
+    <nav id="sidebar-nav" class="flex-1 p-2 space-y-1 overflow-y-auto">
+		<NavLink href="/dashboard" class="nav-link flex items-center p-3 rounded-lg transition-colors text-gray-300 hover:bg-gray-700 hover:text-white" ActiveClass="bg-blue-600 text-white" Match="NavLinkMatch.All">
+            <span class="text-xl font-bold w-6 text-center">D</span>
+            @if (!IsCollapsed)
+            {
+                <span class="ml-4 transition-opacity duration-300">Dashboard</span>
+            }
+        </NavLink>
+
+        <NavLink href="/users" class="nav-link flex items-center p-3 rounded-lg transition-colors text-gray-300 hover:bg-gray-700 hover:text-white" ActiveClass="bg-blue-600 text-white">
+            <span class="text-xl font-bold w-6 text-center">U</span>
+            @if (!IsCollapsed)
+            {
+                <span class="ml-4 transition-opacity duration-300">Usuarios</span>
+            }
+        </NavLink>
+
+        <NavLink href="/contracts" class="nav-link flex items-center p-3 rounded-lg transition-colors text-gray-300 hover:bg-gray-700 hover:text-white" ActiveClass="bg-blue-600 text-white">
+            <span class="text-xl font-bold w-6 text-center">C</span>
+            @if (!IsCollapsed)
+            {
+                <span class="ml-4 transition-opacity duration-300">Contratos</span>
+            }
+        </NavLink>
+
+        <NavLink href="/clients" class="nav-link flex items-center p-3 rounded-lg transition-colors text-gray-300 hover:bg-gray-700 hover:text-white" ActiveClass="bg-blue-600 text-white">
+            <span class="text-xl font-bold w-6 text-center">L</span>
+            @if (!IsCollapsed)
+            {
+                <span class="ml-4 transition-opacity duration-300">Clientes</span>
+            }
+        </NavLink>
+
+        <NavLink href="/rates" class="nav-link flex items-center p-3 rounded-lg transition-colors text-gray-300 hover:bg-gray-700 hover:text-white" ActiveClass="bg-blue-600 text-white">
+            <span class="text-xl font-bold w-6 text-center">T</span>
+            @if (!IsCollapsed)
+            {
+                <span class="ml-4 transition-opacity duration-300">Tasas y Divisas</span>
+            }
+        </NavLink>
+
+        <NavLink href="/billing" class="nav-link flex items-center p-3 rounded-lg transition-colors text-gray-300 hover:bg-gray-700 hover:text-white" ActiveClass="bg-blue-600 text-white">
+            <span class="text-xl font-bold w-6 text-center">F</span>
+            @if (!IsCollapsed)
+            {
+                <span class="ml-4 transition-opacity duration-300">Facturación</span>
+            }
+        </NavLink>
+
+        <NavLink href="/admin" class="nav-link flex items-center p-3 rounded-lg transition-colors text-gray-300 hover:bg-gray-700 hover:text-white" ActiveClass="bg-blue-600 text-white">
+            <span class="text-xl font-bold w-6 text-center">A</span>
+            @if (!IsCollapsed)
+            {
+                <span class="ml-4 transition-opacity duration-300">Administración</span>
+            }
+        </NavLink>
+
+        <NavLink href="/analytics" class="nav-link flex items-center p-3 rounded-lg transition-colors text-gray-300 hover:bg-gray-700 hover:text-white" ActiveClass="bg-blue-600 text-white">
+            <span class="text-xl font-bold w-6 text-center">G</span>
+            @if (!IsCollapsed)
+            {
+                <span class="ml-4 transition-opacity duration-300">Análisis Gráfico</span>
+            }
+        </NavLink>
+
+        <NavLink href="/ia-strategy" class="nav-link flex items-center p-3 rounded-lg transition-colors text-gray-300 hover:bg-gray-700 hover:text-white" ActiveClass="bg-blue-600 text-white">
+            <span class="text-xl font-bold w-6 text-center">I</span>
+            @if (!IsCollapsed)
+            {
+                <span class="ml-4 transition-opacity duration-300">Estrategia IA</span>
+            }
+        </NavLink>
+    </nav>
+</div>
+
+@code {
+    [Parameter] 
+    public bool IsCollapsed { get; set; }
+
+    protected override void OnParametersSet()
+    {
+        base.OnParametersSet();
+    }
+
+    private string GetSidebarClasses()
+    {
+        // hidden: oculta en móvil
+        // md:flex: muestra en desktop (pantallas >= 768px)
+		var baseClasses = "bg-gray-800 text-white transition-all duration-300 ease-in-out md:block flex-col h-screen";
+        var widthClass = IsCollapsed ? "w-20" : "w-64";
+        
+        return $"{baseClasses} {widthClass}";
+    }
+}
+

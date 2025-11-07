@@ -1,0 +1,85 @@
+@page "/users"
+@inject IMediator Mediator
+
+<div class="bg-white rounded-lg shadow-md p-6">
+    <div class="flex justify-between items-center mb-4">
+        <h1 class="text-xl font-bold text-gray-800">Administrar Usuarios</h1>
+        <div class="flex items-center gap-2">
+            <button class="px-4 py-2 rounded-md font-semibold text-sm flex items-center justify-center transition-colors bg-blue-600 text-white hover:bg-blue-700">
+                Exportar a Excel
+            </button>
+        </div>
+    </div>
+
+
+	<Table Hoverable="true" Striped="true">
+		<TableHead>
+			<TableRow>
+				<CustomTableHeadCell>Nombre usuario</CustomTableHeadCell>
+				<CustomTableHeadCell>Nombre/s</CustomTableHeadCell>
+				<CustomTableHeadCell>Apellido/s</CustomTableHeadCell>
+				<CustomTableHeadCell>E-mail</CustomTableHeadCell>
+				<CustomTableHeadCell>Teléfono</CustomTableHeadCell>
+				<CustomTableHeadCell>Habilitado</CustomTableHeadCell>
+				<CustomTableHeadCell>Acciones</CustomTableHeadCell>
+			</TableRow>
+		</TableHead>
+		<TableBody class="divide-y">
+				@foreach (var user in users)
+				{
+					<TableRow class="bg-white">
+						<TableCell Class="whitespace-nowrap font-medium text-gray-900">@user.Username</TableCell>
+						<TableCell>@user.Name</TableCell>
+						<TableCell>@user.Surname</TableCell>
+						<TableCell>@user.Email</TableCell>
+						<TableCell>@user.Phone</TableCell>
+						<TableCell>
+							<span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full @GetEnabledClass(user.Enabled)">
+								@(user.Enabled ? "Si" : "No")
+							</span>
+						</TableCell>
+						<TableCell>
+							<TableActions OnEdit="@(() => EditUser(user))"
+									  OnDelete="@(() => DeleteUser(user))" />
+						</TableCell>
+					</TableRow>
+				}
+		</TableBody>
+	</Table>
+</div>
+
+@code {
+	private List<UserDto> users = new();
+	private bool isLoading = true;
+
+	protected override async Task OnInitializedAsync()
+	{
+		isLoading = true;
+		var query = new GetAllUsersQuery();
+		var result = await Mediator.Send(query);
+
+		if (result.Succeeded)
+		{
+			users = result.Data!;
+		}
+		isLoading = false;
+	}
+
+	private string GetEnabledClass(bool status)
+	{
+		return status ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800";
+	}
+
+
+    private void EditUser(UserDto user)
+    {
+        // TODO: Implementar lógica de edición
+        Console.WriteLine($"Editando usuario: {user.Username}");
+    }
+
+    private void DeleteUser(UserDto user)
+    {
+        // TODO: Implementar lógica de eliminación
+        Console.WriteLine($"Eliminando usuario: {user.Username}");
+    }
+}

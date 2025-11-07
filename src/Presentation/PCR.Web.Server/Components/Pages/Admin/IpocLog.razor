@@ -1,0 +1,187 @@
+@page "/admin"
+@inject IMediator Mediator
+
+<div class="bg-white rounded-lg shadow-md p-6">
+    <div class="flex justify-between items-center mb-4">
+        <h1 class="text-xl font-bold text-gray-800">Registros Facturación</h1>
+        <div class="flex items-center gap-2">
+            <button class="px-3 py-1 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50">
+                <div class="flex items-center gap-1">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+                    </svg>
+                    Buscar
+                </div>
+            </button>
+            <button class="p-2 rounded-full hover:bg-gray-200">
+                <svg class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path>
+                </svg>
+            </button>
+            <button @onclick="ExportToExcel" class="px-4 py-2 rounded-md font-semibold text-sm flex items-center justify-center transition-colors bg-blue-600 text-white hover:bg-blue-700">
+                Exportar a Excel
+            </button>
+        </div>
+    </div>
+
+    <div class="overflow-x-auto">
+        <Table Hoverable="true" Striped="true">
+            <TableHead>
+                <TableRow>
+                    <CustomTableHeadCell>Timestamp</CustomTableHeadCell>
+                    <CustomTableHeadCell>Período</CustomTableHeadCell>
+                    <CustomTableHeadCell>Age ID</CustomTableHeadCell>
+                    <CustomTableHeadCell>Nemo Cliente</CustomTableHeadCell>
+                    <CustomTableHeadCell>Nemo Generador</CustomTableHeadCell>
+                    <CustomTableHeadCell>E_Total_Plus</CustomTableHeadCell>
+                    <CustomTableHeadCell>E_Total_Ren</CustomTableHeadCell>
+                    <CustomTableHeadCell>Estado</CustomTableHeadCell>
+                    <CustomTableHeadCell></CustomTableHeadCell>
+                </TableRow>
+            </TableHead>
+            <TableBody class="divide-y">
+                @if (isLoading)
+                {
+                    <TableRow>
+                        <TableCell colspan="9" class="text-center py-10">
+                            <Spinner class="inline w-8 h-8 mr-2 text-gray-200 animate-spin fill-blue-600" />
+                            <span class="text-xl text-gray-500 align-middle">Cargando...</span>
+                        </TableCell>
+                    </TableRow>
+                }
+                else if (!mockIpocData.Any())
+                {
+                    <TableRow>
+                        <TableCell colspan="9" class="text-center py-10 text-gray-500">
+                            No se encontraron registros.
+                        </TableCell>
+                    </TableRow>
+                }
+                else
+                {
+                    @foreach (var data in mockIpocData)
+                    {
+                        <TableRow class="bg-white">
+                            <TableCell Class="whitespace-nowrap font-medium text-gray-900">@data.Timestamp</TableCell>
+                            <TableCell>@data.Periodo</TableCell>
+                            <TableCell>@data.AgeId</TableCell>
+                            <TableCell>@data.NemoCliente</TableCell>
+                            <TableCell>@data.NemoGenerador</TableCell>
+                            <TableCell>@data.EtotalPlus</TableCell>
+                            <TableCell>@data.EtotalRen</TableCell>
+                            <TableCell>
+                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full @GetStatusClass(data.Status)">
+                                    @(data.Status ? "Procesado" : "Pendiente")
+                                </span>
+                            </TableCell>
+                            <TableCell>
+                                <a class="text-blue-600 hover:text-blue-800">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                                    </svg>
+                                </a>
+                            </TableCell>
+                        </TableRow>
+                    }
+                }
+            </TableBody>
+        </Table>
+    </div>
+
+    <div class="mt-4 flex justify-end">
+        <button @onclick="ReplicateData" class="px-4 py-2 rounded-md font-semibold text-sm flex items-center justify-center transition-colors bg-blue-600 text-white hover:bg-blue-700">
+            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004 12m7-7V2m7 2v3m-2-3h-2M4 16v-5h.582m15.356 2A8.001 8.001 0 714 12m7 7v3m7-3v-3m-2 3h-2"></path>
+            </svg>
+            Replicar
+        </button>
+    </div>
+</div>
+
+@code {
+    private bool isLoading = true;
+    private List<IpocDataDto> mockIpocData = new List<IpocDataDto>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        isLoading = true;
+        await Task.Delay(1000);
+        
+        mockIpocData = new List<IpocDataDto>
+        {
+            new IpocDataDto
+            {
+                Timestamp = "2024-11-25 10:30",
+                Periodo = "202411",
+                AgeId = "1",
+                NemoCliente = "PESLUIS",
+                NemoGenerador = "PESLUIS",
+                EtotalPlus = "125000",
+                EtotalRen = "75000",
+                Status = true
+            },
+            new IpocDataDto
+            {
+                Timestamp = "2024-11-25 10:35",
+                Periodo = "202411",
+                AgeId = "2",
+                NemoCliente = "IRENEC",
+                NemoGenerador = "IRENEC",
+                EtotalPlus = "15000",
+                EtotalRen = "10000",
+                Status = true
+            },
+            new IpocDataDto
+            {
+                Timestamp = "2024-11-25 10:40",
+                Periodo = "202411",
+                AgeId = "3",
+                NemoCliente = "SANLUISNORT",
+                NemoGenerador = "PESLUIS",
+                EtotalPlus = "50000",
+                EtotalRen = "0",
+                Status = false
+            },
+            new IpocDataDto
+            {
+                Timestamp = "2024-12-01 09:00",
+                Periodo = "202412",
+                AgeId = "1",
+                NemoCliente = "PESLUIS",
+                NemoGenerador = "PESLUIS",
+                EtotalPlus = "0",
+                EtotalRen = "0",
+                Status = true
+            }
+        };
+
+        isLoading = false;
+    }
+
+    private string GetStatusClass(bool status)
+    {
+        return status ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800";
+    }
+
+    private void ExportToExcel()
+    {
+        Console.WriteLine("Exportando a Excel...");
+    }
+
+    private void ReplicateData()
+    {
+        Console.WriteLine("Replicando datos...");
+    }
+
+    public class IpocDataDto
+    {
+        public string Timestamp { get; set; } = string.Empty;
+        public string Periodo { get; set; } = string.Empty;
+        public string AgeId { get; set; } = string.Empty;
+        public string NemoCliente { get; set; } = string.Empty;
+        public string NemoGenerador { get; set; } = string.Empty;
+        public string EtotalPlus { get; set; } = string.Empty;
+        public string EtotalRen { get; set; } = string.Empty;
+        public bool Status { get; set; } = false;
+    }
+}

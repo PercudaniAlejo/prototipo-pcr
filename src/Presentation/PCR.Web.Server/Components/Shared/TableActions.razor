@@ -1,0 +1,38 @@
+@* Botones de acción estándar para tablas *@
+
+<div class="flex space-x-2">
+    @if (ShowEdit)
+    {
+        <button @onclick="OnEdit" 
+				class="btn-action-edit">
+            Editar
+        </button>
+    }
+    
+    @if (ShowDelete)
+    {
+        <button @onclick="OnDelete" 
+				class="btn-action-remove">
+            Borrar
+        </button>
+    }
+
+    @AdditionalActions
+</div>
+
+@code {
+    [Parameter]
+    public EventCallback OnEdit { get; set; }
+
+    [Parameter]
+    public EventCallback OnDelete { get; set; }
+
+    [Parameter]
+    public bool ShowEdit { get; set; } = true;
+
+    [Parameter]
+    public bool ShowDelete { get; set; } = true;
+
+    [Parameter]
+    public RenderFragment? AdditionalActions { get; set; }
+}

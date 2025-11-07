@@ -1,0 +1,393 @@
+@page "/contracts/new"
+@page "/contracts/edit/{id}"
+@inject IMediator Mediator
+@inject NavigationManager Navigation
+
+<div class="flex justify-between items-center mb-4">
+	<h1 class="text-2xl font-bold text-gray-800">
+		@(IsEditMode ? $"Editar Contrato: {contractForm.Code}" : "Nuevo Contrato")
+	</h1>
+</div>
+
+@if (!string.IsNullOrEmpty(errorMessage))
+{
+	<div class="mb-4 p-4 bg-red-50 border-l-4 border-red-500 text-red-700 rounded-md">
+		<p class="font-semibold">Error</p>
+		<p>@errorMessage</p>
+	</div>
+}
+
+<div class="bg-white rounded-xl shadow-lg p-6">
+	<EditForm Model="contractForm" OnValidSubmit="HandleSubmit">
+		<DataAnnotationsValidator />
+
+		<!-- Sección 1: Datos Generales -->
+		<div class="border-b pb-4 mb-6">
+			<h3 class="text-xl font-semibold text-gray-800 mb-4">1. Datos Generales</h3>
+			<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+
+				<div>
+					<label class="block text-sm font-medium text-gray-700 mb-1">ID Contrato</label>
+					<input type="text" value="@contractForm.Code" disabled
+						   class="w-full px-3 py-2 border border-gray-300 rounded-lg bg-gray-200 cursor-not-allowed" />
+					<p class="text-xs text-blue-600 mt-1">Campo generado automáticamente.</p>
+				</div>
+
+				<div>
+					<label class="block text-sm font-medium text-gray-700 mb-1">Nombre Comercial</label>
+					<InputText @bind-Value="contractForm.Name"
+							   class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500" />
+					<ValidationMessage For="@(() => contractForm.Name)" />
+				</div>
+
+				<div>
+					<label class="block text-sm font-medium text-gray-700 mb-1">Cliente Asociado</label>
+					<InputSelect @bind-Value="contractForm.ClientId"
+								 class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500">
+						<option value="0">Seleccionar Cliente</option>
+						@foreach (var client in clients)
+						{
+							<option value="@client.Id">@client.Name</option>
+						}
+					</InputSelect>
+					<ValidationMessage For="@(() => contractForm.ClientId)" />
+				</div>
+
+				<div>
+					<label class="block text-sm font-medium text-gray-700 mb-1">Fecha Inicio</label>
+					<InputDate @bind-Value="contractForm.StartDate"
+							   class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500" />
+					<ValidationMessage For="@(() => contractForm.StartDate)" />
+				</div>
+
+				<div>
+					<label class="block text-sm font-medium text-gray-700 mb-1">Duración (Meses)</label>
+					<InputNumber @bind-Value="contractForm.TermMonths" min="1"
+								 class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500" />
+					<ValidationMessage For="@(() => contractForm.TermMonths)" />
+				</div>
+
+				<div>
+					<label class="block text-sm font-medium text-gray-700 mb-1">Fecha Vencimiento</label>
+					<input type="date" value="@CalculateEndDate()" disabled
+						   class="w-full px-3 py-2 border border-gray-300 rounded-lg bg-gray-200 cursor-not-allowed" />
+					<p class="text-xs text-blue-600 mt-1">Calculado automáticamente.</p>
+				</div>
+
+				<div>
+					<label class="block text-sm font-medium text-gray-700 mb-1">Estado</label>
+					<InputSelect @bind-Value="contractForm.Status"
+								 class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500">
+						<option value="Draft">Borrador</option>
+						<option value="Activo">Activo</option>
+						<option value="Vencido">Vencido</option>
+					</InputSelect>
+				</div>
+
+			</div>
+		</div>
+
+		<!-- Sección 2: Precios y Moneda -->
+		<div class="border-b pb-4 mb-6">
+			<h3 class="text-xl font-semibold text-gray-800 mb-4">2. Precios y Moneda</h3>
+			<div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+
+				<div>
+					<label class="block text-sm font-medium text-gray-700 mb-1">Moneda de Facturación</label>
+					<InputSelect @bind-Value="contractForm.Currency"
+								 class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500">
+						<option value="USD">Dólar Estadounidense (USD)</option>
+						<option value="ARS">Peso Argentino (ARS)</option>
+					</InputSelect>
+				</div>
+
+				<div>
+					<label class="block text-sm font-medium text-gray-700 mb-1">Precio Base</label>
+					<InputNumber @bind-Value="contractForm.BasePrice" min="0" step="0.01"
+								 class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500" />
+					<ValidationMessage For="@(() => contractForm.BasePrice)" />
+				</div>
+
+				<div>
+					<label class="block text-sm font-medium text-gray-700 mb-1">Precio Remanente</label>
+					<InputNumber @bind-Value="contractForm.RemnantPrice" min="0" step="0.01"
+								 class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500" />
+				</div>
+
+				<div>
+					<label class="block text-sm font-medium text-gray-700 mb-1">Término de Pago</label>
+					<InputText @bind-Value="contractForm.PaymentTerm"
+							   class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
+							   placeholder="Ej: 30 Días F.F." />
+				</div>
+
+			</div>
+		</div>
+
+		<!-- Sección 3: Compromisos y Tolerancias -->
+		<div class="border-b pb-4 mb-6">
+			<h3 class="text-xl font-semibold text-gray-800 mb-4">3. Compromisos y Tolerancias (%)</h3>
+			<div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+
+				<div>
+					<label class="block text-sm font-medium text-gray-700 mb-1">Compromiso Anual (%)</label>
+					<InputNumber @bind-Value="contractForm.AnnualCommitment" min="0" max="100"
+								 class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500" />
+				</div>
+
+				<div>
+					<label class="block text-sm font-medium text-gray-700 mb-1">Compromiso Mensual (%)</label>
+					<InputNumber @bind-Value="contractForm.MonthlyCommitment" min="0" max="100"
+								 class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500" />
+				</div>
+
+				<div>
+					<label class="block text-sm font-medium text-gray-700 mb-1">Tolerancia DOP Mensual (%)</label>
+					<InputNumber @bind-Value="contractForm.DopMonthly" min="0" max="100"
+								 class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500" />
+				</div>
+
+				<div>
+					<label class="block text-sm font-medium text-gray-700 mb-1">Tolerancia DOP Anual (%)</label>
+					<InputNumber @bind-Value="contractForm.DopAnnual" min="0" max="100"
+								 class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500" />
+				</div>
+
+			</div>
+		</div>
+
+		<!-- Sección 4: Programación Mensual -->
+		<div class="pb-4 mb-6">
+			<h3 class="text-xl font-semibold text-gray-800 mb-4">4. Programación Mensual de Energía (MWh)</h3>
+			<div class="overflow-x-auto border border-gray-200 rounded-lg">
+				<Table Hoverable="true" Striped="true">
+					<TableHead>
+						<TableRow>
+							<CustomTableHeadCell>Mes/Año</CustomTableHeadCell>
+							<CustomTableHeadCell>Energía (MWh)</CustomTableHeadCell>
+							<CustomTableHeadCell>Unidad</CustomTableHeadCell>
+						</TableRow>
+					</TableHead>
+					<TableBody class="divide-y">
+						@for (int i = 0; i < 12; i++)
+						{
+							int monthIndex = i;
+							<TableRow class="bg-white dark:border-gray-700">
+								<TableCell class="whitespace-nowrap font-medium text-gray-900 dark:text-white">@GetMonthName(monthIndex)</TableCell>
+								<TableCell>
+									<InputNumber @bind-Value="contractForm.MonthlySchedule[monthIndex]" min="0"
+												 @oninput="@(() => StateHasChanged())"
+												 class="w-full px-2 py-1 border border-gray-300 rounded-md text-sm text-right focus:ring-blue-500 focus:border-blue-500" />
+								</TableCell>
+								<TableCell>MWh</TableCell>
+							</TableRow>
+						}
+					</TableBody>
+				</Table>
+
+
+			</div>
+			<div class="mt-4 p-3 bg-blue-50 border-l-4 border-blue-400 text-blue-700 rounded-md">
+				<p class="text-sm">
+					Total Anual Contratado (MWh): <span class="font-bold text-blue-800">@CalculateAnnualTotal().ToString("N0") MWh</span>
+				</p>
+			</div>
+		</div>
+
+		<!-- Sección 5: Conceptos Adicionales y Garantías -->
+		<div class="border-b pb-4 mb-6">
+			<h3 class="text-xl font-semibold text-gray-800 mb-4 border-t pt-4">5. Conceptos Adicionales y Garantías</h3>
+			<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+				
+				<div>
+					<label class="block text-sm font-medium text-gray-700 mb-1">Conceptos de Facturación</label>
+					<InputTextArea @bind-Value="contractForm.Concepts" rows="3"
+								   class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
+								   placeholder="Ej: Energía Activa, FNNE, Dev. Anticipo" />
+				</div>
+
+				<div>
+					<label class="block text-sm font-medium text-gray-700 mb-1">Garantías y Observaciones</label>
+					<InputTextArea @bind-Value="contractForm.Guarantees" rows="3"
+								   class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
+								   placeholder="Ej: Garantía bancaria, pagarés, etc." />
+				</div>
+
+			</div>
+		</div>
+
+		<!-- Botones -->
+		<div class="pb-4 flex justify-end">
+			<Button @onclick="Cancel" class="bg-gray-300 hover:bg-gray-400 font-semibold py-2 px-4 rounded-md text-sm transition-colors mr-2">
+				Cancelar
+			</Button>
+			<Button @onclick="HandleSubmit" disabled="@isSubmitting"
+					class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-md text-sm transition-colors disabled:bg-gray-400">
+				@if (isSubmitting)
+				{
+					<span>Guardando...</span>
+				}
+				else
+				{
+					@(IsEditMode ? "Guardar Cambios" : "Crear Contrato")
+				}
+			</Button>
+		</div>
+
+	</EditForm>
+</div>
+
+@code {
+	[Parameter] public string? Id { get; set; }
+
+	private ContractFormModel contractForm = new();
+	private List<ClientDto> clients = new();
+	private bool isSubmitting = false;
+	private string errorMessage = string.Empty;
+	private bool IsEditMode => !string.IsNullOrEmpty(Id) && Id != "new";
+
+	protected override async Task OnInitializedAsync()
+	{
+		// Cargar lista de clientes
+		var clientsQuery = new GetAllClientsQuery();
+		var clientsResult = await Mediator.Send(clientsQuery);
+		if (clientsResult.Succeeded)
+		{
+			clients = clientsResult.Data!;
+		}
+
+		if (IsEditMode)
+		{
+			// TODO: Cargar contrato existente cuando esté implementado el query
+			// var query = new GetContractByIdQuery(Id!);
+			// var result = await Mediator.Send(query);
+			// if (result.Succeeded)
+			// {
+			//     MapToForm(result.Data!);
+			// }
+			
+			// Por ahora, datos mock para testing
+			contractForm = new ContractFormModel
+			{
+				Code = "CON001",
+				Name = "Contrato MWH Norte",
+				ClientId = clients.FirstOrDefault()?.Id ?? 0,
+				StartDate = new DateTime(2023, 3, 1),
+				TermMonths = 24,
+				Currency = "USD",
+				BasePrice = 52.40m,
+				RemnantPrice = 156.00m,
+				PaymentTerm = "30 Días F.F.",
+				AnnualCommitment = 95,
+				MonthlyCommitment = 90,
+				DopMonthly = 10,
+				DopAnnual = 10,
+				Status = "Activo",
+				MonthlySchedule = Enumerable.Repeat(5000m, 12).ToArray(),
+				Concepts = "Energía Activa\nDev. Anticipo",
+				Guarantees = "Garantía bancaria por $1M"
+			};
+		}
+		else
+		{
+			// Inicializar nuevo contrato
+			contractForm = new ContractFormModel
+			{
+				Code = "AUTO", // Se generará automáticamente
+				Currency = "USD",
+				StartDate = DateTime.Today,
+				TermMonths = 24,
+				Status = "Draft",
+				MonthlySchedule = new decimal[12],
+				AnnualCommitment = 100,
+				MonthlyCommitment = 100,
+				PaymentTerm = "30 Días F.F."
+			};
+		}
+	}
+
+	private async Task HandleSubmit()
+	{
+		isSubmitting = true;
+		errorMessage = string.Empty;
+
+		try
+		{
+			// TODO: Implementar Commands cuando estén creados
+			// if (IsEditMode)
+			// {
+			//     var command = new UpdateContractCommand { ... };
+			//     var result = await Mediator.Send(command);
+			//     if (!result.Succeeded) { ... }
+			// }
+			// else
+			// {
+			//     var command = new CreateContractCommand { ... };
+			//     var result = await Mediator.Send(command);
+			//     if (!result.Succeeded) { ... }
+			// }
+
+			// Por ahora, solo simular guardado
+			await Task.Delay(500); // Simular llamada a API
+			
+			Navigation.NavigateTo("/contracts");
+		}
+		catch (Exception ex)
+		{
+			errorMessage = $"Error al guardar el contrato: {ex.Message}";
+		}
+		finally
+		{
+			isSubmitting = false;
+		}
+	}
+
+	private void Cancel()
+	{
+		Navigation.NavigateTo("/contracts");
+	}
+
+	private string CalculateEndDate()
+	{
+		if (contractForm.StartDate != default && contractForm.TermMonths > 0)
+		{
+			var endDate = contractForm.StartDate.AddMonths(contractForm.TermMonths);
+			return endDate.ToString("yyyy-MM-dd");
+		}
+		return string.Empty;
+	}
+
+	private decimal CalculateAnnualTotal()
+	{
+		return contractForm.MonthlySchedule?.Sum() ?? 0;
+	}
+
+	private string GetMonthName(int index)
+	{
+		var monthNames = new[] { "Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic" };
+		var year = contractForm.StartDate != default ? contractForm.StartDate.Year : DateTime.Now.Year;
+		return $"{monthNames[index]} {year}";
+	}
+
+	// Modelo para el formulario
+	public class ContractFormModel
+	{
+		public string Code { get; set; } = string.Empty;
+		public string Name { get; set; } = string.Empty;
+		public int ClientId { get; set; }
+		public DateTime StartDate { get; set; }
+		public int TermMonths { get; set; }
+		public string Currency { get; set; } = "USD";
+		public decimal BasePrice { get; set; }
+		public decimal RemnantPrice { get; set; }
+		public string PaymentTerm { get; set; } = string.Empty;
+		public decimal AnnualCommitment { get; set; }
+		public decimal MonthlyCommitment { get; set; }
+		public decimal DopMonthly { get; set; }
+		public decimal DopAnnual { get; set; }
+		public string Status { get; set; } = "Draft";
+		public decimal[] MonthlySchedule { get; set; } = new decimal[12];
+		public string Concepts { get; set; } = string.Empty;
+		public string Guarantees { get; set; } = string.Empty;
+	}
+}

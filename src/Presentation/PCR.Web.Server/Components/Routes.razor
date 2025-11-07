@@ -1,0 +1,14 @@
+<Router AppAssembly="typeof(Program).Assembly" 
+        NotFoundPage="typeof(Pages.NotFound)">
+    <Found Context="routeData">
+        <RouteView RouteData="routeData" 
+                   DefaultLayout="typeof(Layout.MainLayout)" />
+        <FocusOnNavigate RouteData="routeData" Selector="h1" />
+    </Found>
+</Router>
+
+@* Configurar el render mode para los componentes interactivos *@
+@code {
+    // Este componente usa render mode Auto por defecto
+    // Lo configuraremos globalmente en App.razor
+}

@@ -1,0 +1,82 @@
+@page "/clients"
+@inject IMediator Mediator
+
+<div class="card bg-white rounded-lg shadow-md p-6">
+    <div class="flex justify-between items-center mb-4">
+        <h1 class="text-xl font-bold text-gray-800">Administrar Clientes</h1>
+        <div class="flex items-center gap-2">
+            <button class="btn-primary">
+                Exportar a Excel
+            </button>
+        </div>
+    </div>
+
+	<Table Hoverable="true" Striped="true">
+	<TableHead>
+		<TableRow>
+			<CustomTableHeadCell>Nombre</CustomTableHeadCell>
+			<CustomTableHeadCell>Descripción</CustomTableHeadCell>
+			<CustomTableHeadCell>Habilitado</CustomTableHeadCell>
+			<CustomTableHeadCell>Vigencia</CustomTableHeadCell>
+			<CustomTableHeadCell>Acciones</CustomTableHeadCell>
+		</TableRow>
+		</TableHead>
+		<TableBody class="divide-y">
+		@foreach (var client in clients)
+			{
+				<TableRow Class="bg-white">
+					<TableCell>@client.Name</TableCell>
+					<TableCell>@client.Description</TableCell>
+					<TableCell>
+						<span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full @GetActiveClass(client.Enabled)">
+							@(client.Enabled ? "Si" : "No")
+						</span>
+					</TableCell>
+					<TableCell>
+						<span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full @GetActiveClass(client.Active)">
+							@(client.Active ? "Vigente" : "No vigente")
+						</span>
+					</TableCell>
+					<TableCell>
+						<TableActions OnEdit="@(() => EditClient(client))" ShowDelete="false" />
+					</TableCell>
+				</TableRow>
+			}
+		</TableBody>
+	</Table>
+</div>
+
+@code {
+    private List<ClientDto> clients = new();
+    private bool isLoading = true;
+
+    protected override async Task OnInitializedAsync()
+    {
+        isLoading = true;
+        var query = new GetAllClientsQuery();
+        var result = await Mediator.Send(query);
+        
+        if (result.Succeeded)
+        {
+            clients = result.Data!;
+        }
+        isLoading = false;
+    }
+
+	private string GetActiveClass(bool status)
+	{
+		return status ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800";
+	}
+
+    private void EditClient(ClientDto client)
+    {
+        // TODO: Implementar lógica de edición
+        Console.WriteLine($"Editando cliente: {client.Name}");
+    }
+
+    private void DeleteClient(ClientDto client)
+    {
+        // TODO: Implementar lógica de eliminación
+        Console.WriteLine($"Eliminando cliente: {client.Name}");
+    }
+}

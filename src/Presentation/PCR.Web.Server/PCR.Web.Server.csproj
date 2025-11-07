@@ -1,0 +1,45 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <ItemGroup>
+    <Compile Remove="Components\Pages\NewFolder1\**" />
+    <Compile Remove="Components\Pages\NewFolder\**" />
+    <Content Remove="Components\Pages\NewFolder1\**" />
+    <Content Remove="Components\Pages\NewFolder\**" />
+    <EmbeddedResource Remove="Components\Pages\NewFolder1\**" />
+    <EmbeddedResource Remove="Components\Pages\NewFolder\**" />
+    <None Remove="Components\Pages\NewFolder1\**" />
+    <None Remove="Components\Pages\NewFolder\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Core\PCR.Core.Application\PCR.Core.Application.csproj" />
+    <ProjectReference Include="..\..\Infrastructure\PCR.Infrastructure.Persistence\PCR.Infrastructure.Persistence.csproj" />
+    <ProjectReference Include="..\..\Infrastructure\PCR.Infrastructure.Identity\PCR.Infrastructure.Identity.csproj" />
+    <ProjectReference Include="..\..\Infrastructure\PCR.Infrastructure.Shared\PCR.Infrastructure.Shared.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Flowbite" Version="0.0.12-alpha" />
+    <PackageReference Include="Flowbite.ExtendedIcons" Version="0.0.5-alpha" />
+    <PackageReference Include="MediatR" Version="13.1.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="10.0.0-rc.2.25502.107" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Docs\" />
+    <Folder Include="wwwroot\css\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="Components\Pages\Billing\BillingReport.razor" />
+  </ItemGroup>
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <BlazorDisableThrowNavigationException>true</BlazorDisableThrowNavigationException>
+    <UserSecretsId>5f91560d-c089-44df-865f-9f094c033991</UserSecretsId>
+  </PropertyGroup>
+
+</Project>

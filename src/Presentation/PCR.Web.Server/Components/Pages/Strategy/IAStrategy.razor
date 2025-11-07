@@ -1,0 +1,111 @@
+@page "/ia-strategy"
+@inject IJSRuntime JS
+
+<h1 class="text-2xl font-bold text-gray-800 mb-6">Estrategia de Inteligencia Artificial (IA)</h1>
+
+<div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+    @foreach (var card in strategyCards)
+    {
+        <div class="bg-white rounded-xl shadow-lg p-6 border-t-4 border-@(card.Color)-600 transition duration-300 hover:shadow-xl">
+            <h2 class="text-xl font-bold text-gray-800 mb-3 flex items-center">
+                @((MarkupString)card.Icon)
+                @card.Title
+            </h2>
+            <p class="text-gray-600">
+                @card.Content
+            </p>
+        </div>
+    }
+</div>
+
+<div class="mt-8 bg-white rounded-xl shadow-lg p-6">
+    <h2 class="text-xl font-semibold text-gray-800 mb-4 border-b pb-2">Análisis de Rentabilidad de Contratos (Optimización de Portafolio)</h2>
+    
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+        <div class="bg-cyan-50 p-4 rounded-lg border-l-4 border-cyan-600">
+            <p class="text-sm font-medium text-cyan-800">Contrato más Rentable (IA Sugerido)</p>
+            <p class="text-xl font-bold text-cyan-900">CON002 (25%)</p>
+        </div>
+        <div class="bg-red-50 p-4 rounded-lg border-l-4 border-red-600">
+            <p class="text-sm font-medium text-red-800">Contrato bajo Objetivo</p>
+            <p class="text-xl font-bold text-red-900">CON003 (8%)</p>
+        </div>
+        <div class="bg-yellow-50 p-4 rounded-lg border-l-4 border-yellow-600">
+            <p class="text-sm font-medium text-yellow-800">Objetivo de Rentabilidad</p>
+            <p class="text-xl font-bold text-yellow-900">18%</p>
+        </div>
+    </div>
+
+    <div style="height: 300px;">
+        <canvas id="iaBarChart"></canvas>
+    </div>
+    
+    <p class="mt-4 text-gray-500 italic text-sm">
+        *Este gráfico simula la rentabilidad promedio de cada contrato. La línea punteada naranja marca el <strong>Objetivo de Rentabilidad (18%)</strong> fijado en el modelo de IA. El Contrato CON003 está significativamente por debajo.
+    </p>
+</div>
+
+@code {
+    private List<StrategyCardDto> strategyCards = new List<StrategyCardDto>
+    {
+        new StrategyCardDto
+        {
+            Title = "Potencial de Inversión en Crecimiento",
+            Content = "Identifica grandes consumidores de MATER con baja contratación propia, indicando dónde enfocar la venta de capacidad renovable.",
+            Color = "blue",
+            Icon = @"<svg class=""w-6 h-6 mr-2 text-blue-600"" fill=""none"" stroke=""currentColor"" viewBox=""0 0 24 24""><path stroke-linecap=""round"" stroke-linejoin=""round"" stroke-width=""2"" d=""M13 10V3L4 14h7v7l9-11h-7z""></path></svg>"
+        },
+        new StrategyCardDto
+        {
+            Title = "Optimización de Portafolio",
+            Content = "Señala los tipos de contrato más rentables, ayudando a tomar decisiones sobre precios o mitigación de riesgos.",
+            Color = "cyan",
+            Icon = @"<svg class=""w-6 h-6 mr-2 text-cyan-600"" fill=""none"" stroke=""currentColor"" viewBox=""0 0 24 24""><path stroke-linecap=""round"" stroke-linejoin=""round"" stroke-width=""2"" d=""M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z""></path></svg>"
+        },
+        new StrategyCardDto
+        {
+            Title = "Proyección Proactiva de Consumo",
+            Content = "Ofrece una predicción para el cliente clave, permitiendo una comunicación proactiva y mejorando la experiencia del cliente.",
+            Color = "yellow",
+            Icon = @"<svg class=""w-6 h-6 mr-2 text-yellow-600"" fill=""none"" stroke=""currentColor"" viewBox=""0 0 24 24""><path stroke-linecap=""round"" stroke-linejoin=""round"" stroke-width=""2"" d=""M9 12l2 2 4-4m5.618-4.276a1.2 1.2 0 011.751 0l.477.477a1.2 1.2 0 010 1.751l-9.52 9.52a1.2 1.2 0 01-1.751 0l-.477-.477a1.2 1.2 0 010-1.751l9.52-9.52z""></path></svg>"
+        }
+    };
+
+    private ContractProfitabilityDto iaContractProfitability = new ContractProfitabilityDto
+    {
+        Labels = new[] { "CON001 (Norte)", "CON002 (Renovable)", "CON003 (Base)", "CON004 (Base)" },
+        Data = new[] { 15, 25, 8, 10 },
+        Target = 18
+    };
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await DrawIABarChart();
+        }
+    }
+
+    private async Task DrawIABarChart()
+    {
+        await JS.InvokeVoidAsync("drawIABarChart", 
+            iaContractProfitability.Labels, 
+            iaContractProfitability.Data, 
+            iaContractProfitability.Target);
+    }
+
+    public class StrategyCardDto
+    {
+        public string Title { get; set; } = string.Empty;
+        public string Content { get; set; } = string.Empty;
+        public string Color { get; set; } = string.Empty;
+        public string Icon { get; set; } = string.Empty;
+    }
+
+    public class ContractProfitabilityDto
+    {
+        public string[] Labels { get; set; } = Array.Empty<string>();
+        public int[] Data { get; set; } = Array.Empty<int>();
+        public int Target { get; set; }
+    }
+}

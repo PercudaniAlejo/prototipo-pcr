@@ -1,0 +1,2670 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Prototipo Facturador PCR</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+      /* Apply a modern font and basic styles */
+      body {
+        font-family: "Inter", sans-serif;
+      }
+      /* Hide elements by default */
+      .hidden {
+        display: none;
+      }
+    </style>
+  </head>
+  <body class="bg-gray-100">
+    <div id="login-screen" class="flex h-screen">
+      <div
+        class="w-1/4 bg-gray-800 p-8 flex-col justify-between hidden md:flex"
+      >
+        <div>
+          <h1 class="text-4xl font-bold text-white">PCR</h1>
+          <p class="text-blue-300">Energías Renovables</p>
+        </div>
+        <div class="text-gray-400 text-xs">&copy; 2024 Consisnet S.A.</div>
+      </div>
+      <div class="w-full md:w-3/4 flex items-center justify-center p-4">
+        <div class="w-full max-w-sm">
+          <div class="bg-white rounded-lg shadow-md p-6">
+            <h2 class="text-2xl font-bold text-center text-gray-700 mb-6">
+              Iniciar Sesión
+            </h2>
+            <div class="space-y-4">
+              <input
+                type="text"
+                id="username-input"
+                placeholder="Usuario"
+                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+              <input
+                type="password"
+                id="password-input"
+                placeholder="Contraseña"
+                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+              <p
+                id="login-error-message"
+                class="text-red-500 text-sm hidden"
+              ></p>
+              <button
+                id="login-button"
+                class="w-full px-4 py-2 rounded-md font-semibold text-sm flex items-center justify-center transition-colors bg-blue-600 text-white hover:bg-blue-700"
+              >
+                Ingresar
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="main-app" class="hidden h-screen font-sans">
+      <div class="flex h-full">
+        <div
+          id="sidebar"
+          class="bg-gray-800 text-white transition-all duration-300 w-64 hidden md:flex flex-col"
+        >
+          <div
+            class="flex items-center justify-center h-16 border-b border-gray-700"
+          >
+            <h1 id="sidebar-logo" class="text-2xl font-bold">PCR</h1>
+          </div>
+          <nav id="sidebar-nav" class="grow p-2"></nav>
+        </div>
+
+        <div class="flex-1 flex flex-col overflow-hidden">
+          <header class="bg-white shadow-sm z-10">
+            <div class="mx-auto px-4">
+              <div class="flex justify-between items-center h-16">
+                <div class="flex items-center">
+                  <button
+                    id="menu-toggle-button"
+                    class="text-gray-500 focus:outline-none"
+                  >
+                    <svg
+                      class="h-6 w-6"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M4 6h16M4 12h16M4 18h16"
+                      />
+                    </svg>
+                  </button>
+                </div>
+                <div class="flex items-center">
+                  <div class="text-right mr-4">
+                    <p
+                      id="user-display-name"
+                      class="font-semibold text-sm text-gray-800"
+                    ></p>
+                    <p class="text-xs text-gray-500">Administrador</p>
+                  </div>
+                  <div
+                    class="w-10 h-10 rounded-full bg-blue-500 flex items-center justify-center text-white font-bold"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="24"
+                      height="24"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    >
+                      <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
+                      <circle cx="12" cy="7" r="4" />
+                    </svg>
+                  </div>
+                  <button
+                    id="logout-button"
+                    class="ml-4 text-gray-500 hover:text-red-500"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="24"
+                      height="24"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    >
+                      <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+                      <polyline points="16 17 21 12 16 7" />
+                      <line x1="21" y1="12" x2="9" y2="12" />
+                    </svg>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </header>
+
+          <div
+            id="mobile-menu"
+            class="md:hidden bg-gray-800 text-white p-4 hidden"
+          >
+            <nav id="mobile-sidebar-nav"></nav>
+          </div>
+
+          <main
+            id="page-content"
+            class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-100 p-4 md:p-6"
+          ></main>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        // --- DOM Elements ---
+        const loginScreen = document.getElementById("login-screen");
+        const mainApp = document.getElementById("main-app");
+        const loginButton = document.getElementById("login-button");
+        const usernameInput = document.getElementById("username-input");
+        const passwordInput = document.getElementById("password-input");
+        const loginErrorMessage = document.getElementById(
+          "login-error-message"
+        );
+        const logoutButton = document.getElementById("logout-button");
+        const pageContent = document.getElementById("page-content");
+        const sidebar = document.getElementById("sidebar");
+        const sidebarLogo = document.getElementById("sidebar-logo");
+        const sidebarNav = document.getElementById("sidebar-nav");
+        const mobileSidebarNav = document.getElementById("mobile-sidebar-nav");
+        const menuToggleButton = document.getElementById("menu-toggle-button");
+        const mobileMenu = document.getElementById("mobile-menu");
+        const userDisplayName = document.getElementById("user-display-name");
+
+        // --- Global Chart and Color variables ---
+        const primaryColor = "#3b82f6"; // blue-600
+        const secondaryColor = "#06b6d4"; // cyan-500
+        const accentColor = "#7EC9EA"; //'#60a5fa'; // blue-400
+        const grayColor = "#6b7280"; // gray-500
+        let mwhBarChartInstance = null;
+        let clientDonutChartInstance = null;
+        let dashboardLineChartInstance = null;
+        let iaBarChartInstance = null; // NUEVA INSTANCIA DE GRÁFICO
+        let contractFormVisible = false; // ESTADO: controla la vista de contratos
+
+        // --- Mock Data ---
+        const mockUsers = [
+          {
+            id: 1,
+            user: "pablo",
+            name: "Pablo",
+            surname: "Santoro",
+            email: "psantoro@pcr.energy",
+            phone: "-",
+            enabled: "Si",
+          },
+          {
+            id: 2,
+            user: "favio",
+            name: "Favio",
+            surname: "Felice",
+            email: "ffelice@pcr.energy",
+            phone: "-",
+            enabled: "Si",
+          },
+          {
+            id: 3,
+            user: "ignacio",
+            name: "Ignacio",
+            surname: "Lopez",
+            email: "jilopez@pcr.energy",
+            phone: "-",
+            enabled: "No",
+          },
+        ];
+        // Datos de contrato Mock más detallados para el formulario
+        /*const mockContracts = [
+              { id: 'CON001', client: 'Cliente 1', name: 'Contrato MWH Norte', status: 'Activo', startDate: '2023-03-01', term: 24, endDate: '2025-02-28', monthlyEnergy: 5000, annualEnergy: 60000, price1: 52.40, price2: 39.50, remPrice: 156.00, compAnnual: 95, compMonthly: 90, compCompensatory: 5, compRemanent: 10, currency: 'USD', paymentTerm: '30 Días F.F.', topMonthly: 5, dopMonthly: 10, dopAnnual: 10, nemonics: ['PESLUIS', 'GEAR'], concepts: ['Energía Activa', 'Dev. Anticipo'], guarantees: 'Garantía bancaria por $1M' },
+              { id: 'CON002', client: 'Cliente 2', name: 'Contrato Renovable', status: 'Draft', startDate: '2025-01-01', term: 24, endDate: '2026-12-31', monthlyEnergy: 1500, annualEnergy: 18000, price1: 60.00, price2: 0, remPrice: 180.00, compAnnual: 80, compMonthly: 85, compCompensatory: 0, compRemanent: 15, currency: 'USD', paymentTerm: '60 Días F.F.', topMonthly: 0, dopMonthly: 5, dopAnnual: 5, nemonics: ['IRENEC'], concepts: ['FNNE'], guarantees: '' },
+              { id: 'CON003', client: 'Cliente 3', name: 'Contrato 003', status: 'Vencido', startDate: '2023-05-01', term: 24, endDate: '2025-04-30', monthlyEnergy: 3250, annualEnergy: 39000, price1: 50.00, price2: 50.00, remPrice: 150.00, compAnnual: 100, compMonthly: 100, compCompensatory: 0, compRemanent: 0, currency: 'ARS', paymentTerm: 'Contado', topMonthly: 0, dopMonthly: 0, dopAnnual: 0, nemonics: ['PESANLUING'], concepts: ['Energía 2', 'Sobrecostos MEM'], guarantees: 'Pagaré a favor' },
+              { id: 'CON004', client: 'Cliente 4', name: 'Contrato 004', status: 'Vencido', startDate: '2023-08-01', term: 24, endDate: '2025-06-30', monthlyEnergy: 3250, annualEnergy: 39000, price1: 50.00, price2: 50.00, remPrice: 150.00, compAnnual: 100, compMonthly: 100, compCompensatory: 0, compRemanent: 0, currency: 'ARS', paymentTerm: 'Contado', topMonthly: 0, dopMonthly: 0, dopAnnual: 0, nemonics: ['PESANLUING'], concepts: ['Energía 2', 'Sobrecostos MEM'], guarantees: '' },
+            ];*/
+        const mockContracts = [
+          // ** Se agregó el campo monthlySchedule **
+          {
+            id: "CON001",
+            client: "Cliente 1",
+            name: "Contrato MWH Norte",
+            status: "Activo",
+            startDate: "2023-03-01",
+            term: 24,
+            endDate: "2025-02-28",
+            monthlyEnergy: 5000,
+            annualEnergy: 60000,
+            price1: 52.4,
+            price2: 39.5,
+            remPrice: 156.0,
+            compAnnual: 95,
+            compMonthly: 90,
+            compCompensatory: 5,
+            compRemanent: 10,
+            currency: "USD",
+            paymentTerm: "30 Días F.F.",
+            topMonthly: 5,
+            dopMonthly: 10,
+            dopAnnual: 10,
+            nemonics: ["PESLUIS", "GEAR"],
+            concepts: ["Energía Activa", "Dev. Anticipo"],
+            guarantees: "Garantía bancaria por $1M",
+            monthlySchedule: [
+              5000, 5000, 5000, 5000, 5000, 5000, 5000, 5000, 5000, 5000, 5000,
+              5000,
+            ],
+          },
+          {
+            id: "CON002",
+            client: "Cliente 2",
+            name: "Contrato Renovable",
+            status: "Draft",
+            startDate: "2025-01-01",
+            term: 24,
+            endDate: "2026-12-31",
+            monthlyEnergy: 1500,
+            annualEnergy: 18000,
+            price1: 60.0,
+            price2: 0,
+            remPrice: 180.0,
+            compAnnual: 80,
+            compMonthly: 85,
+            compCompensatory: 0,
+            compRemanent: 15,
+            currency: "USD",
+            paymentTerm: "60 Días F.F.",
+            topMonthly: 0,
+            dopMonthly: 5,
+            dopAnnual: 5,
+            nemonics: ["IRENEC"],
+            concepts: ["FNNE"],
+            guarantees: "",
+            monthlySchedule: [
+              1500, 1500, 1600, 1600, 1700, 1700, 1800, 1800, 1900, 1900, 2000,
+              2000,
+            ],
+          },
+          {
+            id: "CON003",
+            client: "Cliente 3",
+            name: "Contrato 003",
+            status: "Vencido",
+            startDate: "2023-05-01",
+            term: 24,
+            endDate: "2025-04-30",
+            monthlyEnergy: 3250,
+            annualEnergy: 39000,
+            price1: 50.0,
+            price2: 50.0,
+            remPrice: 150.0,
+            compAnnual: 100,
+            compMonthly: 100,
+            compCompensatory: 0,
+            compRemanent: 0,
+            currency: "ARS",
+            paymentTerm: "Contado",
+            topMonthly: 0,
+            dopMonthly: 0,
+            dopAnnual: 0,
+            nemonics: ["PESANLUING"],
+            concepts: ["Energía 2", "Sobrecostos MEM"],
+            guarantees: "Pagaré a favor",
+            monthlySchedule: [
+              3250, 3250, 3250, 3250, 3250, 3250, 3250, 3250, 3250, 3250, 3250,
+              3250,
+            ],
+          },
+          {
+            id: "CON004",
+            client: "Cliente 4",
+            name: "Contrato 004",
+            status: "Vencido",
+            startDate: "2023-08-01",
+            term: 24,
+            endDate: "2025-06-30",
+            monthlyEnergy: 3250,
+            annualEnergy: 39000,
+            price1: 50.0,
+            price2: 50.0,
+            remPrice: 150.0,
+            compAnnual: 100,
+            compMonthly: 100,
+            compCompensatory: 0,
+            compRemanent: 0,
+            currency: "ARS",
+            paymentTerm: "Contado",
+            topMonthly: 0,
+            dopMonthly: 0,
+            dopAnnual: 0,
+            nemonics: ["PESANLUING"],
+            concepts: ["Energía 2", "Sobrecostos MEM"],
+            guarantees: "",
+            monthlySchedule: [
+              3250, 3250, 3250, 3250, 3250, 3250, 3250, 3250, 3250, 3250, 3250,
+              3250,
+            ],
+          },
+        ];
+
+        const mockClients = [
+          {
+            id: 1,
+            name: "Cliente 1",
+            description: "Cliente 03",
+            enabled: false,
+            active: true,
+          },
+          {
+            id: 2,
+            name: "Cliente 2",
+            description: "Cliente 01",
+            enabled: false,
+            active: true,
+          },
+          {
+            id: 3,
+            name: "Cliente 3",
+            description: "Cliente 02",
+            enabled: true,
+            active: false,
+          },
+          {
+            id: 4,
+            name: "Cliente 4",
+            description: "Cliente 04",
+            enabled: true,
+            active: true,
+          },
+        ];
+        const mockRates = [
+          {
+            id: 1,
+            name: "DÓLAR BANCO NACION",
+            value: "950.00",
+            until: "30/10/2024",
+          },
+          {
+            id: 2,
+            name: "DÓLAR BANCO NACION",
+            value: "960.00",
+            until: "30/11/2024",
+          },
+          { id: 3, name: "DÓLAR BANCO NACION", value: "970.00", until: "" },
+          { id: 4, name: "EURO", value: "1050.00", until: "30/10/2024" },
+          { id: 5, name: "A3500", value: "950.00", until: "30/10/2024" },
+          { id: 6, name: "A3500", value: "960.00", until: "30/11/2024" },
+          { id: 7, name: "A3500", value: "970.00", until: "" },
+          { id: 8, name: "TASA SOFR", value: "3.50", until: "" },
+        ];
+
+        // Datos adicionales para Facturación
+        const mockBillingData = [
+          {
+            nemo: "SANLUISNORT",
+            description: "Energía Activa",
+            nemo_generador: "PESLUIS",
+            cantidad: "5.000,00",
+            unitario: "52,40",
+            monto: "262.000,00",
+            moneda: "USD",
+          },
+          {
+            nemo: "SANLUISNORT",
+            description: "Dev. Anticipo",
+            nemo_generador: "PESLUIS",
+            cantidad: "1,00",
+            unitario: "-500,00",
+            monto: "-500,00",
+            moneda: "USD",
+          },
+          {
+            nemo: "IRENEC",
+            description: "FNNE",
+            nemo_generador: "IRENEC",
+            cantidad: "1.500,00",
+            unitario: "60,00",
+            monto: "90.000,00",
+            moneda: "USD",
+          },
+          {
+            nemo: "PESANLUING",
+            description: "Sobrecostos MEM",
+            nemo_generador: "",
+            cantidad: "1,00",
+            unitario: "10.000,00",
+            monto: "10.000,00",
+            moneda: "ARS",
+          },
+        ];
+
+        // Datos adicionales para Administración/Log de Procesos
+        const mockIpocData = [
+          {
+            timestamp: "2024-11-25 10:30",
+            periodo: "202411",
+            age_id: "1",
+            nemo_cliente: "PESLUIS",
+            nemo_generador: "PESLUIS",
+            etotal_plus: "125000",
+            etotal_ren: "75000",
+            estado: "Procesado",
+          },
+          {
+            timestamp: "2024-11-25 10:35",
+            periodo: "202411",
+            age_id: "2",
+            nemo_cliente: "IRENEC",
+            nemo_generador: "IRENEC",
+            etotal_plus: "15000",
+            etotal_ren: "10000",
+            estado: "Procesado",
+          },
+          {
+            timestamp: "2024-11-25 10:40",
+            periodo: "202411",
+            age_id: "3",
+            nemo_cliente: "SANLUISNORT",
+            nemo_generador: "PESLUIS",
+            etotal_plus: "50000",
+            etotal_ren: "0",
+            estado: "Pendiente",
+          },
+          {
+            timestamp: "2024-12-01 09:00",
+            periodo: "202412",
+            age_id: "1",
+            nemo_cliente: "PESLUIS",
+            nemo_generador: "PESLUIS",
+            etotal_plus: "0",
+            etotal_ren: "0",
+            estado: "Procesado",
+          },
+        ];
+
+        // Datos Históricos de MWh para Dashboard y Analytics
+        const fullAnalyticsData = [
+          {
+            month: "2024-07",
+            c1: 1500,
+            c2: 800,
+            c3: 3500,
+            c4: 1000,
+            total: 6800,
+          },
+          {
+            month: "2024-08",
+            c1: 1800,
+            c2: 900,
+            c3: 4000,
+            c4: 1100,
+            total: 7800,
+          },
+          {
+            month: "2024-09",
+            c1: 2000,
+            c2: 1000,
+            c3: 4200,
+            c4: 1300,
+            total: 8500,
+          },
+          {
+            month: "2024-10",
+            c1: 2200,
+            c2: 1100,
+            c3: 4400,
+            c4: 1400,
+            total: 9100,
+          },
+          {
+            month: "2024-11",
+            c1: 2150,
+            c2: 1150,
+            c3: 4450,
+            c4: 1450,
+            total: 9200,
+          },
+          {
+            month: "2024-12",
+            c1: 2100,
+            c2: 1200,
+            c3: 4500,
+            c4: 1500,
+            total: 9300,
+          },
+          {
+            month: "2025-01",
+            c1: 2000,
+            c2: 1300,
+            c3: 4600,
+            c4: 1600,
+            total: 9500,
+          },
+          {
+            month: "2025-02",
+            c1: 1900,
+            c2: 1400,
+            c3: 4700,
+            c4: 1700,
+            total: 9700,
+          },
+          {
+            month: "2025-03",
+            c1: 2100,
+            c2: 1500,
+            c3: 4800,
+            c4: 1800,
+            total: 10200,
+          },
+          {
+            month: "2025-04",
+            c1: 2200,
+            c2: 1600,
+            c3: 4900,
+            c4: 1900,
+            total: 10600,
+          },
+          {
+            month: "2025-05",
+            c1: 2300,
+            c2: 1700,
+            c3: 5000,
+            c4: 2000,
+            total: 11000,
+          },
+          {
+            month: "2025-06",
+            c1: 2400,
+            c2: 1800,
+            c3: 5100,
+            c4: 2100,
+            total: 11400,
+          },
+        ];
+
+        const clientNames = [
+          "Cliente 1 (C1)",
+          "Cliente 2 (C2)",
+          "Cliente 3 (C3)",
+          "Cliente 4 (C4)",
+        ];
+
+        // NUEVOS DATOS MOCK PARA DASHBOARD KPI
+        const mockKpis = {
+          mwhTotalLastMonth: 9300,
+          billedAmountLastMonth: 450000000,
+          activeClients: 4,
+          daysToCammesaClose: 5,
+        };
+
+        // NUEVOS DATOS MOCK PARA RENTABILIDAD DE CONTRATOS IA
+        const iaContractProfitability = {
+          labels: [
+            "CON001 (Norte)",
+            "CON002 (Renovable)",
+            "CON003 (Base)",
+            "CON004 (Base)",
+          ],
+          data: [15, 25, 8, 10], // Rentabilidad simulada en %
+          target: 18, // Rentabilidad objetivo
+        };
+
+        // --- App State ---
+        let currentPage = "dashboard";
+        let isSidebarCollapsed = false;
+
+        // --- Navigation Links ---
+        const navLinks = [
+          { id: "dashboard", label: "Dashboard", short: "D" },
+          { id: "users", label: "Usuarios", short: "U" },
+          { id: "contracts", label: "Contratos", short: "C" },
+          { id: "clients", label: "Clientes", short: "L" },
+          { id: "rates", label: "Tasas y Divisas", short: "T" },
+          { id: "billing", label: "Facturación", short: "F" },
+          { id: "ipoc-admin", label: "Administración ", short: "A" },
+          { id: "analytics", label: "Análisis Gráfico", short: "G" },
+          { id: "ia-strategy", label: "Estrategia IA", short: "I" },
+        ];
+
+        // --- Page Render Functions ---
+
+        // #############################################################
+        // # DASHBOARD (RESTAURADO)
+        // #############################################################
+
+        function renderDashboard() {
+          // MOCK DATA: Process Status
+          const companies = [
+            {
+              name: "Empresa 1",
+              color: "bg-blue-600",
+              status: "DEFINITIVO",
+              dteDate: "20/11/2024 08:21:50",
+              lastDte: "22/11/2024 17:31:34",
+              icon: `<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>`,
+            },
+            {
+              name: "Empresa 2",
+              color: "bg-cyan-600",
+              status: "PRE-LIQUIDACIÓN",
+              dteDate: "20/12/2024 10:00:00",
+              lastDte: "22/12/2024 11:00:00",
+              icon: `<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>`,
+            },
+            {
+              name: "Empresa 3",
+              color: "bg-gray-600",
+              status: "CARGA MATER",
+              dteDate: "20/12/2024 12:00:00",
+              lastDte: "22/12/2024 13:00:00",
+              icon: `<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v-1a4 4 0 014-4h8a4 4 0 014 4v1m-6 0h.01M6 20h12a2 2 0 002-2v-1a2 2 0 00-2-2H6a2 2 0 00-2 2v1a2 2 0 002 2z"></path></svg>`,
+            },
+          ];
+
+          // MOCK DATA: MWh Trend (Last 6 Months) for Line Chart
+          const trendData = fullAnalyticsData.slice(0, 6); // Últimos 6 meses
+          const trendLabels = trendData.map((d) => d.month);
+          const trendValues = trendData.map((d) => d.total);
+
+          const formatNumber = (num, currency = false) => {
+            const options = {
+              style: currency ? "currency" : "decimal",
+              currency: "ARS",
+              minimumFractionDigits: currency ? 0 : 0,
+              maximumFractionDigits: currency ? 0 : 0,
+            };
+            // Reemplazamos ARS por $ para una visualización más limpia en el dashboard
+            return num.toLocaleString("es-AR", options).replace("ARS", "$");
+          };
+
+          const kpisHtml = `
+                    <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+                        <div class="bg-white rounded-xl shadow-lg p-5 border-l-4 border-blue-600 transition duration-300 hover:shadow-xl">
+                            <p class="text-sm font-medium text-gray-500 uppercase">MWh TOTALES (Dic 2024)</p>
+                            <div class="flex items-center justify-between mt-1">
+                                <span class="text-3xl font-extrabold text-gray-900">${formatNumber(
+                                  mockKpis.mwhTotalLastMonth
+                                )}</span>
+                                <div class="p-2 bg-blue-100 text-blue-600 rounded-full">
+                                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-white rounded-xl shadow-lg p-5 border-l-4 border-cyan-600 transition duration-300 hover:shadow-xl">
+                            <p class="text-sm font-medium text-gray-500 uppercase">MONTO TOTAL (Dic 2024)</p>
+                            <div class="flex items-center justify-between mt-1">
+                                <span class="text-3xl font-extrabold text-gray-900">${formatNumber(
+                                  mockKpis.billedAmountLastMonth,
+                                  true
+                                )}</span>
+                                <div class="p-2 bg-cyan-100 text-cyan-600 rounded-full">
+                                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-3.136 0-6.096 1.408-7.938 3.535A1.993 1.993 0 002 14c0 1.105.895 2 2 2h16c1.105 0 2-.895 2-2 0-1.22-.67-2.28-1.637-2.903C18.096 9.408 15.136 8 12 8z"></path></svg>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="bg-white rounded-xl shadow-lg p-5 border-l-4 border-gray-400 transition duration-300 hover:shadow-xl">
+                            <p class="text-sm font-medium text-gray-500 uppercase">CLIENTES ACTIVOS</p>
+                            <div class="flex items-center justify-between mt-1">
+                                <span class="text-3xl font-extrabold text-gray-900">${
+                                  mockKpis.activeClients
+                                }</span>
+                                <div class="p-2 bg-gray-100 text-gray-600 rounded-full">
+                                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-white rounded-xl shadow-lg p-5 border-l-4 border-yellow-600 transition duration-300 hover:shadow-xl">
+                            <p class="text-sm font-medium text-gray-500 uppercase">DÍAS RESTANTES (Cierre)</p>
+                            <div class="flex items-center justify-between mt-1">
+                                <span class="text-3xl font-extrabold text-gray-900">${
+                                  mockKpis.daysToCammesaClose
+                                }</span>
+                                <div class="p-2 bg-yellow-100 text-yellow-600 rounded-full">
+                                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+
+          const processStatusHtml = companies
+            .map(
+              (company) => `
+                    <div class="bg-white rounded-lg shadow-md p-4 flex items-center space-x-4 border-l-4 ${company.color.replace(
+                      "bg-",
+                      "border-"
+                    )}">
+                        <div class="text-white ${
+                          company.color
+                        } p-2 rounded-full">
+                            ${company.icon}
+                        </div>
+                        <div class="flex-1">
+                            <h3 class="text-lg font-semibold text-gray-800">${
+                              company.name
+                            }</h3>
+                            <p class="text-sm text-gray-600">Estado: <span class="font-bold text-blue-700">${
+                              company.status
+                            }</span></p>
+                        </div>
+                        <div class="text-right text-xs text-gray-500">
+                            <p>Período: ${company.dteDate.substring(3, 10)}</p>
+                            <p>Última Actualización: ${company.lastDte.substring(
+                              0,
+                              10
+                            )}</p>
+                        </div>
+                    </div>
+                `
+            )
+            .join("");
+
+          const strategyOutput = [
+            {
+              contract: "CON001",
+              metric: "Pronóstico MWh (2025)",
+              value: "62.000 MWh (↑ 3.3%)",
+              status: "Optimo",
+              recommendation: "Mantener precio y buscar extensión del plazo.",
+            },
+            {
+              contract: "CON002",
+              metric: "Riesgo de Vencimiento",
+              value: "Alto (Vence 2026-01)",
+              status: "Advertencia",
+              recommendation:
+                "Iniciar re-negociación con +12 meses de antelación.",
+            },
+            {
+              contract: "CON003",
+              metric: "Precio ARS vs Inflación",
+              value: "Pérdida (15%)",
+              status: "Crítico",
+              recommendation:
+                "Revisar cláusula de ajuste o pasar a precio DÓLAR link.",
+            },
+            //{ contract: 'CON004', metric: 'Garantía Emitida', value: 'Faltante', status: 'Advertencia', recommendation: 'Solicitar emisión de pagaré o fianza bancaria inmediatamente.' },
+          ];
+
+          pageContent.innerHTML = `
+                    <h1 class="text-2xl font-bold text-gray-800 mb-4">Resumen del Proceso de Facturación</h1>
+                    
+                    ${kpisHtml}
+
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                        <div class="lg:col-span-2 bg-white rounded-xl shadow-lg p-6">
+                            <h2 class="text-xl font-semibold text-gray-800 mb-4">Tendencia de MWh Facturados (Últimos 6 Meses)</h2>
+                            <div style="height: 300px;">
+                                <canvas id="dashboardLineChart"></canvas>
+                            </div>
+                        </div>
+
+                        <!--<div>
+                            <h2 class="text-xl font-semibold text-gray-800 mb-4">Estado de las Entidades</h2>
+                            <div class="space-y-4">
+                                ${processStatusHtml}
+                            </div>
+                            <div class="mt-6 p-4 bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 rounded-md shadow-md">
+                                <p><span class="font-bold">Alerta:</span> Contrato CON002 vence en 60 días. Revisar.</p>
+                            </div>
+                        </div>-->
+						 <div class="bg-white rounded-xl shadow-lg p-6">
+                            <h2 class="text-xl font-semibold text-gray-800 mb-4">Recomendaciones Clave</h2>
+                            <div class="space-y-4">
+                                ${strategyOutput
+                                  .map(
+                                    (item) => `
+                                    <div class="p-3 border-l-4 ${
+                                      item.status === "Optimo"
+                                        ? "border-blue-500 bg-blue-50"
+                                        : item.status === "Advertencia"
+                                        ? "border-yellow-500 bg-yellow-50"
+                                        : "border-red-500 bg-red-50"
+                                    } rounded-md">
+                                        <p class="text-xs font-semibold uppercase text-gray-600">${
+                                          item.contract
+                                        } - ${item.metric}</p>
+                                        <p class="font-bold text-gray-800 mb-1">${
+                                          item.value
+                                        } <span class="text-xs font-normal ${
+                                      item.status === "Optimo"
+                                        ? "text-blue-600"
+                                        : item.status === "Advertencia"
+                                        ? "text-yellow-600"
+                                        : "text-red-600"
+                                    }">(${item.status})</span></p>
+                                        <p class="text-sm text-gray-700 italic">${
+                                          item.recommendation
+                                        }</p>
+                                    </div>
+                                `
+                                  )
+                                  .join("")}
+                            </div>
+                        </div>
+                    </div>
+                `;
+
+          // --- Inicialización del Gráfico de Tendencia (Chart.js) ---
+          if (dashboardLineChartInstance) {
+            dashboardLineChartInstance.destroy(); // Destruir si ya existía
+          }
+
+          const ctx = document
+            .getElementById("dashboardLineChart")
+            .getContext("2d");
+          dashboardLineChartInstance = new Chart(ctx, {
+            type: "line",
+            data: {
+              labels: trendLabels,
+              datasets: [
+                {
+                  label: "MWh Total",
+                  data: trendValues,
+                  backgroundColor: accentColor + "40", // light blue fill
+                  borderColor: primaryColor,
+                  borderWidth: 2,
+                  tension: 0.3, // Smoother line
+                  fill: true,
+                  pointRadius: 5,
+                  pointBackgroundColor: primaryColor,
+                },
+              ],
+            },
+            options: {
+              responsive: true,
+              maintainAspectRatio: false,
+              plugins: {
+                legend: { display: false },
+                title: { display: false },
+              },
+              scales: {
+                y: {
+                  beginAtZero: false,
+                  title: { display: true, text: "MWh", color: grayColor },
+                  grid: { color: "rgba(0,0,0,0.05)" },
+                },
+                x: {
+                  title: { display: true, text: "Período", color: grayColor },
+                  grid: { display: false },
+                },
+              },
+            },
+          });
+        }
+
+        function updateCharts(period = 3) {
+          const slicedData = fullAnalyticsData.slice(0, period);
+
+          const monthlyLabels = slicedData.map((d) => d.month);
+          const monthlyData = slicedData.map((d) => d.total);
+
+          const clientTotals = {};
+          clientNames.forEach((name, index) => (clientTotals[name] = 0));
+
+          slicedData.forEach((monthData) => {
+            clientTotals[clientNames[0]] += monthData.c1;
+            clientTotals[clientNames[1]] += monthData.c2;
+            clientTotals[clientNames[2]] += monthData.c3;
+            clientTotals[clientNames[3]] += monthData.c4;
+          });
+
+          const clientLabels = clientNames;
+          const clientData = clientNames.map((name) => clientTotals[name]);
+
+          // --- Actualizar o Inicializar GRÁFICO DE BARRAS ---
+          if (mwhBarChartInstance) {
+            mwhBarChartInstance.data.labels = monthlyLabels;
+            mwhBarChartInstance.data.datasets[0].data = monthlyData;
+            mwhBarChartInstance.update();
+          } else {
+            const ctxBar = document
+              .getElementById("mwhBarChart")
+              .getContext("2d");
+            mwhBarChartInstance = new Chart(ctxBar, {
+              type: "bar",
+              data: {
+                labels: monthlyLabels,
+                datasets: [
+                  {
+                    label: "MWh Facturados",
+                    data: monthlyData,
+                    backgroundColor: primaryColor,
+                    borderColor: primaryColor,
+                    borderWidth: 1,
+                  },
+                ],
+              },
+              options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                  legend: { display: false },
+                  title: {
+                    display: true,
+                    text: `Megavatios-hora (MWh) en los últimos ${period} meses`,
+                  },
+                },
+                scales: {
+                  y: {
+                    beginAtZero: true,
+                    title: { display: true, text: "MWh" },
+                  },
+                },
+              },
+            });
+          }
+
+          // --- Actualizar o Inicializar GRÁFICO DE DONA ---
+          if (clientDonutChartInstance) {
+            clientDonutChartInstance.data.labels = clientLabels;
+            clientDonutChartInstance.data.datasets[0].data = clientData;
+            clientDonutChartInstance.options.plugins.title.text = `Proporción MWh por Cliente (Total Últimos ${period} Meses)`;
+            clientDonutChartInstance.update();
+          } else {
+            const ctxDonut = document
+              .getElementById("clientDonutChart")
+              .getContext("2d");
+            clientDonutChartInstance = new Chart(ctxDonut, {
+              type: "doughnut",
+              data: {
+                labels: clientLabels,
+                datasets: [
+                  {
+                    label: "MWh Facturados",
+                    data: clientData,
+                    backgroundColor: [
+                      primaryColor,
+                      secondaryColor,
+                      accentColor,
+                      grayColor,
+                      "#10b981",
+                      "#f59e0b",
+                    ],
+                    hoverOffset: 4,
+                  },
+                ],
+              },
+              options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                  legend: { position: "bottom" },
+                  title: {
+                    display: true,
+                    text: `Proporción MWh por Cliente (Total Últimos ${period} Meses)`,
+                  },
+                },
+              },
+            });
+          }
+        }
+
+        function renderAnalytics() {
+          pageContent.innerHTML = `
+                    <h1 class="text-2xl font-bold text-gray-800 mb-6">Análisis Gráfico de Facturación (MWh)</h1>
+                    
+                    <div class="bg-white rounded-lg shadow-md p-4 mb-6 flex items-center gap-4">
+                        <div class="flex items-center gap-2">
+                            <label for="period-select-mwh" class="text-sm font-medium text-gray-700">Comparar Meses:</label>
+                            <select id="period-select-mwh" class="border border-gray-300 rounded-md px-3 py-1 text-sm focus:ring-blue-500 focus:border-blue-500">
+                                <option value="3" selected>Últimos 3 meses</option>
+                                <option value="6">Últimos 6 meses</option>
+                                <option value="12">Últimos 12 meses</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                        <div class="lg:col-span-2 bg-white rounded-xl shadow-lg p-6">
+                            <h2 class="text-xl font-semibold text-gray-800 mb-4">MWh Facturados - Total Mensual</h2>
+                            <div style="height: 400px;">
+                                <canvas id="mwhBarChart"></canvas>
+                            </div>
+                        </div>
+
+                        <div class="bg-white rounded-xl shadow-lg p-6">
+                            <h2 class="text-xl font-semibold text-gray-800 mb-4">Proporción por Cliente (MWh Acumulado)</h2>
+                            <div class="relative flex justify-center" style="height: 400px;">
+                                <canvas id="clientDonutChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                `;
+
+          updateCharts(3);
+
+          document
+            .getElementById("period-select-mwh")
+            .addEventListener("change", (e) => {
+              const selectedPeriod = parseInt(e.target.value);
+              updateCharts(selectedPeriod);
+            });
+        }
+
+        /* COMIENZA PARTE GRAFICA 
+            function updateCharts(period = 3) {
+                // Filtra los datos para los últimos 'period' meses
+                const filteredData = fullAnalyticsData.slice(-period);
+                const labels = filteredData.map(d => d.month);
+                const donutColors = [primaryColor, secondaryColor, accentColor, grayColor, '#ff9933', '#cc66ff'];
+
+                // --- 1. Gráfico de Barras (MWh por Cliente) ---
+                const datasetsBar = clientNames.map((clientName, index) => {
+                    const clientKey = `c${index + 1}`;
+                    const color = donutColors[index % donutColors.length];
+                    return {
+                        label: clientName,
+                        data: filteredData.map(d => d[clientKey]),
+                        backgroundColor: color,
+                        stack: 'stack1',
+                    };
+                });
+
+                if (mwhBarChartInstance) {
+                    mwhBarChartInstance.data.labels = labels;
+                    mwhBarChartInstance.data.datasets = datasetsBar;
+                    mwhBarChartInstance.update();
+                }
+
+                // --- 2. Gráfico de Torta/Dona (Participación Total) ---
+                // Se basa en el total del ÚLTIMO período
+                const latestData = filteredData[filteredData.length - 1];
+                const donutDataValues = clientNames.map((clientName, index) => latestData[`c${index + 1}`]);
+                const totalMWh = latestData ? latestData.total : 0;
+
+                if (clientDonutChartInstance) {
+                    clientDonutChartInstance.data.labels = clientNames.map((name, index) => {
+                        const value = donutDataValues[index] || 0;
+                        const percentage = totalMWh > 0 ? ((value / totalMWh) * 100).toFixed(1) : 0;
+                        return `${name} (${percentage}%)`;
+                    });
+                    clientDonutChartInstance.data.datasets[0].data = donutDataValues;
+                    clientDonutChartInstance.data.datasets[0].backgroundColor = donutColors.slice(0, clientNames.length);
+                    clientDonutChartInstance.update();
+                }
+
+            }
+
+
+            function renderAnalytics() {
+                pageContent.innerHTML = `
+                    <h1 class="text-2xl font-bold text-gray-800 mb-6">Análisis Gráfico de Consumos (MWh)</h1>
+
+                    <div class="mb-6 flex justify-end items-center space-x-4">
+                        <label for="period-selector" class="text-gray-700 font-medium">Período:</label>
+                        <select id="period-selector" class="px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
+                            <option value="3">Últimos 3 Meses</option>
+                            <option value="6" selected>Últimos 6 Meses</option>
+                            <option value="12">Últimos 12 Meses</option>
+                        </select>
+                    </div>
+
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                        <div class="lg:col-span-2 bg-white rounded-xl shadow-lg p-6">
+                            <h2 class="text-xl font-semibold text-gray-800 mb-4">Consumo Mensual por Cliente (MWh)</h2>
+                            <div style="height: 400px;">
+                                <canvas id="mwhBarChart"></canvas>
+                            </div>
+                        </div>
+
+                        <div class="bg-white rounded-xl shadow-lg p-6 flex flex-col items-center">
+                            <h2 class="text-xl font-semibold text-gray-800 mb-4 text-center">Participación Total (Último Mes)</h2>
+                            <div style="height: 300px; width: 300px;">
+                                <canvas id="clientDonutChart"></canvas>
+                            </div>
+                            <p class="text-sm text-gray-500 mt-4">La torta muestra la distribución del MWh total del último período seleccionado.</p>
+                        </div>
+                    </div>
+                `;
+
+                // --- Inicialización de Chart.js ---
+                // Destruir instancias previas
+                if (mwhBarChartInstance) mwhBarChartInstance.destroy();
+                if (clientDonutChartInstance) clientDonutChartInstance.destroy();
+
+                const ctxBar = document.getElementById('mwhBarChart').getContext('2d');
+                mwhBarChartInstance = new Chart(ctxBar, {
+                    type: 'bar',
+                    data: {
+                        labels: [], // Se llenará con updateCharts
+                        datasets: [] // Se llenará con updateCharts
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            tooltip: { mode: 'index', intersect: false },
+                            legend: { position: 'bottom' }
+                        },
+                        scales: {
+                            x: { stacked: true, grid: { display: false } },
+                            y: { stacked: true, beginAtZero: true, title: { display: true, text: 'MWh' } }
+                        }
+                    }
+                });
+
+                const ctxDonut = document.getElementById('clientDonutChart').getContext('2d');
+                const donutColors = [primaryColor, secondaryColor, accentColor, grayColor, '#ff9933', '#cc66ff']; 
+                clientDonutChartInstance = new Chart(ctxDonut, {
+                    type: 'doughnut',
+                    data: {
+                        labels: [], // Se llenará con updateCharts
+                        datasets: [{
+                            data: [],
+                            backgroundColor: donutColors,
+                            hoverOffset: 8,
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: { position: 'bottom' },
+                            tooltip: { callbacks: { label: (context) => {
+                                    const label = context.label || '';
+                                    const value = context.parsed || 0;
+                                    return `${label}: ${value.toLocaleString('es-AR')} MWh`;
+                                }
+                            }},
+                        }
+                    }
+                });
+
+                // Cargar los datos iniciales (6 meses por defecto)
+                updateCharts(6);
+
+                // Event Listener para cambiar el período
+                document.getElementById('period-selector').addEventListener('change', (e) => {
+                    updateCharts(parseInt(e.target.value));
+                });
+            }
+             HASTA ACA LLEGA LA PARTE GRAFICA */
+        // #############################################################
+        // # ADMINISTRACION DE CONTRATOS (SIN CAMBIOS FUNCIONALES)
+        // #############################################################
+
+        function renderField(
+          label,
+          id,
+          type = "text",
+          value = "",
+          options = [],
+          isCalculated = false,
+          min = null,
+          max = null
+        ) {
+          const calculatedClass = isCalculated
+            ? "bg-gray-200 text-gray-700 font-semibold cursor-not-allowed"
+            : "bg-white focus:ring-blue-500 focus:border-blue-500";
+          const disabledAttr = isCalculated ? "disabled" : "";
+          const inputType =
+            type === "number" || type === "date" ? type : "text";
+
+          let inputHtml;
+          if (type === "select") {
+            inputHtml = `
+                        <select id="${id}" class="w-full px-3 py-2 border border-gray-300 rounded-lg ${calculatedClass}" ${disabledAttr}>
+                            ${options
+                              .map(
+                                (opt) =>
+                                  `<option value="${opt.value}" ${
+                                    opt.selected ? "selected" : ""
+                                  }>${opt.text}</option>`
+                              )
+                              .join("")}
+                        </select>
+                    `;
+          } else if (type === "textarea") {
+            inputHtml = `<textarea id="${id}" rows="3" class="w-full px-3 py-2 border border-gray-300 rounded-lg ${calculatedClass}" ${disabledAttr}>${value}</textarea>`;
+          } else if (type === "checkbox-group") {
+            inputHtml = `
+                        <div class="space-y-2">
+                            ${options
+                              .map(
+                                (opt) => `
+                                <div class="flex items-center">
+                                    <input id="${id}-${
+                                  opt.value
+                                }" type="checkbox" value="${
+                                  opt.value
+                                }" class="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500" ${
+                                  opt.checked ? "checked" : ""
+                                } ${disabledAttr}>
+                                    <label for="${id}-${
+                                  opt.value
+                                }" class="ml-2 text-sm text-gray-700">${
+                                  opt.text
+                                }</label>
+                                </div>
+                            `
+                              )
+                              .join("")}
+                        </div>
+                    `;
+          } else {
+            let constraints = "";
+            if (min !== null) constraints += ` min="${min}"`;
+            if (max !== null) constraints += ` max="${max}"`;
+            inputHtml = `<input type="${inputType}" id="${id}" value="${value}" class="w-full px-3 py-2 border border-gray-300 rounded-lg ${calculatedClass}" ${disabledAttr} ${constraints}>`;
+          }
+
+          return `
+                    <div class="space-y-1">
+                        <label for="${id}" class="block text-sm font-medium text-gray-700">${label} ${type === "number" && !isCalculated ? "" : ""}</label>
+                        ${inputHtml}
+                        ${
+                          isCalculated
+                            ? `<p class="text-xs text-blue-600 mt-1">Campo calculado automáticamente.</p>`
+                            : ""
+                        }
+                    </div>
+                `;
+        }
+
+        function renderSection(title, content) {
+          return `
+                    <div class="bg-gray-50 p-4 border-l-4 border-blue-500 rounded-lg shadow-inner mb-6">
+                        <h3 class="text-lg font-bold text-gray-800 mb-4">${title}</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                            ${content}
+                        </div>
+                    </div>
+                `;
+        }
+        // FUNCIÓN: Renderiza la grilla de programación mensual
+        function renderMonthlyScheduleGrid(schedule) {
+          const months = [
+            "Ene",
+            "Feb",
+            "Mar",
+            "Abr",
+            "May",
+            "Jun",
+            "Jul",
+            "Ago",
+            "Sep",
+            "Oct",
+            "Nov",
+            "Dic",
+          ];
+          const currentYear = new Date().getFullYear();
+
+          const rows = months
+            .map((month, index) => {
+              const monthYear = `${month} ${currentYear}`;
+              // Formato para que se vea con separador de miles
+              const energyValue =
+                schedule[index] !== undefined &&
+                schedule[index] !== "" &&
+                schedule[index] !== null
+                  ? parseFloat(schedule[index]).toLocaleString("es-AR", {
+                      minimumFractionDigits: 0,
+                      maximumFractionDigits: 0,
+                    })
+                  : "";
+
+              return `
+                        <tr>
+                            <td class="px-3 py-2 whitespace-nowrap text-sm font-medium text-gray-900">${monthYear}</td>
+                            <td class="px-3 py-2 whitespace-nowrap">
+                                <input type="text" value="${energyValue}" 
+                                       data-month-index="${index}" 
+                                       class="monthly-energy-input w-full px-2 py-1 border border-gray-300 rounded-md text-sm text-right focus:outline-none focus:ring-2 focus:ring-blue-500" 
+                                       placeholder="MWh">
+                            </td>
+                            <td class="px-3 py-2 whitespace-nowrap text-sm text-gray-500">MWh</td>
+                        </tr>
+                    `;
+            })
+            .join("");
+
+          return `
+                    <div class="overflow-x-auto border border-gray-200 rounded-lg shadow-inner">
+                        <table class="min-w-full divide-y divide-gray-200">
+                            <thead class="bg-gray-50">
+                                <tr>
+                                    <th scope="col" class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-1/2">Mes/Año</th>
+                                    <th scope="col" class="px-3 py-2 text-right text-xs font-medium text-gray-500 uppercase tracking-wider w-1/4">Energía Contratada</th>
+                                    <th scope="col" class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-1/4">Unidad</th>
+                                </tr>
+                            </thead>
+                            <tbody id="monthly-schedule-body" class="bg-white divide-y divide-gray-200">
+                                ${rows}
+                            </tbody>
+                        </table>
+                    </div>
+                `;
+        }
+
+        /**
+         * Calcula el total de energía cargada en la grilla mensual y actualiza el campo de resumen.
+         */
+        function updateAnnualEnergy() {
+          let totalEnergy = 0;
+          const inputFields = document.querySelectorAll(
+            ".monthly-energy-input"
+          );
+
+          inputFields.forEach((input) => {
+            // Limpiar el valor: quitar separador de miles (.), reemplazar coma decimal (,) por punto
+            let value = input.value.replace(/\./g, "").replace(/,/g, ".");
+            let num = parseFloat(value);
+
+            if (!isNaN(num)) {
+              totalEnergy += num;
+            }
+          });
+
+          const annualEnergyField = document.getElementById(
+            "contract-annual-energy"
+          );
+          if (annualEnergyField) {
+            annualEnergyField.value = totalEnergy.toLocaleString("es-AR", {
+              minimumFractionDigits: 0,
+              maximumFractionDigits: 0,
+            });
+          }
+
+          // También actualiza la etiqueta informativa debajo de la grilla
+          const infoLabel = document.getElementById("annual-energy-info-label");
+          if (infoLabel) {
+            infoLabel.textContent = totalEnergy.toLocaleString("es-AR", {
+              minimumFractionDigits: 0,
+              maximumFractionDigits: 0,
+            });
+          }
+        }
+
+        function renderContractList() {
+          const listHtml = mockContracts
+            .map(
+              (contract) => `
+                    <tr>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">${
+                          contract.id
+                        }</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${
+                          contract.client
+                        }</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${
+                          contract.name
+                        }</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${
+                          contract.startDate
+                        } / ${contract.endDate}</td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
+                              contract.status === "Activo"
+                                ? "bg-green-100 text-green-800"
+                                : contract.status === "Draft"
+                                ? "bg-yellow-100 text-yellow-800"
+                                : "bg-red-100 text-red-800"
+                            }">
+                                ${contract.status}
+                            </span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                            <a href="#" data-contract-id="${
+                              contract.id
+                            }" class="text-blue-600 hover:text-blue-900 mr-2 edit-contract-btn">Editar</a>
+                            <a href="#" class="text-red-600 hover:text-red-900">Eliminar</a>
+                        </td>
+                    </tr>
+                `
+            )
+            .join("");
+
+          pageContent.innerHTML = `
+                    <h1 class="text-2xl font-bold text-gray-800 mb-6">Administración de Contratos</h1>
+                    <div class="bg-white rounded-xl shadow-lg p-6">
+                        <div class="flex justify-between items-center mb-4">
+                            <h2 class="text-xl font-semibold text-gray-800">Lista de Contratos (${mockContracts.length})</h2>
+                            <button id="new-contract-btn" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-md text-sm transition-colors">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline-block mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" /></svg>
+                                Nuevo Contrato
+                            </button>
+                        </div>
+                        <div class="overflow-x-auto">
+                            <table class="min-w-full divide-y divide-gray-200">
+                                <thead class="bg-gray-50">
+                                    <tr>
+                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID</th>
+                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Cliente</th>
+                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nombre</th>
+                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Vigencia</th>
+                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Estado</th>
+                                        <th scope="col" class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="bg-white divide-y divide-gray-200">
+                                    ${listHtml}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                `;
+
+          // Add event listeners for editing
+          document
+            .getElementById("new-contract-btn")
+            .addEventListener("click", () => {
+              contractFormVisible = true;
+              renderContracts();
+            });
+          document.querySelectorAll(".edit-contract-btn").forEach((btn) => {
+            btn.addEventListener("click", (e) => {
+              e.preventDefault();
+              const contractId = e.currentTarget.dataset.contractId;
+              contractFormVisible = true;
+              renderContracts(contractId);
+            });
+          });
+        }
+
+        function renderContractForm(contractId = null) {
+          console.log("renderContractForm", contractId);
+          const currentContract =
+            mockContracts.find((c) => c.id === contractId.id) || {};
+          const isEdit = !!contractId;
+          // Usamos el nuevo campo monthlySchedule
+          const currentSchedule =
+            currentContract.monthlySchedule || new Array(12).fill("");
+          console.log(
+            "renderContractForm currentContract",
+            currentContract,
+            currentSchedule
+          );
+          const clientOptions = mockClients.map((c) => ({
+            value: c.name,
+            text: c.name,
+            selected: currentContract.client === c.name,
+          }));
+          clientOptions.unshift({
+            value: "",
+            text: "Seleccionar Cliente",
+            selected: !currentContract.client,
+          });
+
+          const nemonicsList = currentContract.nemonics
+            ? currentContract.nemonics
+                .map(
+                  (nemo) => `
+                    <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800">
+                        ${nemo}
+                        <button type="button" class="ml-1.5 -mr-0.5 h-4 w-4 inline-flex items-center justify-center rounded-full text-blue-500 hover:bg-blue-200">
+                            <svg class="h-3 w-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
+                        </button>
+                    </span>
+                `
+                )
+                .join("")
+            : '<p class="text-sm text-gray-500">No hay nemotécnicos asociados.</p>';
+
+          // Calculamos el total inicial para el campo deshabilitado
+          const initialAnnualEnergy = currentSchedule.reduce(
+            (sum, value) => sum + (parseFloat(value) || 0),
+            0
+          );
+
+          pageContent.innerHTML = `
+                    <div class="flex justify-between items-center mb-4">
+                        <h1 class="text-2xl font-bold text-gray-800">
+                            ${
+                              isEdit
+                                ? `Editar Contrato: ${currentContract.name} (${currentContract.id})`
+                                : "Nuevo Contrato"
+                            }
+                        </h1>
+                        <!--<div>
+                            <button id="cancel-form-btn" class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold py-2 px-4 rounded-md text-sm transition-colors mr-2">
+                                Cancelar
+                            </button>
+                            <button id="save-contract-btn" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-md text-sm transition-colors">
+                                Guardar Contrato
+                            </button>
+                        </div>-->
+                    </div>
+
+                    <div class="bg-white rounded-xl shadow-lg p-6">
+                        <form class="space-y-8">
+                            
+                            <div class="border-b pb-4">
+                                <h3 class="text-xl font-semibold text-gray-800 mb-4">1. Datos Generales</h3>
+                                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                                    ${renderField(
+                                      "ID Contrato",
+                                      "contract-id",
+                                      "text",
+                                      currentContract.id || "",
+                                      [],
+                                      true
+                                    )}
+                                    ${renderField(
+                                      "Nombre Comercial",
+                                      "contract-name",
+                                      "text",
+                                      currentContract.name || ""
+                                    )}
+                                    ${renderField(
+                                      "Cliente Asociado",
+                                      "contract-client",
+                                      "select",
+                                      currentContract.client || "",
+                                      clientOptions
+                                    )}
+                                    ${renderField(
+                                      "Fecha Inicio",
+                                      "contract-start-date",
+                                      "date",
+                                      currentContract.startDate || ""
+                                    )}
+                                    ${renderField(
+                                      "Duración (Meses)",
+                                      "contract-term",
+                                      "number",
+                                      currentContract.term || "",
+                                      [],
+                                      false,
+                                      1
+                                    )}
+                                    ${renderField(
+                                      "Fecha Vencimiento",
+                                      "contract-end-date",
+                                      "date",
+                                      currentContract.endDate || "",
+                                      [],
+                                      true
+                                    )}
+                                    ${renderField(
+                                      "Energía Contratada Anual (MWh)",
+                                      "contract-annual-energy",
+                                      "text",
+                                      initialAnnualEnergy,
+                                      [],
+                                      true
+                                    )}
+                                    ${renderField(
+                                      "Estatus",
+                                      "contract-status",
+                                      "select",
+                                      currentContract.status || "Draft",
+                                      [
+                                        {
+                                          value: "Activo",
+                                          text: "Activo",
+                                          selected:
+                                            currentContract.status === "Activo",
+                                        },
+                                        {
+                                          value: "Draft",
+                                          text: "Borrador",
+                                          selected:
+                                            currentContract.status === "Draft",
+                                        },
+                                        {
+                                          value: "Vencido",
+                                          text: "Vencido",
+                                          selected:
+                                            currentContract.status ===
+                                            "Vencido",
+                                        },
+                                      ]
+                                    )}
+                                </div>
+                            </div>
+                            
+                            <div class="border-b pb-4">
+                                <h3 class="text-xl font-semibold text-gray-800 mb-4">2. Precios y Moneda</h3>
+                                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                                    ${renderField(
+                                      "Moneda de Facturación",
+                                      "contract-currency",
+                                      "select",
+                                      currentContract.currency || "USD",
+                                      [
+                                        {
+                                          value: "USD",
+                                          text: "Dólar Estadounidense (USD)",
+                                          selected:
+                                            currentContract.currency === "USD",
+                                        },
+                                        {
+                                          value: "ARS",
+                                          text: "Peso Argentino (ARS)",
+                                          selected:
+                                            currentContract.currency === "ARS",
+                                        },
+                                      ]
+                                    )}
+                                    ${renderField(
+                                      "Precio Base ",
+                                      "contract-price1",
+                                      "number",
+                                      currentContract.price1 || "",
+                                      [],
+                                      false,
+                                      0
+                                    )}
+                                    ${renderField(
+                                      "Precio Remanente",
+                                      "contract-rem-price",
+                                      "number",
+                                      currentContract.remPrice || "",
+                                      [],
+                                      false,
+                                      0
+                                    )}
+                                    ${renderField(
+                                      "Término de Pago",
+                                      "contract-payment-term",
+                                      "text",
+                                      currentContract.paymentTerm ||
+                                        "30 Días F.F."
+                                    )}
+                                </div>
+                            </div>
+
+                            <div class="border-b pb-4">
+                                <h3 class="text-xl font-semibold text-gray-800 mb-4">3. Compromisos y Tolerancias (%)</h3>
+                                <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+                                    ${renderField(
+                                      "Compromiso Anual",
+                                      "comp-annual",
+                                      "number",
+                                      currentContract.compAnnual || 0,
+                                      [],
+                                      false,
+                                      0,
+                                      100
+                                    )}
+                                    ${renderField(
+                                      "Compromiso Mensual",
+                                      "comp-monthly",
+                                      "number",
+                                      currentContract.compMonthly || 0,
+                                      [],
+                                      false,
+                                      0,
+                                      100
+                                    )}
+                                    ${renderField(
+                                      "Tolerancia Desvío Mensual (DOP)",
+                                      "dop-monthly",
+                                      "number",
+                                      currentContract.dopMonthly || 0,
+                                      [],
+                                      false,
+                                      0,
+                                      100
+                                    )}
+                                    ${renderField(
+                                      "Tolerancia Desvío Anual (DOP)",
+                                      "dop-annual",
+                                      "number",
+                                      currentContract.dopAnnual || 0,
+                                      [],
+                                      false,
+                                      0,
+                                      100
+                                    )}
+                                </div>
+                            </div>
+
+                            <div class="pb-4">
+                                <h3 class="text-xl font-semibold text-gray-800 mb-4">4. Nemotécnicos (Puntos de Suministro)</h3>
+                                
+                                <h4 class="text-lg font-semibold text-gray-700 mt-4 mb-3">4.1. Listado de Nemotécnicos Asociados</h4>
+                                <div class="flex flex-wrap gap-2 p-3 border border-gray-200 rounded-md bg-gray-50 mb-6">
+                                    ${nemonicsList}
+                                </div>
+                                
+                                <h4 class="text-lg font-semibold text-gray-700 mt-6 mb-3">4.2. Programación Mensual de Energía Contratada (MWh)</h4>
+                                ${renderMonthlyScheduleGrid(currentSchedule)}
+                                <div class="mt-4 p-3 bg-blue-50 border-l-4 border-blue-400 text-blue-700 rounded-md">
+                                    <p class="text-sm">
+                                        Total Anual Contratado (MWh): <span id="annual-energy-info-label" class="font-bold text-blue-800">${initialAnnualEnergy.toLocaleString(
+                                          "es-AR",
+                                          {
+                                            minimumFractionDigits: 0,
+                                            maximumFractionDigits: 0,
+                                          }
+                                        )}</span>.
+                                    </p>
+                                </div>
+
+                            </div>
+                            
+                            <div>
+                                <h3 class="text-xl font-semibold text-gray-800 mb-4 border-t pt-4">5. Conceptos Adicionales y Garantías</h3>
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                    ${renderField(
+                                      "Conceptos de Facturación",
+                                      "contract-concepts",
+                                      "textarea",
+                                      currentContract.concepts
+                                        ? currentContract.concepts.join("\n")
+                                        : ""
+                                    )}
+                                    ${renderField(
+                                      "Garantías y Observaciones",
+                                      "contract-guarantees",
+                                      "textarea",
+                                      currentContract.guarantees || ""
+                                    )}
+                                </div>
+                            </div>
+							<div class="pt-6 border-t border-gray-200 flex justify-end space-x-4">
+								<button type="button" id="cancel-contract-form" class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold py-2 px-4 rounded-md text-sm transition-colors mr-2">
+									Cancelar
+								</button>
+								<button type="submit" class="px-6 py-2 rounded-lg text-sm font-semibold text-white bg-blue-600 hover:bg-blue-700 transition-colors">
+									${isEdit ? "Guardar Cambios" : "Crear Contrato"}
+								</button>
+							</div>
+                        </form>
+                    </div>
+                `;
+
+          // Add event listener for cancel button
+          document
+            .getElementById("cancel-form-btn")
+            .addEventListener("click", (e) => {
+              e.preventDefault();
+              contractFormVisible = false;
+              renderContracts();
+            });
+
+          // ** NUEVO: Agregar Listener a todos los inputs de la grilla para actualizar el total **
+          document
+            .querySelectorAll(".monthly-energy-input")
+            .forEach((input) => {
+              input.addEventListener("input", updateAnnualEnergy);
+            });
+        }
+
+        // MODIFICACIÓN: Función principal de administración de contratos
+        function renderContractAdmin() {
+          /*if (contractFormVisible) {
+                    // Si el formulario debe estar visible, lo renderiza (se llama con el ID para cargar los datos)
+                    return; 
+                }*/
+
+          // Si no, renderiza la tabla
+          const headers = [
+            "Código",
+            "Cliente",
+            "Nombre",
+            "Inicio",
+            "Finalización",
+            "MWh Mensual",
+            "Estado",
+            "Acciones",
+          ];
+          const headerHtml = headers
+            .map((h) => `<th scope="col" class="px-6 py-3">${h}</th>`)
+            .join("");
+          const renderRow = (contract, index) => {
+            let statusClass;
+            switch (contract.status) {
+              case "Activo":
+                statusClass = "bg-green-100 text-green-800";
+                break;
+              case "Draft":
+                statusClass = "bg-yellow-100 text-yellow-800";
+                break;
+              case "Vencido":
+                statusClass = "bg-red-100 text-red-800";
+                break;
+              default:
+                statusClass = "bg-gray-100 text-gray-800";
+            }
+
+            return `
+                        <tr class="${
+                          index % 2 === 0 ? "bg-gray-50" : "bg-white"
+                        } border-b">
+                            <td class="px-6 py-4 font-medium text-gray-900">${
+                              contract.id
+                            }</td>
+                            <td class="px-6 py-4">${contract.client}</td>
+                            <td class="px-6 py-4">${contract.name}</td>
+                            <td class="px-6 py-4">${contract.startDate}</td>
+                            <td class="px-6 py-4">${contract.endDate}</td>
+                            <td class="px-6 py-4 text-right">${contract.monthlyEnergy.toLocaleString(
+                              "es-AR"
+                            )}</td>
+                            <td class="px-6 py-4"><span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${statusClass}">${
+              contract.status
+            }</span></td>
+                            <td class="px-6 py-4">
+                                <div class="flex space-x-2">
+                                    <button class="edit-contract-btn text-blue-600 hover:text-blue-800" data-contract-id="${
+                                      contract.id
+                                    }">Editar</button>
+                                    <button class="text-red-600 hover:text-red-800">Borrar</button>
+                                </div>
+                            </td>
+                        </tr>
+                    `;
+          };
+
+          // Renderiza la tabla de contratos
+          pageContent.innerHTML = `
+                    <div class="bg-white rounded-lg shadow-md p-6">
+                        <div class="flex justify-between items-center mb-4">
+                            <h1 class="text-xl font-bold text-gray-800">Administrar Contratos</h1>
+                            <button id="add-contract-btn" class="px-4 py-2 rounded-md font-semibold text-sm flex items-center justify-center transition-colors bg-green-600 text-white hover:bg-green-700">
+                                <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+                                Nuevo Contrato
+                            </button>
+                        </div>
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-sm text-left text-gray-600">
+                                <thead class="text-xs text-white uppercase bg-gray-700">
+                                    <tr>${headerHtml}</tr>
+                                </thead>
+                                <tbody>
+                                    ${mockContracts
+                                      .map((item, index) =>
+                                        renderRow(item, index)
+                                      )
+                                      .join("")}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                `;
+
+          // Añade el Event Listener para los botones de EDITAR y NUEVO
+          document.querySelectorAll(".edit-contract-btn").forEach((button) => {
+            button.addEventListener("click", (e) => {
+              const contractId = e.currentTarget.dataset.contractId;
+              const contract = mockContracts.find((c) => c.id === contractId);
+              contractFormVisible = true;
+              renderContractForm(contract);
+            });
+          });
+
+          document
+            .getElementById("add-contract-btn")
+            .addEventListener("click", () => {
+              contractFormVisible = true;
+              // Llamar sin contrato para un formulario de creación vacío
+              renderContractForm(null);
+            });
+        }
+
+        // #############################################################
+        // # FUNCIONES GENÉRICAS Y DE ADMINS (RESTAURADAS)
+        // #############################################################
+
+        function renderTable(
+          title,
+          headers,
+          data,
+          renderRow,
+          showExportButton = false
+        ) {
+          const headerHtml = headers
+            .map((h) => `<th scope="col" class="px-6 py-3">${h}</th>`)
+            .join("");
+          const bodyHtml = data
+            .map((item, index) => renderRow(item, index))
+            .join("");
+
+          pageContent.innerHTML = `
+                    <div class="bg-white rounded-lg shadow-md p-6">
+                        <div class="flex justify-between items-center mb-4">
+                            <h1 class="text-xl font-bold text-gray-800">${title}</h1>
+                            ${
+                              showExportButton
+                                ? `
+                                <button class="px-4 py-2 rounded-md font-semibold text-sm flex items-center justify-center transition-colors bg-blue-600 text-white hover:bg-blue-700">
+                                    Exportar a Excel
+                                </button>
+                            `
+                                : ""
+                            }
+                        </div>
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-sm text-left text-gray-600">
+                                <thead class="text-xs text-white uppercase bg-gray-700">
+                                    <tr>${headerHtml}</tr>
+                                </thead>
+                                <tbody>${bodyHtml}</tbody>
+                            </table>
+                        </div>
+                    </div>
+                `;
+        }
+
+        function renderUserAdmin() {
+          renderTable(
+            "Administrar Usuarios",
+            [
+              "Nombre usuario",
+              "Nombre/s",
+              "Apellido/s",
+              "E-mail",
+              "Teléfono",
+              "Habilitado",
+              "Acciones",
+            ],
+            mockUsers,
+            (user, index) => `
+                    <tr class="${
+                      index % 2 === 0 ? "bg-gray-50" : "bg-white"
+                    } border-b">
+                        <td class="px-6 py-4 font-medium text-gray-900">${
+                          user.user
+                        }</td>
+                        <td class="px-6 py-4">${user.name}</td>
+                        <td class="px-6 py-4">${user.surname}</td>
+                        <td class="px-6 py-4">${user.email}</td>
+                        <td class="px-6 py-4">${user.phone}</td>
+                        <td class="px-6 py-4"><span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
+                          user.enabled === "Si"
+                            ? "bg-green-100 text-green-800"
+                            : "bg-red-100 text-red-800"
+                        }">${user.enabled}</span></td>
+                        <td class="px-6 py-4"><div class="flex space-x-2"><button class="text-blue-600 hover:text-blue-800">Editar</button><button class="text-red-600 hover:text-red-800">Borrar</button></div></td>
+                    </tr>
+                `,
+            true
+          );
+        }
+
+        function renderClientAdmin() {
+          renderTable(
+            "Administrar Clientes",
+            ["Nombre", "Descripción", "Habilitado", "Vigencia", "Acciones"],
+            mockClients,
+            (client, index) => `
+                    <tr class="${
+                      index % 2 === 0 ? "bg-gray-50" : "bg-white"
+                    } border-b">
+                        <td class="px-6 py-4 font-medium text-gray-900">${
+                          client.name
+                        }</td>
+                        <td class="px-6 py-4">${client.description}</td>
+                        <td class="px-6 py-4">${
+                          client.enabled
+                            ? '<span class="text-green-500 font-bold">✓</span>'
+                            : '<span class="text-red-500 font-bold">✗</span>'
+                        }</td>
+                        <td class="px-6 py-4">${
+                          client.active
+                            ? '<span class="text-green-500 font-bold">✓</span>'
+                            : '<span class="text-red-500 font-bold">✗</span>'
+                        }</td>
+                        <td class="px-6 py-4"><button class="text-blue-600 hover:text-blue-800">Editar</button></td>
+                    </tr>
+                `,
+            true
+          );
+        }
+
+        function renderRatesAdmin() {
+          renderTable(
+            "Administrar Tasas y Divisas",
+            ["Nombre", "Valor", "Vigencia Hasta", "Acciones"],
+            mockRates,
+            (rate, index) => `
+                    <tr class="${
+                      index % 2 === 0 ? "bg-gray-50" : "bg-white"
+                    } border-b">
+                        <td class="px-6 py-4 font-medium text-gray-900">${
+                          rate.name
+                        }</td>
+                        <td class="px-6 py-4">${rate.value}</td>
+                        <td class="px-6 py-4">${rate.until}</td>
+                        <td class="px-6 py-4"><button class="text-blue-600 hover:text-blue-800">Editar</button></td>
+                    </tr>
+                `,
+            true
+          );
+        }
+
+        /*
+            function renderBillingReport() {
+                const headers = ['Nemo', 'Descripción', 'Nemo Generador', 'Cantidad', 'Unitario', 'Monto', 'Moneda'];
+                const headerHtml = headers.map(h => `<th scope="col" class="px-6 py-3">${h}</th>`).join('');
+                
+                const bodyHtml = mockBillingData.map((item, index) => `
+                    <tr class="${index % 2 === 0 ? 'bg-gray-50' : 'bg-white'} border-b">
+                        <td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">${item.nemo}</td>
+                        <td class="px-6 py-4 whitespace-nowrap">${item.description}</td>
+                        <td class="px-6 py-4 whitespace-nowrap">${item.nemo_generador}</td>
+                        <td class="px-6 py-4 text-right whitespace-nowrap">${item.cantidad}</td>
+                        <td class="px-6 py-4 text-right whitespace-nowrap">${item.unitario}</td>
+                        <td class="px-6 py-4 text-right font-semibold text-blue-600 whitespace-nowrap">${item.monto}</td>
+                        <td class="px-6 py-4">
+                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                                ${item.moneda}
+                            </span>
+                        </td>
+                    </tr>
+                `).join('');
+
+                 pageContent.innerHTML = `
+                    <div class="bg-white rounded-lg shadow-md p-6">
+                        <div class="flex justify-between items-center mb-4">
+                            <h1 class="text-xl font-bold text-gray-800">Cálculo de Facturación</h1>
+                            <div class="flex items-center gap-4">
+                                <div class="flex items-center gap-2">
+                                    <label for="period" class="text-sm font-medium">Período:</label>
+                                    <select id="period" class="border border-gray-300 rounded-md px-2 py-1">
+                                        <option>11/2024 (Definitivo)</option>
+                                        <option>10/2024 (Definitivo)</option>
+                                        <option>09/2024 (Ajuste)</option>
+                                    </select>
+                                </div>
+                                <button class="px-4 py-2 rounded-md font-semibold text-sm flex items-center justify-center transition-colors bg-blue-600 text-white hover:bg-blue-700">
+                                    Exportar a Excel
+                                </button>
+                                <button id="send-to-jde-button" class="px-4 py-2 rounded-md font-semibold text-sm flex items-center justify-center transition-colors bg-green-600 text-white hover:bg-green-700">
+                                    Enviar a JDE
+                                </button>
+                            </div>
+                        </div>
+                        <div class="overflow-x-auto">
+                            <h3 class="font-bold text-lg mb-4 text-gray-700">Cliente: San Luis Norte</h3>
+                            <table class="w-full text-sm text-left text-gray-600">
+                                <thead class="text-xs text-white uppercase bg-gray-700">
+                                    <tr>${headerHtml}</tr>
+                                </thead>
+                                <tbody>
+                                    ${bodyHtml}
+                                </tbody>
+                            </table>
+                        </div>
+                        <div id="jde-confirmation-message" class="mt-4 p-4 bg-green-100 border-l-4 border-green-500 text-green-700 rounded-md hidden">
+                            Datos enviados a JDE con éxito.
+                        </div>
+                    </div>
+                 `;
+
+                // Add event listener for the new button
+                document.getElementById('send-to-jde-button').addEventListener('click', () => {
+                    const confirmationMessage = document.getElementById('jde-confirmation-message');
+                    confirmationMessage.classList.remove('hidden'); 
+                    document.getElementById('send-to-jde-button').disabled = true;
+                    document.getElementById('send-to-jde-button').textContent = 'Enviado';
+                    document.getElementById('send-to-jde-button').classList.remove('bg-green-600', 'hover:bg-green-700');
+                    document.getElementById('send-to-jde-button').classList.add('bg-gray-400', 'cursor-not-allowed');
+                });
+            }
+			*/
+        function renderBillingReport() {
+          const billingHtml = mockBillingData
+            .map(
+              (item) => `
+                    <tr>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">${
+                          item.nemo
+                        }</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${
+                          item.description
+                        }</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${
+                          item.nemo_generador || "-"
+                        }</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-right">${
+                          item.cantidad
+                        }</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-right">${
+                          item.unitario
+                        }</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 font-semibold text-right">${
+                          item.monto
+                        }</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${
+                          item.moneda
+                        }</td>
+                    </tr>
+                `
+            )
+            .join("");
+
+          pageContent.innerHTML = `
+                    <h1 class="text-2xl font-bold text-gray-800 mb-6">Simulación de Facturación (Mock)</h1>
+                    <div class="bg-white p-6 rounded-xl shadow-lg">
+                        <div class="mb-4 grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700">Contrato</label>
+                                <select class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3">
+                                    <option>CON001 - Cliente 1</option>
+                                    <option>CON002 - Cliente 2</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700">Período</label>
+                                <input type="month" value="2024-12" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3">
+                            </div>
+                            <!--<div class="flex items-end">
+								<div>
+								<button class="px-4 py-2 bg-blue-600 text-white px-4 py-2 rounded-lg shadow-md hover:bg-blue-700 transition duration-150 ease-in-out w-full">
+                                    Exportar a Excel
+                                </button>
+								 </div>
+                            <div>
+                                <button style="display: block; margin-left: auto;" id="send-to-jde-button" class="px-4 py-2  bg-blue-600 text-white px-4 py-2 rounded-lg shadow-md hover:bg-blue-700 transition duration-150 ease-in-out w-full">
+                                    Enviar a JDE
+                                </button>
+								</div>
+                            </div> -->
+							<div style="display: flex; justify-content: flex-end; align-items: center; gap: 1rem;">
+                            <button style="background-color: #2563eb; color: white; padding: 8px 16px; border-radius: 8px;">
+                                Exportar a Excel
+                            </button>
+
+                            <button id="send-to-jde-button" style="background-color: #16a34a; color: white; padding: 8px 16px; border-radius: 8px;">
+                                Enviar a JDE
+                            </button>
+                        </div>
+                        </div>
+
+                        <h2 class="text-xl font-semibold text-gray-700 mb-4 border-t pt-4">Detalle de Ítems a Facturar</h2>
+
+                        <div class="overflow-x-auto">
+
+                            <table class="w-full text-sm text-left text-gray-600">
+                                <thead class="text-xs text-white uppercase bg-gray-700">								
+                                    <tr>
+                                        <th class="px-6 py-3 text-left text-xs font-medium  uppercase tracking-wider">Némen Cliente</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium  uppercase tracking-wider">Descripción</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium  uppercase tracking-wider">Némen Generador</th>
+                                        <th class="px-6 py-3 text-right text-xs font-medium  uppercase tracking-wider">Cantidad</th>
+                                        <th class="px-6 py-3 text-right text-xs font-medium  uppercase tracking-wider">P. Unitario</th>
+                                        <th class="px-6 py-3 text-right text-xs font-medium  uppercase tracking-wider">Monto</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium  uppercase tracking-wider">Moneda</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="bg-white divide-y divide-gray-200">
+                                    ${billingHtml}
+                                </tbody>
+                            </table>
+                        </div>
+                        
+                        <div class="mt-6 flex justify-end">
+                            <div class="text-right p-4 border rounded-lg bg-gray-50">
+                                <p class="text-lg font-bold text-gray-800">Total a Facturar:</p>
+                                <p class="text-2xl font-extrabold text-blue-600">USD 351.500,00</p>
+                                <p class="text-sm text-gray-500">(+ ARS 10.000,00)</p>
+                                <!--<button class="mt-3 bg-green-600 text-white px-4 py-2 rounded-lg shadow-md hover:bg-green-700 transition duration-150 ease-in-out">
+                                    Confirmar Facturación
+                                </button> -->
+                            </div>
+                        </div>
+
+                `;
+
+          // Add event listener for the new button
+          document
+            .getElementById("send-to-jde-button")
+            .addEventListener("click", () => {
+              const confirmationMessage = document.getElementById(
+                "jde-confirmation-message"
+              );
+              confirmationMessage.classList.remove("hidden");
+              document.getElementById("send-to-jde-button").disabled = true;
+              document.getElementById("send-to-jde-button").textContent =
+                "Enviado";
+              document
+                .getElementById("send-to-jde-button")
+                .classList.remove("bg-green-600", "hover:bg-green-700");
+              document
+                .getElementById("send-to-jde-button")
+                .classList.add("bg-gray-400", "cursor-not-allowed");
+            });
+        }
+
+        function renderIpocAdmin() {
+          pageContent.innerHTML = `
+                    <div class="bg-white rounded-lg shadow-md p-6">
+                        <div class="flex justify-between items-center mb-4">
+                            <h1 class="text-xl font-bold text-gray-800">Registros Facturación</h1>
+                            <div class="flex items-center gap-2">
+                                <button class="px-3 py-1 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50">
+                                    <div class="flex items-center gap-1">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+                                        Buscar
+                                    </div>
+                                </button>
+                                <button class="p-2 rounded-full hover:bg-gray-200">
+                                    <svg class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg>
+                                </button>
+                                <button class="px-4 py-2 rounded-md font-semibold text-sm flex items-center justify-center transition-colors bg-blue-600 text-white hover:bg-blue-700">
+                                    Exportar a Excel
+                                </button>
+                            </div>
+                        </div>
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-sm text-left text-gray-600">
+                                <thead class="text-xs text-white uppercase bg-gray-700">
+                                    <tr>
+                                        <th scope="col" class="px-6 py-3">TIMESTAMP</th>
+                                        <th scope="col" class="px-6 py-3">PERIODO</th>
+                                        <th scope="col" class="px-6 py-3">AGE_ID</th>
+                                        <th scope="col" class="px-6 py-3">NEMO_CLIENTE</th>
+                                        <th scope="col" class="px-6 py-3">NEMO_GENERADOR</th>
+                                        <th scope="col" class="px-6 py-3">ETOTAL_PLUS</th>
+                                        <th scope="col" class="px-6 py-3">ETOTAL_REN</th>
+                                        <th scope="col" class="px-6 py-3">Estado</th>
+                                        <th scope="col" class="px-6 py-3"></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    ${mockIpocData
+                                      .map(
+                                        (item, index) => `
+                                        <tr class="${
+                                          index % 2 === 0
+                                            ? "bg-white"
+                                            : "bg-gray-50"
+                                        } border-b">
+                                            <td class="px-6 py-4 font-medium text-gray-900">${
+                                              item.timestamp
+                                            }</td>
+                                            <td class="px-6 py-4">${
+                                              item.periodo
+                                            }</td>
+                                            <td class="px-6 py-4">${
+                                              item.age_id
+                                            }</td>
+                                            <td class="px-6 py-4">${
+                                              item.nemo_cliente
+                                            }</td>
+                                            <td class="px-6 py-4">${
+                                              item.nemo_generador
+                                            }</td>
+                                            <td class="px-6 py-4">${
+                                              item.etotal_plus
+                                            }</td>
+                                            <td class="px-6 py-4">${
+                                              item.etotal_ren
+                                            }</td>
+                                            <td class="px-6 py-4"><span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
+                                              item.estado === "Procesado"
+                                                ? "bg-green-100 text-green-800"
+                                                : "bg-red-100 text-red-800"
+                                            }">${item.estado}</span></td>
+                                            <td class="px-6 py-4">
+                                                <a href="#" class="text-blue-600 hover:text-blue-800">
+                                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    `
+                                      )
+                                      .join("")}
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="mt-4 flex justify-end">
+                            <button class="px-4 py-2 rounded-md font-semibold text-sm flex items-center justify-center transition-colors bg-blue-600 text-white hover:bg-blue-700">
+                                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004 12m7-7V2m7 2v3m-2-3h-2M4 16v-5h.582m15.356 2A8.001 8.001 0 014 12m7 7v3m7-3v-3m-2 3h-2"></path></svg>
+                                Replicar
+                            </button>
+                        </div>
+                    </div>
+                 `;
+        }
+        function renderIAStrategy() {
+          const cardData = [
+            {
+              title: "Potencial de Inversión en Crecimiento",
+              content:
+                "Identifica grandes consumidores de MATER con baja contratación propia, indicando dónde enfocar la venta de capacidad renovable.",
+              color: "blue",
+              icon: `<svg class="w-6 h-6 mr-2 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>`,
+            },
+            {
+              title: "Optimización de Portafolio",
+              content:
+                "Señala los tipos de contrato más rentables, ayudando a tomar decisiones sobre precios o mitigación de riesgos.",
+              color: "cyan",
+              icon: `<svg class="w-6 h-6 mr-2 text-cyan-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>`,
+            },
+            {
+              title: "Proyección Proactiva de Consumo",
+              content:
+                "Ofrece una predicción para el cliente clave, permitiendo una comunicación proactiva y mejorando la experiencia del cliente.",
+              color: "yellow",
+              icon: `<svg class="w-6 h-6 mr-2 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.276a1.2 1.2 0 011.751 0l.477.477a1.2 1.2 0 010 1.751l-9.52 9.52a1.2 1.2 0 01-1.751 0l-.477-.477a1.2 1.2 0 010-1.751l9.52-9.52z"></path></svg>`,
+            },
+          ];
+
+          const cardsHtml = cardData
+            .map(
+              (card) => `
+                    <div class="bg-white rounded-xl shadow-lg p-6 border-t-4 border-${card.color}-600 transition duration-300 hover:shadow-xl">
+                        <h2 class="text-xl font-bold text-gray-800 mb-3 flex items-center">
+                            ${card.icon}
+                            ${card.title}
+                        </h2>
+                        <p class="text-gray-600">
+                            ${card.content}
+                        </p>
+                    </div>
+                `
+            )
+            .join("");
+
+          pageContent.innerHTML = `
+                    <h1 class="text-2xl font-bold text-gray-800 mb-6">Estrategia de Inteligencia Artificial (IA)</h1>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                        ${cardsHtml}
+                    </div>
+                    
+                    <div class="mt-8 bg-white rounded-xl shadow-lg p-6">
+                        <h2 class="text-xl font-semibold text-gray-800 mb-4 border-b pb-2">Análisis de Rentabilidad de Contratos (Optimización de Portafolio)</h2>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+                            <div class="bg-cyan-50 p-4 rounded-lg border-l-4 border-cyan-600">
+                                <p class="text-sm font-medium text-cyan-800">Contrato más Rentable (IA Sugerido)</p>
+                                <p class="text-xl font-bold text-cyan-900">CON002 (25%)</p>
+                            </div>
+                            <div class="bg-red-50 p-4 rounded-lg border-l-4 border-red-600">
+                                <p class="text-sm font-medium text-red-800">Contrato bajo Objetivo</p>
+                                <p class="text-xl font-bold text-red-900">CON003 (8%)</p>
+                            </div>
+                            <div class="bg-yellow-50 p-4 rounded-lg border-l-4 border-yellow-600">
+                                <p class="text-sm font-medium text-yellow-800">Objetivo de Rentabilidad</p>
+                                <p class="text-xl font-bold text-yellow-900">18%</p>
+                            </div>
+                        </div>
+
+                        <div style="height: 300px;">
+                            <canvas id="iaBarChart"></canvas>
+                        </div>
+                        
+                        <p class="mt-4 text-gray-500 italic text-sm">
+                            *Este gráfico simula la rentabilidad promedio de cada contrato. La línea punteada naranja marca el **Objetivo de Rentabilidad (18%)** fijado en el modelo de IA. El Contrato CON003 está significativamente por debajo.
+                        </p>
+                    </div>
+                `;
+          // Dibuja el gráfico después de que el HTML esté en el DOM
+          drawIABarChart();
+        }
+        function drawIABarChart() {
+          // Rentabilidad: CON001(15), CON002(25), CON003(8), CON004(10)
+          const data = iaContractProfitability.data;
+          const labels = iaContractProfitability.labels;
+          const target = iaContractProfitability.target;
+
+          // Colores para el gráfico: Verde si supera el target, Rojo si es bajo, Azul/Gris si está cerca
+          const backgroundColors = data.map((value) => {
+            if (value >= target) {
+              return "#10b981"; // green-500 (Alta Rentabilidad)
+            } else if (value >= target - 5) {
+              return "#3b82f6"; // blue-600 (Rentabilidad Media)
+            } else {
+              return "#ef4444"; // red-500 (Baja Rentabilidad - Requiere Revisión)
+            }
+          });
+
+          if (iaBarChartInstance) {
+            iaBarChartInstance.destroy();
+          }
+
+          const ctx = document.getElementById("iaBarChart").getContext("2d");
+          iaBarChartInstance = new Chart(ctx, {
+            type: "bar",
+            data: {
+              labels: labels,
+              datasets: [
+                {
+                  label: "Rentabilidad Promedio (%)",
+                  data: data,
+                  backgroundColor: backgroundColors,
+                  borderColor: backgroundColors,
+                  borderWidth: 1,
+                },
+              ],
+            },
+            options: {
+              responsive: true,
+              maintainAspectRatio: false,
+              indexAxis: "y", // Hace el gráfico horizontal
+              plugins: {
+                legend: {
+                  display: false,
+                },
+                title: {
+                  display: true,
+                  text: "Rentabilidad Simulada de Contratos (%) - IA",
+                },
+                tooltip: {
+                  callbacks: {
+                    label: function (context) {
+                      let label = context.dataset.label || "";
+                      if (label) {
+                        label += ": ";
+                      }
+                      label += context.parsed.x + "%";
+                      return label;
+                    },
+                  },
+                },
+              },
+              scales: {
+                x: {
+                  beginAtZero: true,
+                  max: 30,
+                  title: {
+                    display: true,
+                    text: "Rentabilidad (%)",
+                  },
+                },
+                y: {
+                  grid: {
+                    display: false,
+                  },
+                },
+              },
+            },
+            plugins: [
+              {
+                // Plugin para dibujar la línea de objetivo de rentabilidad
+                id: "targetLine",
+                beforeDraw: (chart) => {
+                  const ctx = chart.ctx;
+                  const xAxis = chart.scales.x;
+
+                  if (xAxis) {
+                    // Coordenada X del target (18%)
+                    const targetX = xAxis.getPixelForValue(target);
+
+                    ctx.save();
+                    ctx.beginPath();
+                    ctx.moveTo(targetX, xAxis.top);
+                    ctx.lineTo(targetX, xAxis.bottom);
+                    ctx.lineWidth = 2;
+                    ctx.strokeStyle = "#f59e0b"; // color orange-500
+                    ctx.setLineDash([6, 6]); // Línea punteada
+                    ctx.stroke();
+                    ctx.restore();
+
+                    // Etiqueta del target
+                    ctx.save();
+                    ctx.fillStyle = "#f59e0b";
+                    ctx.font = "10px sans-serif";
+                    ctx.fillText(
+                      `Objetivo ${target}%`,
+                      targetX + 5,
+                      xAxis.top + 15
+                    );
+                    ctx.restore();
+                  }
+                },
+              },
+            ],
+          });
+        }
+        // --- Navigation and Routing ---
+        function updateNavLinks() {
+          const navHtml = navLinks
+            .map(
+              (link) => `
+                    <a href="#" class="nav-link flex items-center p-3 rounded-lg transition-colors ${
+                      currentPage === link.id
+                        ? "bg-blue-600 text-white"
+                        : "text-gray-300 hover:bg-gray-700 hover:text-white"
+                    }" data-page="${link.id}">
+                        <span class="text-xl font-bold w-6 text-center">${
+                          link.short
+                        }</span>
+                        <span class="ml-4 ${
+                          isSidebarCollapsed ? "hidden" : "block"
+                        }">${link.label}</span>
+                    </a>
+                `
+            )
+            .join("");
+
+          sidebarNav.innerHTML = navHtml;
+          mobileSidebarNav.innerHTML = navHtml;
+
+          // Attach click handlers to new links
+          document.querySelectorAll(".nav-link").forEach((link) => {
+            link.addEventListener("click", function (e) {
+              e.preventDefault();
+              const pageId = this.dataset.page;
+              navigateTo(pageId);
+              if (mobileMenu.classList.contains("block")) {
+                mobileMenu.classList.add("hidden");
+              }
+            });
+          });
+        }
+
+        function navigateTo(pageId) {
+          currentPage = pageId;
+          // Destruir instancias de Chart.js si existen
+          if (dashboardLineChartInstance) dashboardLineChartInstance.destroy();
+          dashboardLineChartInstance = null;
+          if (mwhBarChartInstance) mwhBarChartInstance.destroy();
+          mwhBarChartInstance = null;
+          if (clientDonutChartInstance) clientDonutChartInstance.destroy();
+          clientDonutChartInstance = null;
+          if (iaBarChartInstance) iaBarChartInstance.destroy(); // AÑADIDO
+          iaBarChartInstance = null; // AÑADIDO
+
+          // Renderizar la página
+          switch (pageId) {
+            case "dashboard":
+              renderDashboard();
+              break;
+            case "users":
+              renderUserAdmin();
+              break;
+            case "contracts":
+              renderContractAdmin();
+              break;
+            case "clients":
+              renderClientAdmin();
+              break;
+            case "rates":
+              renderRatesAdmin();
+              break;
+            case "billing":
+              renderBillingReport();
+              break;
+            case "ipoc-admin":
+              renderIpocAdmin();
+              break;
+            case "analytics":
+              renderAnalytics();
+              break;
+            case "ia-strategy": // Nuevo
+              renderIAStrategy();
+              break;
+            default:
+              pageContent.innerHTML = `<h1 class="text-2xl font-bold text-gray-800">Página no encontrada: ${pageId}</h1>`;
+          }
+
+          updateNavLinks();
+          // Ocultar menú móvil después de la navegación
+          mobileMenu.classList.add("hidden");
+        }
+
+        // --- Event Listeners and Initial Load ---
+
+        // --- Event Listeners ---
+        loginButton.addEventListener("click", () => {
+          const username = usernameInput.value.toLowerCase();
+          const password = passwordInput.value;
+          let displayName = "";
+
+          if (password === "12345") {
+            if (username === "pablo") {
+              displayName = "Pablo Santoro";
+            } else if (username === "favio") {
+              displayName = "Favio Felice";
+            }
+          }
+
+          if (displayName) {
+            loginErrorMessage.classList.add("hidden");
+            loginScreen.classList.add("hidden");
+            mainApp.classList.remove("hidden");
+            userDisplayName.textContent = displayName; // Actualiza el nombre de usuario
+            navigateTo("dashboard");
+          } else {
+            loginErrorMessage.textContent = "Usuario o contraseña incorrectos";
+            loginErrorMessage.classList.remove("hidden");
+          }
+        });
+
+        logoutButton.addEventListener("click", () => {
+          mainApp.classList.add("hidden");
+          loginScreen.classList.remove("hidden");
+          usernameInput.value = ""; // Clear username
+          passwordInput.value = ""; // Clear password
+          loginErrorMessage.classList.add("hidden"); // Hide error message on logout
+        });
+
+        menuToggleButton.addEventListener("click", () => {
+          // Toggle for desktop sidebar
+          isSidebarCollapsed = !isSidebarCollapsed;
+          sidebar.classList.toggle("w-64");
+          sidebar.classList.toggle("w-20");
+          sidebarLogo.textContent = isSidebarCollapsed ? "P" : "PCR";
+          updateNavLinks();
+
+          // Toggle for mobile menu
+          mobileMenu.classList.toggle("hidden");
+        });
+
+        // --- Initial Load ---
+        updateNavLinks();
+      });
+    </script>
+  </body>
+</html>

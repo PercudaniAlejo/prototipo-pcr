@@ -1,0 +1,100 @@
+@inherits LayoutComponentBase
+@inject NavigationManager Navigation
+
+<div id="main-app" class="h-screen font-sans">
+    <div class="flex h-full">
+        <!-- Sidebar -->
+        <AppSidebar IsCollapsed="@isCollapsed" />
+
+        <!-- Main Content -->
+        <div class="flex-1 flex flex-col overflow-hidden">
+            <!-- TopBar -->
+            <TopBar OnMenuToggle="@ToggleSidebar" 
+                    UserDisplayName="@userDisplayName" 
+                    OnLogout="@HandleLogout" 
+                    IsCollapsed="@isCollapsed" />
+
+            <!-- Mobile Menu -->
+            <div id="mobile-menu" class="@(showMobileMenu ? "block" : "hidden") md:hidden bg-gray-800 text-white p-4">
+                <nav>
+                    <NavLink href="/dashboard" class="nav-link flex items-center p-3 rounded-lg transition-colors text-gray-300 hover:bg-gray-700 hover:text-white" ActiveClass="bg-blue-600 text-white" Match="NavLinkMatch.All">
+                        <span class="text-xl font-bold w-6 text-center">D</span>
+                        <span class="ml-4">Dashboard</span>
+                    </NavLink>
+
+                    <NavLink href="/users" class="nav-link flex items-center p-3 rounded-lg transition-colors text-gray-300 hover:bg-gray-700 hover:text-white" ActiveClass="bg-blue-600 text-white">
+                        <span class="text-xl font-bold w-6 text-center">U</span>
+                        <span class="ml-4">Usuarios</span>
+                    </NavLink>
+
+                    <NavLink href="/contracts" class="nav-link flex items-center p-3 rounded-lg transition-colors text-gray-300 hover:bg-gray-700 hover:text-white" ActiveClass="bg-blue-600 text-white">
+                        <span class="text-xl font-bold w-6 text-center">C</span>
+                        <span class="ml-4">Contratos</span>
+                    </NavLink>
+
+                    <NavLink href="/clients" class="nav-link flex items-center p-3 rounded-lg transition-colors text-gray-300 hover:bg-gray-700 hover:text-white" ActiveClass="bg-blue-600 text-white">
+                        <span class="text-xl font-bold w-6 text-center">L</span>
+                        <span class="ml-4">Clientes</span>
+                    </NavLink>
+
+                    <NavLink href="/rates" class="nav-link flex items-center p-3 rounded-lg transition-colors text-gray-300 hover:bg-gray-700 hover:text-white" ActiveClass="bg-blue-600 text-white">
+                        <span class="text-xl font-bold w-6 text-center">T</span>
+                        <span class="ml-4">Tasas y Divisas</span>
+                    </NavLink>
+
+                    <NavLink href="/billing" class="nav-link flex items-center p-3 rounded-lg transition-colors text-gray-300 hover:bg-gray-700 hover:text-white" ActiveClass="bg-blue-600 text-white">
+                        <span class="text-xl font-bold w-6 text-center">F</span>
+                        <span class="ml-4">Facturación</span>
+                    </NavLink>
+
+                    <NavLink href="/admin" class="nav-link flex items-center p-3 rounded-lg transition-colors text-gray-300 hover:bg-gray-700 hover:text-white" ActiveClass="bg-blue-600 text-white">
+                        <span class="text-xl font-bold w-6 text-center">A</span>
+                        <span class="ml-4">Administración</span>
+                    </NavLink>
+
+                    <NavLink href="/analytics" class="nav-link flex items-center p-3 rounded-lg transition-colors text-gray-300 hover:bg-gray-700 hover:text-white" ActiveClass="bg-blue-600 text-white">
+                        <span class="text-xl font-bold w-6 text-center">G</span>
+						<span class="ml-4">Análisis Gráfico</span>
+                    </NavLink>
+
+                    <NavLink href="/ia-strategy" class="nav-link flex items-center p-3 rounded-lg transition-colors text-gray-300 hover:bg-gray-700 hover:text-white" ActiveClass="bg-blue-600 text-white">
+                        <span class="text-xl font-bold w-6 text-center">I</span>
+                        <span class="ml-4">Estrategia IA</span>
+                    </NavLink>
+                </nav>
+            </div>
+
+            <!-- Page Content -->
+            <main id="page-content" class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-100 p-4 md:p-6">
+                @Body
+            </main>
+        </div>
+    </div>
+</div>
+
+@code {
+    private bool isCollapsed = false;
+    private bool showMobileMenu = false;
+    private string userDisplayName = "Usuario";
+
+    protected override void OnInitialized()
+    {
+        userDisplayName = "Pablo Santoro";
+    }
+
+    private async Task ToggleSidebar()
+    {
+        // En desktop: colapsar/expandir sidebar
+        // En móvil: mostrar/ocultar menú móvil
+        isCollapsed = !isCollapsed;
+        showMobileMenu = !showMobileMenu;
+        await InvokeAsync(StateHasChanged);
+    }
+
+    private async Task HandleLogout()
+    {
+        await Task.CompletedTask;
+        Navigation.NavigateTo("/login");
+    }
+}
+

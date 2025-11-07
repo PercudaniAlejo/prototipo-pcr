@@ -1,0 +1,52 @@
+<div class="bg-white rounded-lg shadow-lg p-4 border-l-4 @GetBorderClass() transition duration-300 hover:shadow-xl">
+    <p class="text-sm font-medium text-gray-500 uppercase">@Title</p>
+    <div class="flex items-center justify-between mt-1">
+        <span class="text-3xl font-extrabold text-gray-900">@Value</span>
+        <div class="p-2 @GetIconBgClass() @GetIconColorClass() rounded-full">
+            @((MarkupString)GetIconSvg())
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter] public string Title { get; set; } = string.Empty;
+    [Parameter] public string Value { get; set; } = string.Empty;
+    [Parameter] public string Icon { get; set; } = string.Empty;
+    [Parameter] public string Color { get; set; } = "blue";
+
+    private string GetBorderClass() => Color switch
+    {
+        "blue" => "border-blue-600",
+        "cyan" => "border-cyan-600",
+        "gray" => "border-gray-400",
+        "yellow" => "border-yellow-600",
+        _ => "border-blue-600"
+    };
+
+    private string GetIconBgClass() => Color switch
+    {
+        "blue" => "bg-blue-100",
+        "cyan" => "bg-cyan-100",
+        "gray" => "bg-gray-100",
+        "yellow" => "bg-yellow-100",
+        _ => "bg-blue-100"
+    };
+
+    private string GetIconColorClass() => Color switch
+    {
+        "blue" => "text-blue-600",
+        "cyan" => "text-cyan-600",
+        "gray" => "text-gray-600",
+        "yellow" => "text-yellow-600",
+        _ => "text-blue-600"
+    };
+
+    private string GetIconSvg() => Icon switch
+    {
+        "lightning" => "<svg class=\"w-6 h-6\" fill=\"none\" stroke=\"currentColor\" viewBox=\"0 0 24 24\"><path stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"2\" d=\"M13 10V3L4 14h7v7l9-11h-7z\"></path></svg>",
+        "cash" => "<svg class=\"w-6 h-6\" fill=\"none\" stroke=\"currentColor\" viewBox=\"0 0 24 24\"><path stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"2\" d=\"M12 8c-3.136 0-6.096 1.408-7.938 3.535A1.993 1.993 0 002 14c0 1.105.895 2 2 2h16c1.105 0 2-.895 2-2 0-1.22-.67-2.28-1.637-2.903C18.096 9.408 15.136 8 12 8z\"></path></svg>",
+        "users" => "<svg class=\"w-6 h-6\" fill=\"none\" stroke=\"currentColor\" viewBox=\"0 0 24 24\"><path stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"2\" d=\"M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z\"></path></svg>",
+        "calendar" => "<svg class=\"w-6 h-6\" fill=\"none\" stroke=\"currentColor\" viewBox=\"0 0 24 24\"><path stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"2\" d=\"M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z\"></path></svg>",
+        _ => "<svg class=\"w-6 h-6\" fill=\"none\" stroke=\"currentColor\" viewBox=\"0 0 24 24\"><path stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"2\" d=\"M13 10V3L4 14h7v7l9-11h-7z\"></path></svg>"
+    };
+}
