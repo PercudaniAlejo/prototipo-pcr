@@ -1,8 +1,6 @@
 ﻿// tailwind.config.js
 module.exports = {
-
-    darkMode: 'false', // <-- AGREGA ESTA LÍNEA
-
+    darkMode: 'false',
     content: [
         './Components/**/*.razor',
         './Pages/**/*.razor',

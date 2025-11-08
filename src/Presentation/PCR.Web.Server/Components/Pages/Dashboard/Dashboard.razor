@@ -1,6 +1,5 @@
 @page "/dashboard"
 @inject IMediator Mediator
-@inject IJSRuntime JS
 
 <h1 class="text-2xl font-bold text-gray-800 mb-4">Resumen del Proceso de Facturación</h1>
 
@@ -12,11 +11,8 @@
 </div>
 
 <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-    <div class="lg:col-span-2 bg-white rounded-xl shadow-lg p-6">
-        <h2 class="text-xl font-semibold text-gray-800 mb-4">Tendencia de MWh Facturados (Últimos 6 Meses)</h2>
-        <div style="height: 300px;">
-            <canvas id="dashboardLineChart"></canvas>
-        </div>
+    <div class="lg:col-span-2">
+        <DashboardTrendChart Data="trendData" />
     </div>
 
     <div class="bg-white rounded-xl shadow-lg p-6">
@@ -47,14 +43,14 @@
     private DashboardKpisDto kpis = new(0, 0, 0, 0);
 
     // Datos históricos de MWh para el gráfico de tendencia (últimos 6 meses)
-    private List<DashboardTrendDto> trendData = new List<DashboardTrendDto>
+    private List<DashboardTrendChart.DashboardTrendDto> trendData = new List<DashboardTrendChart.DashboardTrendDto>
     {
-        new DashboardTrendDto { Month = "2024-07", Total = 6800 },
-        new DashboardTrendDto { Month = "2024-08", Total = 7800 },
-        new DashboardTrendDto { Month = "2024-09", Total = 8500 },
-        new DashboardTrendDto { Month = "2024-10", Total = 9100 },
-        new DashboardTrendDto { Month = "2024-11", Total = 9200 },
-        new DashboardTrendDto { Month = "2024-12", Total = 9300 }
+        new DashboardTrendChart.DashboardTrendDto { Month = "Jul 2024", Total = 6800 },
+        new DashboardTrendChart.DashboardTrendDto { Month = "Ago 2024", Total = 7800 },
+        new DashboardTrendChart.DashboardTrendDto { Month = "Sep 2024", Total = 8500 },
+        new DashboardTrendChart.DashboardTrendDto { Month = "Oct 2024", Total = 9100 },
+        new DashboardTrendChart.DashboardTrendDto { Month = "Nov 2024", Total = 9200 },
+        new DashboardTrendChart.DashboardTrendDto { Month = "Dic 2024", Total = 9300 }
     };
 
     protected override async Task OnInitializedAsync()
@@ -66,27 +62,5 @@
         {
             kpis = result.Data!;
         }
-    }
-
-    protected override async Task OnAfterRenderAsync(bool firstRender)
-    {
-        if (firstRender)
-        {
-            await DrawDashboardLineChart();
-        }
-    }
-
-    private async Task DrawDashboardLineChart()
-    {
-        var labels = trendData.Select(d => d.Month).ToArray();
-        var values = trendData.Select(d => d.Total).ToArray();
-
-        await JS.InvokeVoidAsync("drawDashboardLineChart", labels, values);
-    }
-
-    public class DashboardTrendDto
-    {
-        public string Month { get; set; } = string.Empty;
-        public int Total { get; set; }
     }
 }

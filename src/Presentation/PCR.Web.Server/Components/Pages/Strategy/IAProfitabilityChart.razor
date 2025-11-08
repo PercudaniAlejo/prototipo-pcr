@@ -1,0 +1,187 @@
+@* Componente para el gráfico de rentabilidad de contratos con línea objetivo *@
+
+<div class="bg-white rounded-xl shadow-lg p-6">
+    <h2 class="text-xl font-semibold text-gray-800 mb-4 border-b pb-2">@Title</h2>
+    
+    <!-- KPIs -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+        <div class="bg-cyan-50 p-4 rounded-lg border-l-4 border-cyan-600">
+            <p class="text-sm font-medium text-cyan-800">Contrato más Rentable (IA Sugerido)</p>
+            <p class="text-xl font-bold text-cyan-900">@MostProfitable</p>
+        </div>
+        <div class="bg-red-50 p-4 rounded-lg border-l-4 border-red-600">
+            <p class="text-sm font-medium text-red-800">Contrato bajo Objetivo</p>
+            <p class="text-xl font-bold text-red-900">@BelowTarget</p>
+        </div>
+        <div class="bg-yellow-50 p-4 rounded-lg border-l-4 border-yellow-600">
+            <p class="text-sm font-medium text-yellow-800">Objetivo de Rentabilidad</p>
+            <p class="text-xl font-bold text-yellow-900">@TargetValue%</p>
+        </div>
+    </div>
+
+    <!-- Gráfico -->
+    <div>
+        <ApexChart TItem="ContractDataDto"
+			Title="Rentabilidad Simulada de Contratos (%) - IA"
+                   Options="chartOptions">
+            
+            <ApexPointSeries TItem="ContractDataDto"
+                             Items="Data"
+							 Name="Rentabilidad Simulada de Contratos (%) - IA"
+                             SeriesType="SeriesType.Bar"
+                             XValue="@(e => e.ContractName)"
+                             YValue="@(e => (decimal)e.Profitability)" />
+        </ApexChart>
+    </div>
+    
+    <p class="mt-4 text-gray-500 italic text-sm">
+        @Description
+    </p>
+</div>
+
+@code {
+    [Parameter] public string Title { get; set; } = "Análisis de Rentabilidad de Contratos (Optimización de Portafolio)";
+    [Parameter] public List<ContractDataDto> Data { get; set; } = new();
+    [Parameter] public int TargetValue { get; set; } = 18;
+    [Parameter] public string MostProfitable { get; set; } = "CON002 (25%)";
+    [Parameter] public string BelowTarget { get; set; } = "CON003 (8%)";
+    [Parameter] public string Description { get; set; } = "*Este gráfico simula la rentabilidad promedio de cada contrato. La línea punteada naranja marca el Objetivo de Rentabilidad (18%) fijado en el modelo de IA. El Contrato CON003 está significativamente por debajo.";
+
+    private ApexChartOptions<ContractDataDto> chartOptions => new ApexChartOptions<ContractDataDto>
+    {
+        Chart = new Chart
+        {
+            Toolbar = new ApexCharts.Toolbar
+            {
+                Show = false
+            },
+            Zoom = new Zoom
+            {
+                Enabled = false
+            },
+            Height = 250
+        },
+        Colors = new List<string> { "#3b82f6", "#10b981", "#ef4444", "#ef4444" }, // Azul, Verde, Rojo, Rojo
+        PlotOptions = new PlotOptions
+        {
+            Bar = new PlotOptionsBar
+            {
+				Horizontal = true,
+                BorderRadius = 2,
+                BarHeight = "80%",
+                Distributed = true, // Permite diferentes colores por barra
+                ColumnWidth = "40%"
+            }
+        },
+        DataLabels = new DataLabels
+        {
+            Enabled = true,
+            Style = new DataLabelsStyle
+            {
+                FontSize = "11px",
+                Colors = new List<string> { "#fff" }
+            },
+            Formatter = @"function(val) { return val + '%'; }",
+            OffsetX = 0
+        },
+        Grid = new Grid
+        {
+            BorderColor = "#e5e7eb",
+            StrokeDashArray = 0,
+            Xaxis = new GridXAxis
+            {
+                Lines = new Lines { Show = true }
+            },
+            Yaxis = new GridYAxis
+            {
+                Lines = new Lines { Show = false }
+            }
+        },
+        Xaxis = new XAxis
+        {
+            Min = 0,
+            Max = 30,
+            Labels = new XAxisLabels
+            {
+                Style = new AxisLabelStyle
+                {
+                    Colors = "#6b7280",
+                    FontSize = "11px"
+                },
+                Formatter = @"function(value) { return value; }"
+            },
+            AxisBorder = new AxisBorder
+            {
+                Show = false
+            },
+            AxisTicks = new AxisTicks
+            {
+                Show = false
+            },
+            Title = new AxisTitle
+            {
+                Text = "Rentabilidad (%)",
+                Style = new AxisTitleStyle
+                {
+                    Color = "#6b7280",
+                    FontSize = "12px",
+                    FontWeight = "500"
+                }
+            }
+        },
+        Yaxis = new List<YAxis>
+        {
+            new YAxis
+            {
+                Labels = new YAxisLabels
+                {
+                    Style = new AxisLabelStyle
+                    {
+                        Colors = "#6b7280",
+                        FontSize = "11px"
+                    }
+                }
+            }
+        },
+        Annotations = new Annotations
+        {
+            Xaxis = new List<AnnotationsXAxis>
+            {
+                new AnnotationsXAxis
+                {
+                    X = TargetValue,
+                    BorderColor = "#f97316",
+                    StrokeDashArray = 4,
+					Label = new ApexCharts.Label
+					{
+						BorderColor = "#1e2939",
+						Style = new Style
+						{
+							Color = "#fff",
+							Background = "#1e2939"
+						},
+						Text = "Objetivo 18%"
+					}
+                }
+            }
+        },
+        Tooltip = new ApexCharts.Tooltip
+        {
+            Enabled = true,
+            Y = new TooltipY
+            {
+                Formatter = @"function(value) { return value + '%'; }"
+            }
+        },
+        Legend = new Legend
+        {
+            Show = false
+        }
+    };
+
+    public class ContractDataDto
+    {
+        public string ContractName { get; set; } = string.Empty;
+        public int Profitability { get; set; }
+    }
+}

@@ -1,0 +1,127 @@
+@* Componente para el gráfico de dona de proporción por cliente *@
+
+<div class="bg-white rounded-xl shadow-lg p-6">
+    <h2 class="text-xl font-semibold text-gray-800">@Title</h2>
+    <p class="text-gray-400 mb-4">@TitlePeriod</p>
+
+    <div>
+		@if (Data != null && Data.Any())
+		{
+			<ApexChart @ref="chart"
+			TItem="ClientDataDto"
+			Options="chartOptions">
+
+				<ApexPointSeries TItem="ClientDataDto"
+				Items="Data"
+				Name="MWh"
+				SeriesType="SeriesType.Donut"
+				XValue="@(e => e.ClientName)"
+				YValue="@(e => (decimal)e.Total)" />
+			</ApexChart>
+		}
+		else
+		{
+			<div class="flex items-center justify-center h-full">
+				<p class="text-gray-500">No hay datos disponibles</p>
+			</div>
+		}
+	</div>
+</div>
+
+@code {
+    [Parameter] public string Title { get; set; } = "Proporción por Cliente (MWh Acumulado)";
+    [Parameter] public List<ClientDataDto> Data { get; set; } = new();
+    [Parameter] public int Period { get; set; } = 3;
+    public string TitlePeriod => $"Proporción MWh por Cliente (Total Últimos {Period} Meses)";
+
+    private ApexChart<ClientDataDto>? chart;
+
+    protected override async Task OnParametersSetAsync()
+    {
+		if (chart != null && Data != null && Data.Any())
+		{
+			await chart.UpdateSeriesAsync(true);
+		}
+    }
+
+    private ApexChartOptions<ClientDataDto> chartOptions => new ApexChartOptions<ClientDataDto>
+    {
+        Chart = new Chart
+        {
+            Toolbar = new ApexCharts.Toolbar
+            {
+                Show = false
+            }
+        },
+        Colors = new List<string> { "#3b82f6", "#10b981", "#f59e0b", "#ef4444" },
+        PlotOptions = new PlotOptions
+        {
+            Pie = new PlotOptionsPie
+            {
+                CustomScale = 1.0,
+                Donut = new PlotOptionsDonut
+                {
+                    Size = "60%",
+                    Labels = new DonutLabels
+                    {
+                        Show = true,
+                        Total = new DonutLabelTotal
+                        {
+                            Show = true,
+                            ShowAlways = true,
+                            Label = "Total",
+                            FontSize = "24px",
+                            Color = "#374151",
+                            Formatter = @"function (w) {
+                                const total = w.globals.seriesTotals.reduce((a, b) => a + b, 0);
+                                return total.toLocaleString('es-AR') + ' MWh';
+                            }"
+                        }
+                    }
+                }
+            }
+        },
+        DataLabels = new DataLabels
+        {
+            Enabled = true,
+            Formatter = @"function(val) { return val.toFixed(1) + '%'; }",
+            Style = new DataLabelsStyle
+            {
+                FontSize = "14px",
+                FontWeight = "600"
+            }
+        },
+        Legend = new Legend
+        {
+            Show = true,
+            Position = LegendPosition.Bottom,
+            FontSize = "14px",
+            FontFamily = "Inter, sans-serif",
+            Markers = new LegendMarkers
+            {
+                Width = 20,
+                Height = 20,
+                Radius = 10
+            },
+            ItemMargin = new LegendItemMargin
+            {
+                Horizontal = 10,
+                Vertical = 5
+            }
+        },
+        Tooltip = new ApexCharts.Tooltip
+        {
+            Enabled = true,
+            Y = new TooltipY
+            {
+                Formatter = @"function(value) { return value.toLocaleString('es-AR') + ' MWh'; }"
+            }
+        }
+    };
+
+    public class ClientDataDto
+    {
+        public string ClientName { get; set; } = string.Empty;
+        public int Total { get; set; }
+    }
+}

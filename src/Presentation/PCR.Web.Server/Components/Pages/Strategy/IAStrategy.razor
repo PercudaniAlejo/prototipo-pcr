@@ -1,5 +1,4 @@
 @page "/ia-strategy"
-@inject IJSRuntime JS
 
 <h1 class="text-2xl font-bold text-gray-800 mb-6">Estrategia de Inteligencia Artificial (IA)</h1>
 
@@ -18,31 +17,11 @@
     }
 </div>
 
-<div class="mt-8 bg-white rounded-xl shadow-lg p-6">
-    <h2 class="text-xl font-semibold text-gray-800 mb-4 border-b pb-2">Análisis de Rentabilidad de Contratos (Optimización de Portafolio)</h2>
-    
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
-        <div class="bg-cyan-50 p-4 rounded-lg border-l-4 border-cyan-600">
-            <p class="text-sm font-medium text-cyan-800">Contrato más Rentable (IA Sugerido)</p>
-            <p class="text-xl font-bold text-cyan-900">CON002 (25%)</p>
-        </div>
-        <div class="bg-red-50 p-4 rounded-lg border-l-4 border-red-600">
-            <p class="text-sm font-medium text-red-800">Contrato bajo Objetivo</p>
-            <p class="text-xl font-bold text-red-900">CON003 (8%)</p>
-        </div>
-        <div class="bg-yellow-50 p-4 rounded-lg border-l-4 border-yellow-600">
-            <p class="text-sm font-medium text-yellow-800">Objetivo de Rentabilidad</p>
-            <p class="text-xl font-bold text-yellow-900">18%</p>
-        </div>
-    </div>
-
-    <div style="height: 300px;">
-        <canvas id="iaBarChart"></canvas>
-    </div>
-    
-    <p class="mt-4 text-gray-500 italic text-sm">
-        *Este gráfico simula la rentabilidad promedio de cada contrato. La línea punteada naranja marca el <strong>Objetivo de Rentabilidad (18%)</strong> fijado en el modelo de IA. El Contrato CON003 está significativamente por debajo.
-    </p>
+<div class="mt-8">
+    <IAProfitabilityChart Data="profitabilityData" 
+                          TargetValue="18"
+                          MostProfitable="CON002 (25%)"
+                          BelowTarget="CON003 (8%)" />
 </div>
 
 @code {
@@ -71,28 +50,13 @@
         }
     };
 
-    private ContractProfitabilityDto iaContractProfitability = new ContractProfitabilityDto
+    private List<IAProfitabilityChart.ContractDataDto> profitabilityData = new List<IAProfitabilityChart.ContractDataDto>
     {
-        Labels = new[] { "CON001 (Norte)", "CON002 (Renovable)", "CON003 (Base)", "CON004 (Base)" },
-        Data = new[] { 15, 25, 8, 10 },
-        Target = 18
+        new() { ContractName = "CON001 (Norte)", Profitability = 15 },
+        new() { ContractName = "CON002 (Renovable)", Profitability = 25 },
+        new() { ContractName = "CON003 (Base)", Profitability = 8 },
+        new() { ContractName = "CON004 (Base)", Profitability = 10 }
     };
-
-    protected override async Task OnAfterRenderAsync(bool firstRender)
-    {
-        if (firstRender)
-        {
-            await DrawIABarChart();
-        }
-    }
-
-    private async Task DrawIABarChart()
-    {
-        await JS.InvokeVoidAsync("drawIABarChart", 
-            iaContractProfitability.Labels, 
-            iaContractProfitability.Data, 
-            iaContractProfitability.Target);
-    }
 
     public class StrategyCardDto
     {
@@ -100,12 +64,5 @@
         public string Content { get; set; } = string.Empty;
         public string Color { get; set; } = string.Empty;
         public string Icon { get; set; } = string.Empty;
-    }
-
-    public class ContractProfitabilityDto
-    {
-        public string[] Labels { get; set; } = Array.Empty<string>();
-        public int[] Data { get; set; } = Array.Empty<int>();
-        public int Target { get; set; }
     }
 }

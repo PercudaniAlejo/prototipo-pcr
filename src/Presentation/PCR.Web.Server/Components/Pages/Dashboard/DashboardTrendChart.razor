@@ -1,0 +1,132 @@
+@* Componente reutilizable para el gráfico de tendencia del Dashboard *@
+
+<div class="bg-white rounded-xl shadow-lg p-6">
+    <h2 class="text-xl font-semibold text-gray-800 mb-4">@Title</h2>
+    <div>
+        <ApexChart TItem="DashboardTrendDto"
+                   Title=""
+                   Options="chartOptions">
+            
+            <ApexPointSeries TItem="DashboardTrendDto"
+                             Items="Data"
+                             Name="@SeriesName"
+                             SeriesType="SeriesType.Area"
+                             XValue="@(e => e.Month)"
+                             YValue="@(e => (decimal)e.Total)" />
+        </ApexChart>
+    </div>
+</div>
+
+@code {
+    [Parameter] public string Title { get; set; } = "Tendencia de MWh Facturados (Últimos 6 Meses)";
+    [Parameter] public string SeriesName { get; set; } = "MWh Total";
+    [Parameter] public List<DashboardTrendDto> Data { get; set; } = new();
+    [Parameter] public string Color { get; set; } = "#3b82f6"; // Azul por defecto
+
+    private ApexChartOptions<DashboardTrendDto> chartOptions => new ApexChartOptions<DashboardTrendDto>
+    {
+        Chart = new Chart
+        {
+            Toolbar = new ApexCharts.Toolbar
+            {
+                Show = false
+            },
+            Zoom = new Zoom
+            {
+                Enabled = false
+            }
+        },
+        Colors = new List<string> { Color },
+        Stroke = new Stroke
+        {
+            Curve = Curve.Smooth,
+            Width = 2
+        },
+        Fill = new Fill
+        {
+            Type = new List<FillType> { FillType.Gradient },
+            Gradient = new FillGradient
+            {
+                ShadeIntensity = 1,
+                OpacityFrom = 0.4,
+                OpacityTo = 0.1,
+                Stops = new List<double> { 0, 90, 100 }
+            }
+        },
+        DataLabels = new DataLabels
+        {
+            Enabled = false
+        },
+        Grid = new Grid
+        {
+            BorderColor = "#e5e7eb",
+            StrokeDashArray = 0,
+            Xaxis = new GridXAxis
+            {
+                Lines = new Lines { Show = false }
+            }
+        },
+        Xaxis = new XAxis
+        {
+            Labels = new XAxisLabels
+            {
+                Style = new AxisLabelStyle
+                {
+                    Colors = "#6b7280",
+                    FontSize = "12px"
+                }
+            },
+            AxisBorder = new AxisBorder
+            {
+                Show = false
+            },
+            AxisTicks = new AxisTicks
+            {
+                Show = false
+            }
+        },
+        Yaxis = new List<YAxis>
+        {
+            new YAxis
+            {
+                Labels = new YAxisLabels
+                {
+                    Style = new AxisLabelStyle
+                    {
+                        Colors = "#6b7280",
+                        FontSize = "12px"
+                    },
+                    Formatter = @"function(value) { return value.toLocaleString('es-AR') + ' MWh'; }"
+                },
+                Title = new AxisTitle
+                {
+                    Text = "MWh",
+                    Style = new AxisTitleStyle
+                    {
+                        Color = "#6b7280",
+                        FontSize = "12px",
+                        FontWeight = "500"
+                    }
+                }
+            }
+        },
+        Tooltip = new ApexCharts.Tooltip
+        {
+            Enabled = true,
+            Y = new TooltipY
+            {
+                Formatter = @"function(value) { return value.toLocaleString('es-AR') + ' MWh'; }"
+            }
+        },
+        Legend = new Legend
+        {
+            Show = false
+        }
+    };
+
+    public class DashboardTrendDto
+    {
+        public string Month { get; set; } = string.Empty;
+        public int Total { get; set; }
+    }
+}

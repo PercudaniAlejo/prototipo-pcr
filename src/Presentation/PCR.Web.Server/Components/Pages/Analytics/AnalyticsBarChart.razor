@@ -1,0 +1,169 @@
+@* Componente para el gráfico de barras de MWh totales mensuales *@
+
+<div class="bg-white rounded-xl shadow-lg p-6">
+    <h2 class="text-xl font-semibold text-gray-800">@Title</h2>
+	<p class="text-gray-400 mb-4">@TitlePeriod</p>
+    <div>
+        @if (Data != null && Data.Any())
+        {
+            <ApexChart TItem="MonthlyDataDto"
+                       Title=""
+                       Options="chartOptions"
+                       @ref="chart">
+                
+                <ApexPointSeries TItem="MonthlyDataDto"
+                                 Items="Data"
+                                 Name="@SeriesName"
+                                 SeriesType="SeriesType.Bar"
+                                 XValue="@(e => e.Month)"
+                                 YValue="@(e => (decimal)e.Total)" />
+            </ApexChart>
+        }
+        else
+        {
+            <div class="flex items-center justify-center h-full">
+                <p class="text-gray-500">No hay datos disponibles</p>
+            </div>
+        }
+    </div>
+</div>
+
+@code {
+    [Parameter] public string Title { get; set; } = "MWh Facturados - Total Mensual";
+    [Parameter] public string SeriesName { get; set; } = "MWh Total";
+    [Parameter] public List<MonthlyDataDto> Data { get; set; } = new();
+    [Parameter] public string Color { get; set; } = "#3b82f6";
+	[Parameter] public int Period { get; set; } = 3;
+	public string TitlePeriod => $"Megavatios-hora (MWh) en los últimos {Period} meses";
+
+    private ApexChart<MonthlyDataDto>? chart;
+
+    protected override async Task OnParametersSetAsync()
+    {
+        // Forzar actualización del gráfico cuando cambien los datos
+        if (chart != null && Data != null && Data.Any())
+        {
+            await chart.UpdateSeriesAsync(true);
+        }
+    }
+
+    private ApexChartOptions<MonthlyDataDto> chartOptions => new ApexChartOptions<MonthlyDataDto>
+    {
+        Chart = new Chart
+        {
+            Toolbar = new ApexCharts.Toolbar
+            {
+                Show = false
+            },
+			
+            Zoom = new Zoom
+            {
+                Enabled = false
+            },
+            Animations = new Animations
+            {
+                Enabled = true,
+                Easing = Easing.Easeinout,
+                Speed = 800,
+                AnimateGradually = new AnimateGradually
+                {
+                    Enabled = true,
+                    Delay = 150
+                },
+                DynamicAnimation = new DynamicAnimation
+                {
+                    Enabled = true,
+                    Speed = 350
+                }
+            }
+        },
+        Colors = new List<string> { Color },
+        PlotOptions = new PlotOptions
+        {
+            Bar = new PlotOptionsBar
+            {
+				Distributed = true,
+                BorderRadius = 4,
+                ColumnWidth = "70%"
+            }
+        },
+        DataLabels = new DataLabels
+        {
+            Enabled = false
+        },
+        Grid = new Grid
+        {
+            BorderColor = "#e5e7eb",
+            StrokeDashArray = 0,
+            Xaxis = new GridXAxis
+            {
+                Lines = new Lines { Show = false }
+            }
+        },
+        Xaxis = new XAxis
+        {
+            Labels = new XAxisLabels
+            {
+                Style = new AxisLabelStyle
+                {
+                    Colors = "#6b7280",
+                    FontSize = "12px"
+                }
+            },
+            AxisBorder = new AxisBorder
+            {
+                Show = false
+            },
+            AxisTicks = new AxisTicks
+            {
+                Show = false
+            }
+        },
+        Yaxis = new List<YAxis>
+        {
+            new YAxis
+            {
+				Min = 0,
+                Max = 13000,
+                TickAmount = 13,
+                Labels = new YAxisLabels
+                {
+                    Style = new AxisLabelStyle
+                    {
+                        Colors = "#6b7280",
+                        FontSize = "12px"
+                    },
+                    Formatter = @"function(value) { return value.toLocaleString('es-AR'); }"
+                },
+                Title = new AxisTitle
+                {
+                    Text = "MWh",
+                    Style = new AxisTitleStyle
+                    {
+                        Color = "#6b7280",
+                        FontSize = "12px",
+                        FontWeight = "100"
+                    }
+                }
+            }
+        },
+        Tooltip = new ApexCharts.Tooltip
+        {
+            Enabled = true,
+            Y = new TooltipY
+            {
+                Formatter = @"function(value) { return value.toLocaleString('es-AR') + ' MWh'; }"
+            }
+        },
+        Legend = new Legend
+        {
+            Show = false
+        }
+    };
+
+    public class MonthlyDataDto
+    {
+        public string Month { get; set; } = string.Empty;
+        public int Total { get; set; }
+    }
+}

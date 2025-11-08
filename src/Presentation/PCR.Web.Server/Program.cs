@@ -1,6 +1,7 @@
-using PCR.Web.Server.Components;
-using PCR.Core.Application.Features.Auth.Commands;
+using ApexCharts;
 using Flowbite.Services;
+using PCR.Core.Application.Features.Auth.Commands;
+using PCR.Web.Server.Components;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,6 +18,8 @@ builder.Services.AddFlowbite();
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents()
     .AddInteractiveWebAssemblyComponents();
+
+builder.Services.AddApexCharts();
 
 var app = builder.Build();
 

@@ -19,6 +19,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Blazor-ApexCharts" Version="6.0.2" />
     <PackageReference Include="Flowbite" Version="0.0.12-alpha" />
     <PackageReference Include="Flowbite.ExtendedIcons" Version="0.0.5-alpha" />
     <PackageReference Include="MediatR" Version="13.1.0" />
