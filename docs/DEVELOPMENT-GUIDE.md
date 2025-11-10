@@ -159,7 +159,7 @@ prototipo-pcr-blazor/
 │   │   ├── PCR.Infrastructure.Identity/      # Autenticación
 │   │   └── PCR.Infrastructure.Shared/        # Servicios compartidos
 │   └── Presentation/
-│       └── PCR.Web.Server/            # Blazor Server UI
+│       └── PCR.Web.Server/             # Blazor Interactive Auto + Flowbite
 ├── tests/                              # Tests unitarios e integración
 ├── docs/                               # Documentación
 └── scripts/                            # Scripts de utilidad
