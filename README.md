@@ -14,6 +14,15 @@ prototipo-pcr-blazor/
 │   │   └── PCR.Infrastructure.Shared/
 │   └── Presentation/                   # Capa de Presentación
 │       └── PCR.Web.Server/             # Blazor Interactive Auto + Flowbite
+│           ├── Components/             # Componentes Blazor
+│           ├── wwwroot/                # Archivos estáticos públicos
+│           │   ├── images/             # Imágenes (logos, banners, etc.)
+│           │   ├── js/                 # Scripts JavaScript personalizados
+│           │   ├── css/                # Archivos CSS compilados
+│           │   └── lib/                # Librerías JavaScript de terceros
+│           ├── Services/
+│           ├── Utilities/
+│           └── ...
 ├── tests/                              # Proyectos de Testing
 └── docs/                               # Documentación
 ```

@@ -160,6 +160,24 @@ prototipo-pcr-blazor/
 │   │   └── PCR.Infrastructure.Shared/        # Servicios compartidos
 │   └── Presentation/
 │       └── PCR.Web.Server/             # Blazor Interactive Auto + Flowbite
+│           ├── Components/             # Componentes Blazor
+│           │   ├── Layout/            # MainLayout, NavMenu
+│           │   ├── Pages/             # Páginas por módulo
+│           │   └── Shared/            # Componentes compartidos
+│           ├── wwwroot/                # ⚡ Archivos estáticos públicos
+│           │   ├── images/             # Imágenes (logos, banners, fondos)
+│           │   ├── js/                 # Scripts JavaScript personalizados
+│           │   ├── css/                # CSS compilado (Tailwind)
+│           │   ├── lib/                # Librerías JS de terceros
+│           │   ├── favicon.png
+│           │   └── app.css
+│           ├── Services/               # Servicios del lado del cliente
+│           ├── Utilities/              # Helpers y extensiones
+│           ├── Resources.resx          # Archivos de localización
+│           ├── Program.cs
+│           ├── appsettings.json
+│           ├── tailwind.config.js
+│           └── package.json            
 ├── tests/                              # Tests unitarios e integración
 ├── docs/                               # Documentación
 └── scripts/                            # Scripts de utilidad
