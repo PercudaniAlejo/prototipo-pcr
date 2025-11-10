@@ -1,6 +1,6 @@
 @page "/ia-strategy"
 
-<h1 class="text-2xl font-bold text-gray-800 mb-6">Estrategia de Inteligencia Artificial (IA)</h1>
+<h1 class="text-2xl font-bold text-gray-800 mb-6">@L["AIStrategy_Title"]</h1>
 
 <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
     @foreach (var card in strategyCards)
@@ -8,10 +8,10 @@
         <div class="bg-white rounded-xl shadow-lg p-6 border-t-4 border-@(card.Color)-600 transition duration-300 hover:shadow-xl">
             <h2 class="text-xl font-bold text-gray-800 mb-3 flex items-center">
                 @((MarkupString)card.Icon)
-                @card.Title
+                @L[card.TitleKey]
             </h2>
             <p class="text-gray-600">
-                @card.Content
+                @L[card.ContentKey]
             </p>
         </div>
     }
@@ -29,22 +29,22 @@
     {
         new StrategyCardDto
         {
-            Title = "Potencial de Inversión en Crecimiento",
-            Content = "Identifica grandes consumidores de MATER con baja contratación propia, indicando dónde enfocar la venta de capacidad renovable.",
+            TitleKey = "AIStrategy_InvestmentPotential",
+            ContentKey = "AIStrategy_InvestmentPotentialDesc",
             Color = "blue",
             Icon = @"<svg class=""w-6 h-6 mr-2 text-blue-600"" fill=""none"" stroke=""currentColor"" viewBox=""0 0 24 24""><path stroke-linecap=""round"" stroke-linejoin=""round"" stroke-width=""2"" d=""M13 10V3L4 14h7v7l9-11h-7z""></path></svg>"
         },
         new StrategyCardDto
         {
-            Title = "Optimización de Portafolio",
-            Content = "Señala los tipos de contrato más rentables, ayudando a tomar decisiones sobre precios o mitigación de riesgos.",
+            TitleKey = "AIStrategy_PortfolioOptimization",
+            ContentKey = "AIStrategy_PortfolioOptimizationDesc",
             Color = "cyan",
             Icon = @"<svg class=""w-6 h-6 mr-2 text-cyan-600"" fill=""none"" stroke=""currentColor"" viewBox=""0 0 24 24""><path stroke-linecap=""round"" stroke-linejoin=""round"" stroke-width=""2"" d=""M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z""></path></svg>"
         },
         new StrategyCardDto
         {
-            Title = "Proyección Proactiva de Consumo",
-            Content = "Ofrece una predicción para el cliente clave, permitiendo una comunicación proactiva y mejorando la experiencia del cliente.",
+            TitleKey = "AIStrategy_ProactiveProjection",
+            ContentKey = "AIStrategy_ProactiveProjectionDesc",
             Color = "yellow",
             Icon = @"<svg class=""w-6 h-6 mr-2 text-yellow-600"" fill=""none"" stroke=""currentColor"" viewBox=""0 0 24 24""><path stroke-linecap=""round"" stroke-linejoin=""round"" stroke-width=""2"" d=""M9 12l2 2 4-4m5.618-4.276a1.2 1.2 0 011.751 0l.477.477a1.2 1.2 0 010 1.751l-9.52 9.52a1.2 1.2 0 01-1.751 0l-.477-.477a1.2 1.2 0 010-1.751l9.52-9.52z""></path></svg>"
         }
@@ -60,8 +60,8 @@
 
     public class StrategyCardDto
     {
-        public string Title { get; set; } = string.Empty;
-        public string Content { get; set; } = string.Empty;
+        public string TitleKey { get; set; } = string.Empty;
+        public string ContentKey { get; set; } = string.Empty;
         public string Color { get; set; } = string.Empty;
         public string Icon { get; set; } = string.Empty;
     }

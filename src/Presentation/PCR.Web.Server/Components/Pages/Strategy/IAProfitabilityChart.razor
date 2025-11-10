@@ -1,20 +1,20 @@
 @* Componente para el gráfico de rentabilidad de contratos con línea objetivo *@
 
 <div class="bg-white rounded-xl shadow-lg p-6">
-    <h2 class="text-xl font-semibold text-gray-800 mb-4 border-b pb-2">@Title</h2>
+    <h2 class="text-xl font-semibold text-gray-800 mb-4 border-b pb-2">@L["AIStrategy_ProfitabilityAnalysis"]</h2>
     
     <!-- KPIs -->
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
         <div class="bg-cyan-50 p-4 rounded-lg border-l-4 border-cyan-600">
-            <p class="text-sm font-medium text-cyan-800">Contrato más Rentable (IA Sugerido)</p>
+            <p class="text-sm font-medium text-cyan-800">@L["AIStrategy_MostProfitable"]</p>
             <p class="text-xl font-bold text-cyan-900">@MostProfitable</p>
         </div>
         <div class="bg-red-50 p-4 rounded-lg border-l-4 border-red-600">
-            <p class="text-sm font-medium text-red-800">Contrato bajo Objetivo</p>
+            <p class="text-sm font-medium text-red-800">@L["AIStrategy_BelowTarget"]</p>
             <p class="text-xl font-bold text-red-900">@BelowTarget</p>
         </div>
         <div class="bg-yellow-50 p-4 rounded-lg border-l-4 border-yellow-600">
-            <p class="text-sm font-medium text-yellow-800">Objetivo de Rentabilidad</p>
+            <p class="text-sm font-medium text-yellow-800">@L["AIStrategy_TargetProfitability"]</p>
             <p class="text-xl font-bold text-yellow-900">@TargetValue%</p>
         </div>
     </div>
@@ -22,12 +22,12 @@
     <!-- Gráfico -->
     <div>
         <ApexChart TItem="ContractDataDto"
-			Title="Rentabilidad Simulada de Contratos (%) - IA"
+			Title="@L["AIStrategy_SimulatedProfitability"]"
                    Options="chartOptions">
             
             <ApexPointSeries TItem="ContractDataDto"
                              Items="Data"
-							 Name="Rentabilidad Simulada de Contratos (%) - IA"
+							 Name="@L["AIStrategy_SimulatedProfitability"]"
                              SeriesType="SeriesType.Bar"
                              XValue="@(e => e.ContractName)"
                              YValue="@(e => (decimal)e.Profitability)" />

@@ -3,10 +3,10 @@
 
 <div class="bg-white rounded-lg shadow-md p-6">
     <div class="flex justify-between items-center mb-4">
-        <h1 class="text-xl font-bold text-gray-800">Administrar Usuarios</h1>
+        <h1 class="text-xl font-bold text-gray-800">@L["Users_Title"]</h1>
         <div class="flex items-center gap-2">
             <button class="px-4 py-2 rounded-md font-semibold text-sm flex items-center justify-center transition-colors bg-blue-600 text-white hover:bg-blue-700">
-                Exportar a Excel
+                @L["Common_ExportToExcel"]
             </button>
         </div>
     </div>
@@ -15,13 +15,13 @@
 	<Table Hoverable="true" Striped="true">
 		<TableHead>
 			<TableRow>
-				<CustomTableHeadCell>Nombre usuario</CustomTableHeadCell>
-				<CustomTableHeadCell>Nombre/s</CustomTableHeadCell>
-				<CustomTableHeadCell>Apellido/s</CustomTableHeadCell>
-				<CustomTableHeadCell>E-mail</CustomTableHeadCell>
-				<CustomTableHeadCell>Teléfono</CustomTableHeadCell>
-				<CustomTableHeadCell>Habilitado</CustomTableHeadCell>
-				<CustomTableHeadCell>Acciones</CustomTableHeadCell>
+				<CustomTableHeadCell>@L["Users_Username"]</CustomTableHeadCell>
+				<CustomTableHeadCell>@L["Users_FirstName"]</CustomTableHeadCell>
+				<CustomTableHeadCell>@L["Users_LastName"]</CustomTableHeadCell>
+				<CustomTableHeadCell>@L["Users_Email"]</CustomTableHeadCell>
+				<CustomTableHeadCell>@L["Users_Phone"]</CustomTableHeadCell>
+				<CustomTableHeadCell>@L["Common_Enabled"]</CustomTableHeadCell>
+				<CustomTableHeadCell>@L["Common_Actions"]</CustomTableHeadCell>
 			</TableRow>
 		</TableHead>
 		<TableBody class="divide-y">
@@ -35,7 +35,7 @@
 						<TableCell>@user.Phone</TableCell>
 						<TableCell>
 							<span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full @GetEnabledClass(user.Enabled)">
-								@(user.Enabled ? "Si" : "No")
+								@(user.Enabled ? L["Common_Yes"] : L["Common_No"])
 							</span>
 						</TableCell>
 						<TableCell>

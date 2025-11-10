@@ -1,13 +1,13 @@
 @page "/dashboard"
 @inject IMediator Mediator
 
-<h1 class="text-2xl font-bold text-gray-800 mb-4">Resumen del Proceso de Facturación</h1>
+<h1 class="text-2xl font-bold text-gray-800 mb-4">@L["Dashboard_Title"]</h1>
 
 <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-    <KpiCard Title="MWh TOTALES (Dic 2024)" Value="@kpis.MwhTotalLastMonth.ToString("N0")" Icon="lightning" Color="blue" />
-    <KpiCard Title="MONTO TOTAL (Dic 2024)" Value="@($"${kpis.BilledAmountLastMonth:N0}")" Icon="cash" Color="cyan" />
-    <KpiCard Title="CLIENTES ACTIVOS" Value="@kpis.ActiveClients.ToString()" Icon="users" Color="gray" />
-    <KpiCard Title="DÍAS RESTANTES (Cierre)" Value="@kpis.DaysToCammesaClose.ToString()" Icon="calendar" Color="yellow" />
+    <KpiCard Title="@L["Dashboard_MwhTotal"]" Value="@kpis.MwhTotalLastMonth.ToString("N0")" Icon="lightning" Color="blue" />
+    <KpiCard Title="@L["Dashboard_TotalAmount"]" Value="@($"${kpis.BilledAmountLastMonth:N0}")" Icon="cash" Color="cyan" />
+    <KpiCard Title="@L["Dashboard_ActiveClients"]" Value="@kpis.ActiveClients.ToString()" Icon="users" Color="gray" />
+    <KpiCard Title="@L["Dashboard_DaysRemaining"]" Value="@kpis.DaysToCammesaClose.ToString()" Icon="calendar" Color="yellow" />
 </div>
 
 <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -16,7 +16,7 @@
     </div>
 
     <div class="bg-white rounded-xl shadow-lg p-6">
-        <h2 class="text-xl font-semibold text-gray-800 mb-4">Recomendaciones Clave</h2>
+        <h2 class="text-xl font-semibold text-gray-800 mb-4">@L["Dashboard_KeyRecommendations"]</h2>
         <div class="space-y-4">
             <div class="p-3 border-l-4 border-blue-500 bg-blue-50 rounded-md">
                 <p class="text-xs font-semibold uppercase text-gray-600">CON001 - PRONÓSTICO MWH</p>

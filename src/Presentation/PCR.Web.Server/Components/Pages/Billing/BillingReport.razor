@@ -3,12 +3,12 @@
 
 
 <div class="bg-white p-6 rounded-xl shadow-lg">
-	<h1 class="text-2xl font-bold text-gray-800 mb-6">Simulación de Facturación (Mock)</h1>
+	<h1 class="text-2xl font-bold text-gray-800 mb-6">@L["Billing_Title"]</h1>
     <div class="mb-4 grid grid-cols-1 md:grid-cols-3 gap-4">
         <div>
-            <label class="block text-sm font-medium text-gray-700">Contrato</label>
+            <label class="block text-sm font-medium text-gray-700">@L["Billing_Contract"]</label>
             <select @bind="selectedContract" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
-                <option value="">Seleccionar Contrato</option>
+                <option value="">@L["Billing_SelectContract"]</option>
                 <option value="CON001">CON001 - Cliente 1</option>
                 <option value="CON002">CON002 - Cliente 2</option>
                 <option value="CON003">CON003 - Cliente 3</option>
@@ -16,34 +16,34 @@
             </select>
         </div>
         <div>
-            <label class="block text-sm font-medium text-gray-700">Período</label>
+            <label class="block text-sm font-medium text-gray-700">@L["Common_Period"]</label>
             <input type="month" value="@selectedPeriod" @onchange="@((ChangeEventArgs e) => selectedPeriod = e.Value?.ToString() ?? "2024-12")" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
         </div>
         <div style="display: flex; justify-content: flex-end; align-items: center; gap: 1rem;">
             <button @onclick="ExportToExcel" class="bg-blue-600 text-white px-4 py-2 rounded-lg shadow-md hover:bg-blue-700 transition duration-150 ease-in-out">
-                Exportar a Excel
+                @L["Common_ExportToExcel"]
             </button>
             <button @onclick="SendToJDE" disabled="@jdeSent" class="@(jdeSent ? "bg-gray-400 cursor-not-allowed" : "bg-green-600 hover:bg-green-700") text-white px-4 py-2 rounded-lg shadow-md transition duration-150 ease-in-out">
-                @(jdeSent ? "Enviado" : "Enviar a JDE")
+                @(jdeSent ? L["Billing_Sent"] : L["Billing_SendToJDE"])
             </button>
         </div>
     </div>
 
     @if (showReport)
     {
-        <h2 class="text-xl font-semibold text-gray-700 mb-4 border-t pt-4">Detalle de Ítems a Facturar</h2>
+        <h2 class="text-xl font-semibold text-gray-700 mb-4 border-t pt-4">@L["Billing_ItemsDetail"]</h2>
 
         <div class="overflow-x-auto">
 			<Table Hoverable="true" Striped="true">
 				<TableHead>
 					<TableRow>
-						<CustomTableHeadCell>Némen Cliente</CustomTableHeadCell>
-						<CustomTableHeadCell>Descripción</CustomTableHeadCell>
-						<CustomTableHeadCell>Némen Generador</CustomTableHeadCell>
-						<CustomTableHeadCell>Cantidad</CustomTableHeadCell>
-						<CustomTableHeadCell>P. Unitario</CustomTableHeadCell>
-						<CustomTableHeadCell>Monto</CustomTableHeadCell>
-						<CustomTableHeadCell>Moneda</CustomTableHeadCell>
+						<CustomTableHeadCell>@L["Billing_NemoClient"]</CustomTableHeadCell>
+						<CustomTableHeadCell>@L["Common_Description"]</CustomTableHeadCell>
+						<CustomTableHeadCell>@L["Billing_NemoGenerator"]</CustomTableHeadCell>
+						<CustomTableHeadCell>@L["Common_Quantity"]</CustomTableHeadCell>
+						<CustomTableHeadCell>@L["Common_UnitPrice"]</CustomTableHeadCell>
+						<CustomTableHeadCell>@L["Common_Amount"]</CustomTableHeadCell>
+						<CustomTableHeadCell>@L["Common_Currency"]</CustomTableHeadCell>
 					</TableRow>
 				</TableHead>
 				<TableBody class="divide-y">
@@ -67,7 +67,7 @@
 
         <div class="mt-6 flex justify-end">
             <div class="text-right p-4 border rounded-lg bg-gray-50">
-                <p class="text-lg font-bold text-gray-800">Total a Facturar:</p>
+                <p class="text-lg font-bold text-gray-800">@L["Billing_TotalToBill"]</p>
                 <p class="text-2xl font-extrabold text-blue-600">USD 351.500,00</p>
                 <p class="text-sm text-gray-500">(+ ARS 10.000,00)</p>
             </div>
@@ -84,7 +84,7 @@
                     </div>
                     <div class="ml-3">
                         <p class="text-sm font-medium">
-                            Datos enviados a JDE con éxito.
+                            @L["Billing_SentSuccessfully"]
                         </p>
                     </div>
                 </div>
@@ -97,7 +97,7 @@
             <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
             </svg>
-            <p class="mt-2 text-sm text-gray-500">Seleccione un contrato y período para ver los detalles de facturación</p>
+            <p class="mt-2 text-sm text-gray-500">@L["Billing_SelectContractAndPeriod"]</p>
         </div>
     }
 </div>

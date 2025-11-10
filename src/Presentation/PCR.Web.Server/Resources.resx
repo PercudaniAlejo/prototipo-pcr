@@ -1,0 +1,465 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Nav_Dashboard" xml:space="preserve">
+    <value>Dashboard</value>
+  </data>
+  <data name="Nav_Users" xml:space="preserve">
+    <value>Usuarios</value>
+  </data>
+  <data name="Nav_Contracts" xml:space="preserve">
+    <value>Contratos</value>
+  </data>
+  <data name="Nav_Clients" xml:space="preserve">
+    <value>Clientes</value>
+  </data>
+  <data name="Nav_Rates" xml:space="preserve">
+    <value>Tasas y Divisas</value>
+  </data>
+  <data name="Nav_Billing" xml:space="preserve">
+    <value>Facturacion</value>
+  </data>
+  <data name="Nav_Administration" xml:space="preserve">
+    <value>Administracion</value>
+  </data>
+  <data name="Nav_Analytics" xml:space="preserve">
+    <value>Analisis Grafico</value>
+  </data>
+  <data name="Nav_AIStrategy" xml:space="preserve">
+    <value>Estrategia IA</value>
+  </data>
+  <data name="Common_Yes" xml:space="preserve">
+    <value>Si</value>
+  </data>
+  <data name="Common_No" xml:space="preserve">
+    <value>No</value>
+  </data>
+  <data name="Common_ExportToExcel" xml:space="preserve">
+    <value>Exportar a Excel</value>
+  </data>
+  <data name="Common_Actions" xml:space="preserve">
+    <value>Acciones</value>
+  </data>
+  <data name="Common_Edit" xml:space="preserve">
+    <value>Editar</value>
+  </data>
+  <data name="Common_Delete" xml:space="preserve">
+    <value>Eliminar</value>
+  </data>
+  <data name="Common_New" xml:space="preserve">
+    <value>Nuevo</value>
+  </data>
+  <data name="Common_Save" xml:space="preserve">
+    <value>Guardar</value>
+  </data>
+  <data name="Common_Cancel" xml:space="preserve">
+    <value>Cancelar</value>
+  </data>
+  <data name="Common_Search" xml:space="preserve">
+    <value>Buscar</value>
+  </data>
+	<data name="Common_Replic" xml:space="preserve">
+    <value>Replicar</value>
+  </data>
+  <data name="Common_Filter" xml:space="preserve">
+    <value>Filtrar</value>
+  </data>
+  <data name="Common_Export" xml:space="preserve">
+    <value>Exportar</value>
+  </data>
+  <data name="Common_Import" xml:space="preserve">
+    <value>Importar</value>
+  </data>
+  <data name="Common_Active" xml:space="preserve">
+    <value>Vigente</value>
+  </data>
+  <data name="Common_Inactive" xml:space="preserve">
+    <value>No vigente</value>
+  </data>
+  <data name="Common_Enabled" xml:space="preserve">
+    <value>Habilitado</value>
+  </data>
+  <data name="Common_Disabled" xml:space="preserve">
+    <value>Deshabilitado</value>
+  </data>
+  <data name="Common_Status" xml:space="preserve">
+    <value>Estado</value>
+  </data>
+  <data name="Common_Name" xml:space="preserve">
+    <value>Nombre</value>
+  </data>
+  <data name="Common_Description" xml:space="preserve">
+    <value>Descripción</value>
+  </data>
+  <data name="Common_Code" xml:space="preserve">
+    <value>Código</value>
+  </data>
+  <data name="Common_Value" xml:space="preserve">
+    <value>Valor</value>
+  </data>
+  <data name="Common_Date" xml:space="preserve">
+    <value>Fecha</value>
+  </data>
+  <data name="Common_Period" xml:space="preserve">
+    <value>Período</value>
+  </data>
+  <data name="Common_Total" xml:space="preserve">
+    <value>Total</value>
+  </data>
+  <data name="Common_Subtotal" xml:space="preserve">
+    <value>Subtotal</value>
+  </data>
+  <data name="Common_Currency" xml:space="preserve">
+    <value>Moneda</value>
+  </data>
+  <data name="Common_Quantity" xml:space="preserve">
+    <value>Cantidad</value>
+  </data>
+  <data name="Common_UnitPrice" xml:space="preserve">
+    <value>P. Unitario</value>
+  </data>
+  <data name="Common_Amount" xml:space="preserve">
+    <value>Monto</value>
+  </data>
+  <data name="Users_Title" xml:space="preserve">
+    <value>Administrar Usuarios</value>
+  </data>
+  <data name="Users_Username" xml:space="preserve">
+    <value>Nombre usuario</value>
+  </data>
+  <data name="Users_FirstName" xml:space="preserve">
+    <value>Nombre/s</value>
+  </data>
+  <data name="Users_LastName" xml:space="preserve">
+    <value>Apellido/s</value>
+  </data>
+  <data name="Users_Email" xml:space="preserve">
+    <value>E-mail</value>
+  </data>
+  <data name="Users_Phone" xml:space="preserve">
+    <value>Teléfono</value>
+  </data>
+  <data name="Clients_Title" xml:space="preserve">
+    <value>Administrar Clientes</value>
+  </data>
+  <data name="Clients_Validity" xml:space="preserve">
+    <value>Vigencia</value>
+  </data>
+  <data name="Contracts_Title" xml:space="preserve">
+    <value>Administrar Contratos</value>
+  </data>
+  <data name="Contracts_New" xml:space="preserve">
+    <value>Nuevo Contrato</value>
+  </data>
+  <data name="Contracts_Edit" xml:space="preserve">
+    <value>Editar Contrato</value>
+  </data>
+  <data name="Contracts_Client" xml:space="preserve">
+    <value>Cliente</value>
+  </data>
+  <data name="Contracts_CommercialName" xml:space="preserve">
+    <value>Nombre Comercial</value>
+  </data>
+  <data name="Contracts_StartDate" xml:space="preserve">
+    <value>Fecha Inicio</value>
+  </data>
+  <data name="Contracts_EndDate" xml:space="preserve">
+    <value>Finalización</value>
+  </data>
+  <data name="Contracts_ExpirationDate" xml:space="preserve">
+    <value>Fecha Vencimiento</value>
+  </data>
+  <data name="Contracts_Duration" xml:space="preserve">
+    <value>Duración (Meses)</value>
+  </data>
+  <data name="Contracts_MonthlyEnergy" xml:space="preserve">
+    <value>MWh Mensual</value>
+  </data>
+  <data name="Contracts_AnnualEnergy" xml:space="preserve">
+    <value>Energía Anual Comprometida (MWh)</value>
+  </data>
+  <data name="Contracts_SelectClient" xml:space="preserve">
+    <value>Seleccionar Cliente</value>
+  </data>
+  <data name="Contracts_GeneralData" xml:space="preserve">
+    <value>Datos Generales</value>
+  </data>
+  <data name="Contracts_PricesAndCurrency" xml:space="preserve">
+    <value>Precios y Moneda</value>
+  </data>
+  <data name="Contracts_BillingCurrency" xml:space="preserve">
+    <value>Moneda de Facturación</value>
+  </data>
+  <data name="Contracts_StatusDraft" xml:space="preserve">
+    <value>Borrador</value>
+  </data>
+  <data name="Contracts_StatusActive" xml:space="preserve">
+    <value>Activo</value>
+  </data>
+  <data name="Contracts_StatusExpired" xml:space="preserve">
+    <value>Vencido</value>
+  </data>
+  <data name="Contracts_AutoGenerated" xml:space="preserve">
+    <value>Campo generado automáticamente.</value>
+  </data>
+  <data name="Contracts_AutoCalculated" xml:space="preserve">
+    <value>Calculado automáticamente.</value>
+  </data>
+  <data name="Rates_Title" xml:space="preserve">
+    <value>Administrar Tasas y Divisas</value>
+  </data>
+  <data name="Rates_ValidUntil" xml:space="preserve">
+    <value>Vigencia Hasta</value>
+  </data>
+  <data name="Billing_Title" xml:space="preserve">
+    <value>Simulación de Facturación (Mock)</value>
+  </data>
+  <data name="Billing_Contract" xml:space="preserve">
+    <value>Contrato</value>
+  </data>
+  <data name="Billing_SelectContract" xml:space="preserve">
+    <value>Seleccionar Contrato</value>
+  </data>
+  <data name="Billing_ItemsDetail" xml:space="preserve">
+    <value>Detalle de Ítems a Facturar</value>
+  </data>
+  <data name="Billing_NemoClient" xml:space="preserve">
+    <value>Némen Cliente</value>
+  </data>
+  <data name="Billing_NemoGenerator" xml:space="preserve">
+    <value>Némen Generador</value>
+  </data>
+  <data name="Billing_TotalToBill" xml:space="preserve">
+    <value>Total a Facturar:</value>
+  </data>
+  <data name="Billing_SendToJDE" xml:space="preserve">
+    <value>Enviar a JDE</value>
+  </data>
+  <data name="Billing_Sent" xml:space="preserve">
+    <value>Enviado</value>
+  </data>
+  <data name="Billing_SentSuccessfully" xml:space="preserve">
+    <value>Datos enviados a JDE con éxito.</value>
+  </data>
+  <data name="Billing_SelectContractAndPeriod" xml:space="preserve">
+    <value>Seleccione un contrato y período para ver los detalles de facturación</value>
+  </data>
+  <data name="Dashboard_Title" xml:space="preserve">
+    <value>Resumen del Proceso de Facturación</value>
+  </data>
+  <data name="Dashboard_MwhTotal" xml:space="preserve">
+    <value>MWh TOTALES (Dic 2024)</value>
+  </data>
+  <data name="Dashboard_TotalAmount" xml:space="preserve">
+    <value>MONTO TOTAL (Dic 2024)</value>
+  </data>
+  <data name="Dashboard_ActiveClients" xml:space="preserve">
+    <value>CLIENTES ACTIVOS</value>
+  </data>
+  <data name="Dashboard_DaysRemaining" xml:space="preserve">
+    <value>DÍAS RESTANTES (Cierre)</value>
+  </data>
+  <data name="Dashboard_KeyRecommendations" xml:space="preserve">
+    <value>Recomendaciones Clave</value>
+  </data>
+  <data name="Dashboard_TrendChart" xml:space="preserve">
+    <value>Tendencia de Facturación MWh (Últimos 6 Meses)</value>
+  </data>
+  <data name="Analytics_Title" xml:space="preserve">
+    <value>Análisis Gráfico de Facturación (MWh)</value>
+  </data>
+  <data name="Analytics_CompareMonths" xml:space="preserve">
+    <value>Comparar Meses:</value>
+  </data>
+  <data name="Analytics_Last3Months" xml:space="preserve">
+    <value>Últimos 3 meses</value>
+  </data>
+  <data name="Analytics_Last6Months" xml:space="preserve">
+    <value>Últimos 6 meses</value>
+  </data>
+  <data name="Analytics_Last12Months" xml:space="preserve">
+    <value>Últimos 12 meses</value>
+  </data>
+  <data name="Analytics_MwhByClient" xml:space="preserve">
+    <value>MWh Facturados por Cliente</value>
+  </data>
+  <data name="Analytics_ClientProportion" xml:space="preserve">
+    <value>Proporción por Cliente (MWh Acumulado)</value>
+  </data>
+  <data name="Analytics_TotalLastMonths" xml:space="preserve">
+    <value>Proporción MWh por Cliente (Total Últimos {0} Meses)</value>
+  </data>
+  <data name="AIStrategy_Title" xml:space="preserve">
+    <value>Estrategia de Inteligencia Artificial (IA)</value>
+  </data>
+  <data name="AIStrategy_InvestmentPotential" xml:space="preserve">
+    <value>Potencial de Inversión en Crecimiento</value>
+  </data>
+  <data name="AIStrategy_InvestmentPotentialDesc" xml:space="preserve">
+    <value>Identifica grandes consumidores de MATER con baja contratación propia, indicando dónde enfocar la venta de capacidad renovable.</value>
+  </data>
+  <data name="AIStrategy_PortfolioOptimization" xml:space="preserve">
+    <value>Optimización de Portafolio</value>
+  </data>
+  <data name="AIStrategy_PortfolioOptimizationDesc" xml:space="preserve">
+    <value>Señala los tipos de contrato más rentables, ayudando a tomar decisiones sobre precios o mitigación de riesgos.</value>
+  </data>
+  <data name="AIStrategy_ProactiveProjection" xml:space="preserve">
+    <value>Proyección Proactiva de Consumo</value>
+  </data>
+  <data name="AIStrategy_ProactiveProjectionDesc" xml:space="preserve">
+    <value>Ofrece una predicción para el cliente clave, permitiendo una comunicación proactiva y mejorando la experiencia del cliente.</value>
+  </data>
+  <data name="AIStrategy_ProfitabilityAnalysis" xml:space="preserve">
+    <value>Análisis de Rentabilidad de Contratos (Optimización de Portafolio)</value>
+  </data>
+  <data name="AIStrategy_MostProfitable" xml:space="preserve">
+    <value>Contrato más Rentable (IA Sugerido)</value>
+  </data>
+  <data name="AIStrategy_BelowTarget" xml:space="preserve">
+    <value>Contrato bajo Objetivo</value>
+  </data>
+  <data name="AIStrategy_TargetProfitability" xml:space="preserve">
+    <value>Objetivo de Rentabilidad</value>
+  </data>
+  <data name="AIStrategy_SimulatedProfitability" xml:space="preserve">
+    <value>Rentabilidad Simulada de Contratos (%) - IA</value>
+  </data>
+  <data name="Messages_Error" xml:space="preserve">
+    <value>Error</value>
+  </data>
+  <data name="Messages_Success" xml:space="preserve">
+    <value>Éxito</value>
+  </data>
+  <data name="Messages_Warning" xml:space="preserve">
+    <value>Advertencia</value>
+  </data>
+  <data name="Messages_Info" xml:space="preserve">
+    <value>Información</value>
+  </data>
+  <data name="Messages_Confirm" xml:space="preserve">
+    <value>Confirmar</value>
+  </data>
+  <data name="Messages_AreYouSure" xml:space="preserve">
+    <value>¿Está seguro?</value>
+  </data>
+  <data name="Admin_Title" xml:space="preserve">
+    <value>Registros Facturación</value>
+  </data>
+</root>

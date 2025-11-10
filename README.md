@@ -21,7 +21,8 @@ prototipo-pcr-blazor/
 ## 🚀 Tecnologías
 
 - **.NET 10.0**
-- **Blazor Server** con MudBlazor
+- **Blazor Server** con Flowbite
+- **Blazor-ApexCharts** para visualización de datos (gráficos)
 - **Tailwind CSS**
 - **Entity Framework Core** con SQL Server
 - **MediatR** (CQRS Pattern)

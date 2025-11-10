@@ -19,47 +19,47 @@
                 <nav>
                     <NavLink href="/dashboard" class="nav-link flex items-center p-3 rounded-lg transition-colors text-gray-300 hover:bg-gray-700 hover:text-white" ActiveClass="bg-blue-600 text-white" Match="NavLinkMatch.All">
                         <span class="text-xl font-bold w-6 text-center">D</span>
-                        <span class="ml-4">Dashboard</span>
+						<span class="ml-4">@L["Nav_Dashboard"]</span>
                     </NavLink>
 
                     <NavLink href="/users" class="nav-link flex items-center p-3 rounded-lg transition-colors text-gray-300 hover:bg-gray-700 hover:text-white" ActiveClass="bg-blue-600 text-white">
                         <span class="text-xl font-bold w-6 text-center">U</span>
-                        <span class="ml-4">Usuarios</span>
+						<span class="ml-4">@L["Nav_Users"]</span>
                     </NavLink>
 
                     <NavLink href="/contracts" class="nav-link flex items-center p-3 rounded-lg transition-colors text-gray-300 hover:bg-gray-700 hover:text-white" ActiveClass="bg-blue-600 text-white">
                         <span class="text-xl font-bold w-6 text-center">C</span>
-                        <span class="ml-4">Contratos</span>
+						<span class="ml-4">@L["Nav_Contracts"]</span>
                     </NavLink>
 
                     <NavLink href="/clients" class="nav-link flex items-center p-3 rounded-lg transition-colors text-gray-300 hover:bg-gray-700 hover:text-white" ActiveClass="bg-blue-600 text-white">
                         <span class="text-xl font-bold w-6 text-center">L</span>
-                        <span class="ml-4">Clientes</span>
+						<span class="ml-4">@L["Nav_Clients"]</span>
                     </NavLink>
 
                     <NavLink href="/rates" class="nav-link flex items-center p-3 rounded-lg transition-colors text-gray-300 hover:bg-gray-700 hover:text-white" ActiveClass="bg-blue-600 text-white">
                         <span class="text-xl font-bold w-6 text-center">T</span>
-                        <span class="ml-4">Tasas y Divisas</span>
+						<span class="ml-4">@L["Nav_Rates"]</span>
                     </NavLink>
 
                     <NavLink href="/billing" class="nav-link flex items-center p-3 rounded-lg transition-colors text-gray-300 hover:bg-gray-700 hover:text-white" ActiveClass="bg-blue-600 text-white">
                         <span class="text-xl font-bold w-6 text-center">F</span>
-                        <span class="ml-4">Facturación</span>
+						<span class="ml-4">@L["Nav_Billing"]</span>
                     </NavLink>
 
                     <NavLink href="/admin" class="nav-link flex items-center p-3 rounded-lg transition-colors text-gray-300 hover:bg-gray-700 hover:text-white" ActiveClass="bg-blue-600 text-white">
                         <span class="text-xl font-bold w-6 text-center">A</span>
-                        <span class="ml-4">Administración</span>
+						<span class="ml-4">@L["Nav_Administration"]</span>
                     </NavLink>
 
                     <NavLink href="/analytics" class="nav-link flex items-center p-3 rounded-lg transition-colors text-gray-300 hover:bg-gray-700 hover:text-white" ActiveClass="bg-blue-600 text-white">
                         <span class="text-xl font-bold w-6 text-center">G</span>
-						<span class="ml-4">Análisis Gráfico</span>
+						<span class="ml-4">@L["Nav_Analytics"]</span>
                     </NavLink>
 
                     <NavLink href="/ia-strategy" class="nav-link flex items-center p-3 rounded-lg transition-colors text-gray-300 hover:bg-gray-700 hover:text-white" ActiveClass="bg-blue-600 text-white">
                         <span class="text-xl font-bold w-6 text-center">I</span>
-                        <span class="ml-4">Estrategia IA</span>
+						<span class="ml-4">@L["Nav_AIStrategy"]</span>
                     </NavLink>
                 </nav>
             </div>
@@ -84,8 +84,6 @@
 
     private async Task ToggleSidebar()
     {
-        // En desktop: colapsar/expandir sidebar
-        // En móvil: mostrar/ocultar menú móvil
         isCollapsed = !isCollapsed;
         showMobileMenu = !showMobileMenu;
         await InvokeAsync(StateHasChanged);

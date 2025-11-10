@@ -1,14 +1,14 @@
 @page "/analytics"
 
-<h1 class="text-2xl font-bold text-gray-800 mb-6">Análisis Gráfico de Facturación (MWh)</h1>
+<h1 class="text-2xl font-bold text-gray-800 mb-6">@L["Analytics_Title"]</h1>
 
 <div class="bg-white rounded-lg shadow-md p-4 mb-6 flex items-center gap-4">
     <div class="flex items-center gap-2">
-        <label for="period-select-mwh" class="text-sm font-medium text-gray-700">Comparar Meses:</label>
+        <label for="period-select-mwh" class="text-sm font-medium text-gray-700">@L["Analytics_CompareMonths"]</label>
         <select @bind="selectedPeriod" @bind:after="UpdateData" class="border border-gray-300 rounded-md px-3 py-1 text-sm focus:ring-blue-500 focus:border-blue-500">
-            <option value="3">Últimos 3 meses</option>
-            <option value="6">Últimos 6 meses</option>
-            <option value="12">Últimos 12 meses</option>
+            <option value="3">@L["Analytics_Last3Months"]</option>
+            <option value="6">@L["Analytics_Last6Months"]</option>
+            <option value="12">@L["Analytics_Last12Months"]</option>
         </select>
     </div>
 </div>

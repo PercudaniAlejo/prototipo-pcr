@@ -5,6 +5,9 @@ using PCR.Web.Server.Components;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Configurar localizacion - Los archivos .resx estan en la raiz del proyecto
+builder.Services.AddLocalization();
+
 // Add MediatR - Escanear el assembly de Application
 builder.Services.AddMediatR(cfg =>
 {
@@ -23,6 +26,15 @@ builder.Services.AddApexCharts();
 
 var app = builder.Build();
 
+// Configurar las culturas soportadas
+var supportedCultures = new[] { "es-ES", "en-US" };
+var localizationOptions = new RequestLocalizationOptions()
+    .SetDefaultCulture("es-ES")
+    .AddSupportedCultures(supportedCultures)
+    .AddSupportedUICultures(supportedCultures);
+
+app.UseRequestLocalization(localizationOptions);
+
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
@@ -34,7 +46,6 @@ app.UseStatusCodePagesWithReExecute("/not-found", createScopeForStatusCodePages:
 app.UseHttpsRedirection();
 
 app.UseAntiforgery();
-
 
 app.MapStaticAssets();
 

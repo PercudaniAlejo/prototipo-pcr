@@ -4,13 +4,13 @@
 
 <div class="bg-white rounded-lg shadow-md p-6">
     <div class="flex justify-between items-center mb-4">
-        <h1 class="text-xl font-bold text-gray-800">Administrar Contratos</h1>
+        <h1 class="text-xl font-bold text-gray-800">@L["Contracts_Title"]</h1>
         <button @onclick="CreateNewContract" 
                 class="px-4 py-2 rounded-md font-semibold text-sm flex items-center justify-center transition-colors bg-green-600 text-white hover:bg-green-700">
             <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
             </svg>
-            Nuevo Contrato
+            @L["Contracts_New"]
         </button>
     </div>
     
@@ -19,14 +19,14 @@
 		<Table Hoverable="true" Striped="true">
 			<TableHead>
 				<TableRow>
-					<CustomTableHeadCell>Código</CustomTableHeadCell>
-					<CustomTableHeadCell>Cliente</CustomTableHeadCell>
-					<CustomTableHeadCell>Nombre</CustomTableHeadCell>
-					<CustomTableHeadCell>Inicio</CustomTableHeadCell>
-					<CustomTableHeadCell>Finalización</CustomTableHeadCell>
-					<CustomTableHeadCell>MWh Mensual</CustomTableHeadCell>
-					<CustomTableHeadCell>Estado</CustomTableHeadCell>
-					<CustomTableHeadCell>Acciones</CustomTableHeadCell>
+					<CustomTableHeadCell>@L["Common_Code"]</CustomTableHeadCell>
+					<CustomTableHeadCell>@L["Contracts_Client"]</CustomTableHeadCell>
+					<CustomTableHeadCell>@L["Common_Name"]</CustomTableHeadCell>
+					<CustomTableHeadCell>@L["Contracts_StartDate"]</CustomTableHeadCell>
+					<CustomTableHeadCell>@L["Contracts_EndDate"]</CustomTableHeadCell>
+					<CustomTableHeadCell>@L["Contracts_MonthlyEnergy"]</CustomTableHeadCell>
+					<CustomTableHeadCell>@L["Common_Status"]</CustomTableHeadCell>
+					<CustomTableHeadCell>@L["Common_Actions"]</CustomTableHeadCell>
 				</TableRow>
 			</TableHead>
 			<TableBody class="divide-y">

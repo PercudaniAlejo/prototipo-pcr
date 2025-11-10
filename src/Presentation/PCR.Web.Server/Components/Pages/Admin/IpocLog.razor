@@ -1,16 +1,17 @@
 @page "/admin"
 @inject IMediator Mediator
 
+@* @L["Admin_Title"] *@
 <div class="bg-white rounded-lg shadow-md p-6">
     <div class="flex justify-between items-center mb-4">
-        <h1 class="text-xl font-bold text-gray-800">Registros Facturación</h1>
+		<h1 class="text-xl font-bold text-gray-800">@L["Admin_Title"]</h1>
         <div class="flex items-center gap-2">
             <button class="px-3 py-1 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50">
                 <div class="flex items-center gap-1">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
                     </svg>
-                    Buscar
+					@L["Common_Search"]
                 </div>
             </button>
             <button class="p-2 rounded-full hover:bg-gray-200">
@@ -19,7 +20,7 @@
                 </svg>
             </button>
             <button @onclick="ExportToExcel" class="px-4 py-2 rounded-md font-semibold text-sm flex items-center justify-center transition-colors bg-blue-600 text-white hover:bg-blue-700">
-                Exportar a Excel
+				@L["Common_ExportToExcel"]
             </button>
         </div>
     </div>
@@ -90,10 +91,7 @@
 
     <div class="mt-4 flex justify-end">
         <button @onclick="ReplicateData" class="px-4 py-2 rounded-md font-semibold text-sm flex items-center justify-center transition-colors bg-blue-600 text-white hover:bg-blue-700">
-            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004 12m7-7V2m7 2v3m-2-3h-2M4 16v-5h.582m15.356 2A8.001 8.001 0 714 12m7 7v3m7-3v-3m-2 3h-2"></path>
-            </svg>
-            Replicar
+			@L["Common_Replic"]
         </button>
     </div>
 </div>

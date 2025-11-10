@@ -3,10 +3,10 @@
 
 <div class="card bg-white rounded-lg shadow-md p-6">
     <div class="flex justify-between items-center mb-4">
-        <h1 class="text-xl font-bold text-gray-800">Administrar Clientes</h1>
+        <h1 class="text-xl font-bold text-gray-800">@L["Clients_Title"]</h1>
         <div class="flex items-center gap-2">
             <button class="btn-primary">
-                Exportar a Excel
+                @L["Common_ExportToExcel"]
             </button>
         </div>
     </div>
@@ -14,11 +14,11 @@
 	<Table Hoverable="true" Striped="true">
 	<TableHead>
 		<TableRow>
-			<CustomTableHeadCell>Nombre</CustomTableHeadCell>
-			<CustomTableHeadCell>Descripción</CustomTableHeadCell>
-			<CustomTableHeadCell>Habilitado</CustomTableHeadCell>
-			<CustomTableHeadCell>Vigencia</CustomTableHeadCell>
-			<CustomTableHeadCell>Acciones</CustomTableHeadCell>
+			<CustomTableHeadCell>@L["Common_Name"]</CustomTableHeadCell>
+			<CustomTableHeadCell>@L["Common_Description"]</CustomTableHeadCell>
+			<CustomTableHeadCell>@L["Common_Enabled"]</CustomTableHeadCell>
+			<CustomTableHeadCell>@L["Clients_Validity"]</CustomTableHeadCell>
+			<CustomTableHeadCell>@L["Common_Actions"]</CustomTableHeadCell>
 		</TableRow>
 		</TableHead>
 		<TableBody class="divide-y">
@@ -29,12 +29,12 @@
 					<TableCell>@client.Description</TableCell>
 					<TableCell>
 						<span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full @GetActiveClass(client.Enabled)">
-							@(client.Enabled ? "Si" : "No")
+							@(client.Enabled ? L["Common_Yes"] : L["Common_No"])
 						</span>
 					</TableCell>
 					<TableCell>
 						<span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full @GetActiveClass(client.Active)">
-							@(client.Active ? "Vigente" : "No vigente")
+							@(client.Active ? L["Common_Active"] : L["Common_Inactive"])
 						</span>
 					</TableCell>
 					<TableCell>

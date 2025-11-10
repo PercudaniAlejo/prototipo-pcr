@@ -25,6 +25,12 @@
   - Componentes UI basados en Tailwind CSS
   - Iconos extendidos: `Flowbite.ExtendedIcons` `0.0.5-alpha`
 
+#### Visualización de Datos
+- **Blazor-ApexCharts** `6.0.2`
+  - Biblioteca de gráficos interactivos para Blazor
+  - Soporte para gráficos de barras, líneas, donas, áreas, etc.
+  - Integración nativa con ApexCharts.js
+
 #### CSS Framework
 - **Tailwind CSS** `4.1.16`
   - Utility-first CSS framework
@@ -135,6 +141,7 @@
 
 ### PCR.Web.Server
 ```xml
+<PackageReference Include="Blazor-ApexCharts" Version="6.0.2" />
 <PackageReference Include="Flowbite" Version="0.0.12-alpha" />
 <PackageReference Include="Flowbite.ExtendedIcons" Version="0.0.5-alpha" />
 <PackageReference Include="MediatR" Version="13.1.0" />

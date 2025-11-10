@@ -3,19 +3,19 @@
 
 <div class="card bg-white rounded-lg shadow-md p-6">
     <div class="flex justify-between items-center mb-4">
-        <h1 class="text-xl font-bold text-gray-800">Administrar Tasas y Divisas</h1>
+        <h1 class="text-xl font-bold text-gray-800">@L["Rates_Title"]</h1>
         <button class="btn-primary">
-            Exportar a Excel
+            @L["Common_ExportToExcel"]
         </button>
     </div>
 
 	<Table Hoverable="true" Striped="true">
 		<TableHead>
 			<TableRow>
-				<CustomTableHeadCell>Nombre</CustomTableHeadCell>
-				<CustomTableHeadCell>Valor</CustomTableHeadCell>
-				<CustomTableHeadCell>Vigencia Hasta</CustomTableHeadCell>
-				<CustomTableHeadCell>Acciones</CustomTableHeadCell>
+				<CustomTableHeadCell>@L["Common_Name"]</CustomTableHeadCell>
+				<CustomTableHeadCell>@L["Common_Value"]</CustomTableHeadCell>
+				<CustomTableHeadCell>@L["Rates_ValidUntil"]</CustomTableHeadCell>
+				<CustomTableHeadCell>@L["Common_Actions"]</CustomTableHeadCell>
 			</TableRow>
 		</TableHead>
 		<TableBody class="divide-y">
