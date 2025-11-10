@@ -13,7 +13,7 @@ prototipo-pcr-blazor/
 │   │   ├── PCR.Infrastructure.Identity/
 │   │   └── PCR.Infrastructure.Shared/
 │   └── Presentation/                   # Capa de Presentación
-│       └── PCR.Web.Server/            # Blazor Server + MudBlazor
+│       └── PCR.Web.Server/             # Blazor Interactive Auto + Flowbite
 ├── tests/                              # Proyectos de Testing
 └── docs/                               # Documentación
 ```
@@ -21,7 +21,7 @@ prototipo-pcr-blazor/
 ## 🚀 Tecnologías
 
 - **.NET 10.0**
-- **Blazor Server** con Flowbite
+- **Blazor Interactive Auto** (Server + WebAssembly) con Flowbite
 - **Blazor-ApexCharts** para visualización de datos (gráficos)
 - **Tailwind CSS**
 - **Entity Framework Core** con SQL Server

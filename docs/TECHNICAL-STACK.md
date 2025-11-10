@@ -9,115 +9,109 @@
 
 ---
 
-## 🌐 Frontend
+## FRONTEND
 
 ### Framework Principal
-- **Blazor Server** (.NET 10.0)
-  - Server-Side Rendering (SSR)
+- **Blazor Interactive Auto** (.NET 10.0)
+  - Modo híbrido: Server + WebAssembly
+  - Server-Side Rendering (SSR) para carga inicial
   - SignalR para comunicación en tiempo real
-  - Soporte para Interactive Server Components
-  - Soporte para Interactive WebAssembly Components
+  - WebAssembly para interactividad del lado del cliente
 
-### UI Libraries y Frameworks
-
-#### Component Libraries
+### Componentes UI
 - **Flowbite** `0.0.12-alpha`
-  - Componentes UI basados en Tailwind CSS
-  - Iconos extendidos: `Flowbite.ExtendedIcons` `0.0.5-alpha`
+  - Biblioteca de componentes basados en Tailwind CSS
+  - Botones, modales, formularios, tablas, etc.
+  - `Flowbite.ExtendedIcons` `0.0.5-alpha` - Set extendido de iconos
 
-#### Visualización de Datos
+### Visualización de Datos
 - **Blazor-ApexCharts** `6.0.2`
-  - Biblioteca de gráficos interactivos para Blazor
-  - Soporte para gráficos de barras, líneas, donas, áreas, etc.
-  - Integración nativa con ApexCharts.js
+  - Gráficos interactivos: barras, líneas, donas, áreas
+  - Actualización dinámica de datos
+  - Responsive y personalizable
 
-#### CSS Framework
+### Estilos
 - **Tailwind CSS** `4.1.16`
   - Utility-first CSS framework
   - Configuración personalizada en `tailwind.config.js`
   - CLI: `@tailwindcss/cli` `4.1.16`
 
-#### CSS Processing
-- **PostCSS** `8.5.6`
-  - Procesamiento de CSS moderno
-- **Autoprefixer** `10.4.21`
-  - Prefijos CSS automáticos para compatibilidad cross-browser
+### Herramientas CSS
+- **PostCSS** `8.5.6` - Procesamiento de CSS moderno
+- **Autoprefixer** `10.4.21` - Compatibilidad cross-browser
 
----
-
-## 🎨 Arquitectura de Aplicación
-
-### Patrón Arquitectónico
-**Clean Architecture** (Arquitectura Hexagonal/Ports & Adapters)
-
-### Patrones de Diseño Implementados
-
-#### CQRS (Command Query Responsibility Segregation)
-- **MediatR** `13.1.0`
-  - Implementación del patrón Mediator
-  - Separación de comandos y consultas
-  - Pipeline behaviors para cross-cutting concerns
-
-#### Mapping
-- **AutoMapper** `15.1.0`
-  - Mapeo automático entre entidades y DTOs
-  - Profiles para configuración de mapeos
-
-#### Validación
-- **FluentValidation** `12.1.0`
-  - Validación fluida y expresiva
-  - `FluentValidation.DependencyInjectionExtensions` `12.1.0`
-  - Validación en pipeline de MediatR
-
----
-
-## 💾 Persistencia de Datos
-
-### ORM y Base de Datos
-- **Entity Framework Core** `9.0.10`
-  - ORM principal para acceso a datos
-  - Code-First approach
-  - Migrations automáticas
-
-### Provider de Base de Datos
-- **Microsoft SQL Server**
-  - `Microsoft.EntityFrameworkCore.SqlServer` `9.0.10`
-  - Soporte para operaciones avanzadas de SQL Server
-
-### Herramientas de EF Core
-- **EF Core Design** `9.0.10`
-  - Herramientas de design-time para migrations
-- **EF Core Tools** `9.0.10`
-  - CLI tools para scaffolding y migrations
-
----
-
-## 🔐 Autenticación y Autorización
-
-### Identity Framework
-- **ASP.NET Core Identity** `9.0.10`
-  - `Microsoft.AspNetCore.Identity.EntityFrameworkCore`
-  - Gestión de usuarios y roles
-  - Autenticación integrada
-  - Password hashing y gestión de tokens
-
-#### Scripts NPM
+### Scripts NPM
 - `css:build` - Build de producción de CSS
 - `css:watch` - Watch mode para desarrollo
 - `css:prod` - Build minificado para producción
 
 ---
 
+## ⚙️ BACKEND
+
+### Arquitectura
+- **Clean Architecture** (Arquitectura Hexagonal/Ports & Adapters)
+  - Separación por capas: Domain → Application → Infrastructure → Presentation
+  - Independencia de frameworks en el núcleo
+  - Inversión de dependencias
+
+### Patrones de Diseño
+
+#### CQRS (Command Query Responsibility Segregation)
+- **MediatR** `13.1.0`
+  - Patrón Mediator para desacoplamiento
+  - Separación de comandos (escritura) y consultas (lectura)
+  - Pipeline behaviors para validación, logging, etc.
+
+#### Mapping
+- **AutoMapper** `15.1.0`
+  - Mapeo automático entre entidades y DTOs
+  - Profiles para configuración declarativa
+
+#### Validación
+- **FluentValidation** `12.1.0`
+  - Validación fluida y expresiva de comandos/consultas
+  - `FluentValidation.DependencyInjectionExtensions` `12.1.0`
+  - Integración con MediatR pipeline
+
+### Persistencia de Datos
+- **Entity Framework Core** `9.0.10`
+  - ORM principal para acceso a datos
+  - Code-First approach
+  - Migrations automáticas
+  - Change Tracking y Unit of Work
+
+#### Provider de Base de Datos
+- **Microsoft SQL Server**
+  - `Microsoft.EntityFrameworkCore.SqlServer` `9.0.10`
+  - Soporte completo para tipos de datos de SQL Server
+
+#### Herramientas EF Core
+- `Microsoft.EntityFrameworkCore.Design` `9.0.10` - Design-time tools
+- `Microsoft.EntityFrameworkCore.Tools` `9.0.10` - CLI para migrations
+
+### Seguridad
+- **ASP.NET Core Identity** `9.0.10`
+  - `Microsoft.AspNetCore.Identity.EntityFrameworkCore`
+  - Gestión de usuarios, roles y claims
+  - Password hashing (PBKDF2)
+  - Tokens de autenticación
+
+---
+
 ## 📦 Dependencias por Proyecto
 
 ### PCR.Core.Domain
+
 **Sin dependencias externas** (Domain-Driven Design)
+
 - Entidades de dominio puras
 - Value Objects
 - Domain Events
 - Interfaces de repositorio
 
 ### PCR.Core.Application
+
 ```xml
 <PackageReference Include="AutoMapper" Version="15.1.0" />
 <PackageReference Include="FluentValidation" Version="12.1.0" />
@@ -126,6 +120,7 @@
 ```
 
 ### PCR.Infrastructure.Persistence
+
 ```xml
 <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.10" />
 <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.10" />
@@ -134,12 +129,14 @@
 ```
 
 ### PCR.Infrastructure.Identity
+
 ```xml
 <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="9.0.10" />
 <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.10" />
 ```
 
 ### PCR.Web.Server
+
 ```xml
 <PackageReference Include="Blazor-ApexCharts" Version="6.0.2" />
 <PackageReference Include="Flowbite" Version="0.0.12-alpha" />
@@ -153,6 +150,7 @@
 ## 📊 Características de la Solución
 
 ### Proyectos en la Solución
+
 1. **Core**
    - PCR.Core.Domain
    - PCR.Core.Application
