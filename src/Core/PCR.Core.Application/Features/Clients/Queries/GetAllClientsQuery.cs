@@ -1,5 +1,8 @@
 using MediatR;
 using PCR.Core.Application.Common.Models;
+using PCR.Core.Application.Features.Users.Queries;
+using PCR.Core.Application.Interfaces.Services;
+using PCR.Core.Domain.Entities;
 
 namespace PCR.Core.Application.Features.Clients.Queries;
 
@@ -15,17 +18,29 @@ public record ClientDto(
 
 public class GetAllClientsQueryHandler : IRequestHandler<GetAllClientsQuery, Result<List<ClientDto>>>
 {
+    private readonly IMockDataService _mockDataService;
+
+    public GetAllClientsQueryHandler(IMockDataService mockDataService)
+    {
+        _mockDataService = mockDataService;
+    }
+
     public async Task<Result<List<ClientDto>>> Handle(GetAllClientsQuery request, CancellationToken cancellationToken)
     {
-        // Mock data
-        var clients = new List<ClientDto>
+        try
         {
-            new(1, "Cliente 1", "Cliente 03", false, true),
-            new(2, "Cliente 2", "Cliente 01", false, true),
-            new(3, "Cliente 3", "Cliente 02", true, false),
-            new(4, "Cliente 4", "Cliente 04", true, true),
-        };
+            var clients = await _mockDataService.GetMockDataAsync<ClientDto>("clients.json");
 
-        return await Task.FromResult(Result<List<ClientDto>>.Success(clients));
+            if (clients.Count == 0)
+            {
+                return Result<List<ClientDto>>.Success(new List<ClientDto>());
+            }
+
+            return Result<List<ClientDto>>.Success(clients);
+        }
+        catch (Exception ex)
+        {
+            return Result<List<ClientDto>>.Failure($"Error al cargar clientes: {ex.Message}");
+        }
     }
 }

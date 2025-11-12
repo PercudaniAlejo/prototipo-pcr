@@ -174,7 +174,7 @@
   <data name="Common_Search" xml:space="preserve">
     <value>Buscar</value>
   </data>
-	<data name="Common_Replic" xml:space="preserve">
+  <data name="Common_Replic" xml:space="preserve">
     <value>Replicar</value>
   </data>
   <data name="Common_Filter" xml:space="preserve">
@@ -461,5 +461,14 @@
   </data>
   <data name="Admin_Title" xml:space="preserve">
     <value>Registros Facturación</value>
+  </data>
+  <data name="Common_Processed" xml:space="preserve">
+    <value>Procesado</value>
+  </data>
+  <data name="Common_Pending" xml:space="preserve">
+    <value>Pendiente</value>
+  </data>
+  <data name="Billing_EmptyMessage" xml:space="preserve">
+    <value>No hay registros de facturación</value>
   </data>
 </root>

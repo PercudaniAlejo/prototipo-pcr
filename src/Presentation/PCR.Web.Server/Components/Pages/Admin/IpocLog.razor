@@ -1,7 +1,7 @@
 @page "/admin"
 @inject IMediator Mediator
+@using PCR.Core.Application.Features.Admin.Queries
 
-@* @L["Admin_Title"] *@
 <div class="bg-white rounded-lg shadow-md p-6">
     <div class="flex justify-between items-center mb-4">
 		<h1 class="text-xl font-bold text-gray-800">@L["Admin_Title"]</h1>
@@ -46,7 +46,7 @@
                     <TableRow>
                         <TableCell colspan="9" class="text-center py-10">
                             <Spinner class="inline w-8 h-8 mr-2 text-gray-200 animate-spin fill-blue-600" />
-                            <span class="text-xl text-gray-500 align-middle">Cargando...</span>
+                            <span class="text-xl text-gray-500 align-middle">@L["Common_Loading"]</span>
                         </TableCell>
                     </TableRow>
                 }
@@ -72,11 +72,11 @@
                             <TableCell>@data.EtotalRen</TableCell>
                             <TableCell>
                                 <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full @GetStatusClass(data.Status)">
-                                    @(data.Status ? "Procesado" : "Pendiente")
+									@(data.Status? @L["Common_Processed"] : @L["Common_Pending"])
                                 </span>
                             </TableCell>
                             <TableCell>
-                                <a class="text-blue-600 hover:text-blue-800">
+                                <a class="text-blue-600 hover:text-blue-800 cursor-pointer">
                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
                                     </svg>
@@ -98,61 +98,20 @@
 
 @code {
     private bool isLoading = true;
-    private List<IpocDataDto> mockIpocData = new List<IpocDataDto>();
+	private List<IpocLogDto> mockIpocData = new List<IpocLogDto>();
 
     protected override async Task OnInitializedAsync()
     {
         isLoading = true;
-        await Task.Delay(1000);
         
-        mockIpocData = new List<IpocDataDto>
-        {
-            new IpocDataDto
-            {
-                Timestamp = "2024-11-25 10:30",
-                Periodo = "202411",
-                AgeId = "1",
-                NemoCliente = "PESLUIS",
-                NemoGenerador = "PESLUIS",
-                EtotalPlus = "125000",
-                EtotalRen = "75000",
-                Status = true
-            },
-            new IpocDataDto
-            {
-                Timestamp = "2024-11-25 10:35",
-                Periodo = "202411",
-                AgeId = "2",
-                NemoCliente = "IRENEC",
-                NemoGenerador = "IRENEC",
-                EtotalPlus = "15000",
-                EtotalRen = "10000",
-                Status = true
-            },
-            new IpocDataDto
-            {
-                Timestamp = "2024-11-25 10:40",
-                Periodo = "202411",
-                AgeId = "3",
-                NemoCliente = "SANLUISNORT",
-                NemoGenerador = "PESLUIS",
-                EtotalPlus = "50000",
-                EtotalRen = "0",
-                Status = false
-            },
-            new IpocDataDto
-            {
-                Timestamp = "2024-12-01 09:00",
-                Periodo = "202412",
-                AgeId = "1",
-                NemoCliente = "PESLUIS",
-                NemoGenerador = "PESLUIS",
-                EtotalPlus = "0",
-                EtotalRen = "0",
-                Status = true
-            }
-        };
+        var query = new GetIpocLogsQuery();
+        var result = await Mediator.Send(query);
 
+        if (result.Succeeded)
+        {
+			mockIpocData = result.Data!;
+        }
+        
         isLoading = false;
     }
 
@@ -169,17 +128,5 @@
     private void ReplicateData()
     {
         Console.WriteLine("Replicando datos...");
-    }
-
-    public class IpocDataDto
-    {
-        public string Timestamp { get; set; } = string.Empty;
-        public string Periodo { get; set; } = string.Empty;
-        public string AgeId { get; set; } = string.Empty;
-        public string NemoCliente { get; set; } = string.Empty;
-        public string NemoGenerador { get; set; } = string.Empty;
-        public string EtotalPlus { get; set; } = string.Empty;
-        public string EtotalRen { get; set; } = string.Empty;
-        public bool Status { get; set; } = false;
     }
 }

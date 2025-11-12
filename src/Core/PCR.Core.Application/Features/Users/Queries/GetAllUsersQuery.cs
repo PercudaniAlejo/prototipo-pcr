@@ -1,5 +1,6 @@
 using MediatR;
 using PCR.Core.Application.Common.Models;
+using PCR.Core.Application.Interfaces.Services;
 
 namespace PCR.Core.Application.Features.Users.Queries;
 
@@ -17,16 +18,29 @@ public record UserDto(
 
 public class GetAllUsersQueryHandler : IRequestHandler<GetAllUsersQuery, Result<List<UserDto>>>
 {
+    private readonly IMockDataService _mockDataService;
+
+    public GetAllUsersQueryHandler(IMockDataService mockDataService)
+    {
+        _mockDataService = mockDataService;
+    }
+
     public async Task<Result<List<UserDto>>> Handle(GetAllUsersQuery request, CancellationToken cancellationToken)
     {
-        // Mock data
-        var users = new List<UserDto>
+        try
         {
-            new(1, "pablo", "Pablo", "Santoro", "psantoro@pcr.energy", "-", true),
-            new(2, "favio", "Favio", "Felice", "ffelice@pcr.energy", "-", true),
-            new(3, "ignacio", "Ignacio", "Lopez", "jilopez@pcr.energy", "-", false),
-        };
+            var users = await _mockDataService.GetMockDataAsync<UserDto>("users.json");
 
-        return await Task.FromResult(Result<List<UserDto>>.Success(users));
+            if (users.Count == 0)
+            {
+                return Result<List<UserDto>>.Success(new List<UserDto>());
+            }
+
+            return Result<List<UserDto>>.Success(users);
+        }
+        catch (Exception ex)
+        {
+            return Result<List<UserDto>>.Failure($"Error al cargar usuarios: {ex.Message}");
+        }
     }
 }

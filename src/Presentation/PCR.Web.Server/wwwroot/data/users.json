@@ -1,0 +1,46 @@
+[
+  {
+    "id": 1,
+    "username": "jperez",
+    "name": "Juan",
+    "surname": "Perez",
+    "email": "juan.perez@pcr.com",
+    "phone": "+54 11 4567-8901",
+    "enabled": true,
+    "role": "Administrador",
+    "createdAt": "2024-01-15T10:00:00"
+  },
+  {
+    "id": 2,
+    "username": "mgarcia",
+    "name": "Maria",
+    "surname": "Garcia",
+    "email": "maria.garcia@pcr.com",
+    "phone": "+54 11 4567-8902",
+    "enabled": true,
+    "role": "Analista",
+    "createdAt": "2024-02-20T14:30:00"
+  },
+  {
+    "id": 3,
+    "username": "rlopez",
+    "name": "Roberto",
+    "surname": "Lopez",
+    "email": "roberto.lopez@pcr.com",
+    "phone": "+54 11 4567-8903",
+    "enabled": true,
+    "role": "Operador",
+    "createdAt": "2024-03-10T09:15:00"
+  },
+  {
+    "id": 4,
+    "username": "amartinez",
+    "name": "Ana",
+    "surname": "Martinez",
+    "email": "ana.martinez@pcr.com",
+    "phone": "+54 11 4567-8904",
+    "enabled": false,
+    "role": "Analista",
+    "createdAt": "2024-04-05T11:45:00"
+  }
+]

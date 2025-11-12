@@ -1,0 +1,54 @@
+[
+  {
+    "id": 1,
+    "contractCode": "CON001",
+    "period": "2024-12",
+    "nemoCliente": "SANLUISNORT",
+    "description": "Energía Activa",
+    "nemoGenerador": "PESLUIS",
+    "quantity": "5000.00",
+    "unitPrice": "52.40",
+    "amount": "262000.00",
+    "currency": "USD",
+    "concept": "Suministro Base"
+  },
+  {
+    "id": 2,
+    "contractCode": "CON001",
+    "period": "2024-12",
+    "nemoCliente": "SANLUISNORT",
+    "description": "Dev. Anticipo",
+    "nemoGenerador": "PESLUIS",
+    "quantity": "1.00",
+    "unitPrice": "-500.00",
+    "amount": "-500.00",
+    "currency": "USD",
+    "concept": "Ajuste Anticipo"
+  },
+  {
+    "id": 3,
+    "contractCode": "CON002",
+    "period": "2024-12",
+    "nemoCliente": "IRENEC",
+    "description": "FNNE",
+    "nemoGenerador": "IRENEC",
+    "quantity": "1500.00",
+    "unitPrice": "60.00",
+    "amount": "90000.00",
+    "currency": "USD",
+    "concept": "Energía Renovable"
+  },
+  {
+    "id": 4,
+    "contractCode": "CON002",
+    "period": "2024-12",
+    "nemoCliente": "PESANLUING",
+    "description": "Sobrecostos MEM",
+    "nemoGenerador": null,
+    "quantity": "1.00",
+    "unitPrice": "10000.00",
+    "amount": "10000.00",
+    "currency": "ARS",
+    "concept": "Ajustes MEM"
+  }
+]

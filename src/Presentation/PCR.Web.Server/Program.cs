@@ -1,12 +1,17 @@
 using ApexCharts;
 using Flowbite.Services;
 using PCR.Core.Application.Features.Auth.Commands;
+using PCR.Core.Application.Interfaces.Services;
+using PCR.Infrastructure.Shared.Services;
 using PCR.Web.Server.Components;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Configurar localizacion - Los archivos .resx estan en la raiz del proyecto
 builder.Services.AddLocalization();
+
+// Add MockDataService para consumir archivos JSON (Prototipo)
+builder.Services.AddScoped<IMockDataService, MockDataService>();
 
 // Add MediatR - Escanear el assembly de Application
 builder.Services.AddMediatR(cfg =>

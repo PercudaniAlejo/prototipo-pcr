@@ -1,49 +1,55 @@
 ﻿using MediatR;
 using PCR.Core.Application.Common.Models;
+using PCR.Core.Application.Interfaces.Services;
 
 namespace PCR.Core.Application.Features.Billing.Queries;
 
-public record GetBillingReportQuery(string ContractId, string Period) : IRequest<Result<BillingReportDto>>;
-
-public record BillingReportDto(
-    string ContractCode,
-    string ClientName,
-    string Period,
-    List<BillingItemDto> Items,
-    decimal TotalMwh,
-    decimal TotalAmount
-);
+public record GetBillingItemsQuery(string? ContractCode = null, string? Period = null) : IRequest<Result<List<BillingItemDto>>>;
 
 public record BillingItemDto(
+    int Id,
+    string ContractCode,
+    string Period,
+    string NemoCliente,
     string Description,
-    decimal Mwh,
-    decimal UnitPrice,
-    decimal Amount
+    string? NemoGenerador,
+    string Quantity,
+    string UnitPrice,
+    string Amount,
+    string Currency,
+    string Concept
 );
 
-public class GetBillingReportQueryHandler : IRequestHandler<GetBillingReportQuery, Result<BillingReportDto>>
+public class GetBillingReportQueryHandler : IRequestHandler<GetBillingItemsQuery, Result<List<BillingItemDto>>>
 {
-    public async Task<Result<BillingReportDto>> Handle(GetBillingReportQuery request, CancellationToken cancellationToken)
+    private readonly IMockDataService _mockDataService;
+
+    public GetBillingReportQueryHandler(IMockDataService mockDataService)
     {
-        await Task.Delay(1, cancellationToken);
+        _mockDataService = mockDataService;
+    }
 
-        var items = new List<BillingItemDto>
+    public async Task<Result<List<BillingItemDto>>> Handle(GetBillingItemsQuery request, CancellationToken cancellationToken)
+    {
+        try
         {
-            new("Energía Base", 5000m, 150.50m, 752500m),
-            new("Energía Pico", 2500m, 180.75m, 451875m),
-            new("Energía Valle", 1800m, 120.00m, 216000m),
-            new("Ajustes CAMMESA", 0m, 0m, -15000m)
-        };
+            var items = await _mockDataService.GetMockDataAsync<BillingItemDto>("billing-items.json");
 
-        var report = new BillingReportDto(
-            request.ContractId,
-            "Cliente Demo S.A.",
-            request.Period,
-            items,
-            9300m,
-            1405375m
-        );
+            if (!string.IsNullOrWhiteSpace(request.ContractCode))
+            {
+                items = items.Where(i => i.ContractCode == request.ContractCode).ToList();
+            }
 
-        return Result<BillingReportDto>.Success(report);
+            if (!string.IsNullOrWhiteSpace(request.Period))
+            {
+                items = items.Where(i => i.Period == request.Period).ToList();
+            }
+
+            return Result<List<BillingItemDto>>.Success(items);
+        }
+        catch (Exception ex)
+        {
+            return Result<List<BillingItemDto>>.Failure($"Error al cargar items de facturación: {ex.Message}");
+        }
     }
 }

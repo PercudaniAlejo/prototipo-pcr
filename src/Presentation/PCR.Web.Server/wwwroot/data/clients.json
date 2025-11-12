@@ -1,0 +1,62 @@
+[
+  {
+    "id": 1,
+    "name": "Cliente 1",
+    "description": "Descripcion Cliente 1",
+    "taxId": "",
+    "address": "",
+    "phone": "+54 266 444-5555",
+    "email": "contacto@cliente1.com",
+    "enabled": false,
+    "active": true,
+    "createdAt": "2022-01-15T00:00:00"
+  },
+  {
+    "id": 2,
+    "name": "Cliente 2",
+    "description": "Descripcion Cliente 2",
+    "taxId": "",
+    "address": "",
+    "phone": "+54 266 444-5555",
+    "email": "contacto@cliente2.com",
+    "enabled": false,
+    "active": true,
+    "createdAt": "2022-01-15T00:00:00"
+  },
+  {
+    "id": 3,
+    "name": "Cliente 3",
+    "description": "Descripcion Cliente 3",
+    "taxId": "",
+    "address": "",
+    "phone": "+54 266 444-5555",
+    "email": "contacto@cliente3.com",
+    "enabled": true,
+    "active": false,
+    "createdAt": "2022-01-15T00:00:00"
+  },
+  {
+    "id": 4,
+    "name": "Cliente 4",
+    "description": "Descripcion Cliente 4",
+    "taxId": "",
+    "address": "",
+    "phone": "+54 266 444-5555",
+    "email": "contacto@cliente4.com",
+    "enabled": true,
+    "active": true,
+    "createdAt": "2022-01-15T00:00:00"
+  },
+  {
+    "id": 5,
+    "name": "Cliente 5",
+    "description": "Descripcion Cliente 5",
+    "taxId": "",
+    "address": "",
+    "phone": "+54 266 444-5555",
+    "email": "contacto@cliente5.com",
+    "enabled": false,
+    "active": false,
+    "createdAt": "2022-01-15T00:00:00"
+  }
+]
