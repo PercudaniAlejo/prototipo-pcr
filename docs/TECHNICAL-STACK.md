@@ -75,7 +75,7 @@
   - Integración con MediatR pipeline
 
 ### Persistencia de Datos
-- **Entity Framework Core** `9.0.10`
+- **Entity Framework Core** `10.0.0`
   - ORM principal para acceso a datos
   - Code-First approach
   - Migrations automáticas
@@ -83,19 +83,34 @@
 
 #### Provider de Base de Datos
 - **Microsoft SQL Server**
-  - `Microsoft.EntityFrameworkCore.SqlServer` `9.0.10`
+  - `Microsoft.EntityFrameworkCore.SqlServer` `10.0.0`
   - Soporte completo para tipos de datos de SQL Server
 
 #### Herramientas EF Core
-- `Microsoft.EntityFrameworkCore.Design` `9.0.10` - Design-time tools
-- `Microsoft.EntityFrameworkCore.Tools` `9.0.10` - CLI para migrations
+- `Microsoft.EntityFrameworkCore.Design` `10.0.0` - Design-time tools
+- `Microsoft.EntityFrameworkCore.Tools` `10.0.0` - CLI para migrations
 
 ### Seguridad
-- **ASP.NET Core Identity** `9.0.10`
+- **ASP.NET Core Identity** `10.0.0`
   - `Microsoft.AspNetCore.Identity.EntityFrameworkCore`
   - Gestión de usuarios, roles y claims
   - Password hashing (PBKDF2)
   - Tokens de autenticación
+
+---
+
+## 🧪 Testing
+
+### Frameworks de Testing
+- **xUnit** `2.9.3` - Framework de testing principal
+- **Microsoft.NET.Test.Sdk** `18.0.1` - SDK de testing para .NET
+- **bUnit** `2.0.66` - Testing de componentes Blazor
+- **Moq** `4.20.72` - Librería de mocking
+- **FluentAssertions** `8.8.0` - Assertions fluidas y expresivas
+- **coverlet.collector** `6.0.4` - Code coverage
+
+### Base de Datos para Testing
+- **Microsoft.EntityFrameworkCore.InMemory** `10.0.0` - In-memory database para tests de integración
 
 ---
 
@@ -122,17 +137,17 @@
 ### PCR.Infrastructure.Persistence
 
 ```xml
-<PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.10" />
-<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.10" />
-<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="9.0.10" />
-<PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="9.0.10" />
+<PackageReference Include="Microsoft.EntityFrameworkCore" Version="10.0.0" />
+<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="10.0.0" />
+<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="10.0.0" />
+<PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="10.0.0" />
 ```
 
 ### PCR.Infrastructure.Identity
 
 ```xml
-<PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="9.0.10" />
-<PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.10" />
+<PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="10.0.0" />
+<PackageReference Include="Microsoft.EntityFrameworkCore" Version="10.0.0" />
 ```
 
 ### PCR.Web.Server
@@ -142,7 +157,55 @@
 <PackageReference Include="Flowbite" Version="0.0.12-alpha" />
 <PackageReference Include="Flowbite.ExtendedIcons" Version="0.0.5-alpha" />
 <PackageReference Include="MediatR" Version="13.1.0" />
-<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="10.0.0-rc.2.25502.107" />
+<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="10.0" />
+<PackageReference Include="Microsoft.Extensions.Localization" Version="10.0.0" />
+```
+
+### PCR.Infrastructure.Shared
+
+```xml
+<PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="10.0.0" />
+```
+
+### PCR.Core.Application.UnitTests
+
+```xml
+<PackageReference Include="coverlet.collector" Version="6.0.4" />
+<PackageReference Include="FluentAssertions" Version="8.8.0" />
+<PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.0.1" />
+<PackageReference Include="Moq" Version="4.20.72" />
+<PackageReference Include="xunit" Version="2.9.3" />
+<PackageReference Include="xunit.runner.visualstudio" Version="3.1.5" />
+```
+
+### PCR.Core.Domain.UnitTests
+
+```xml
+<PackageReference Include="coverlet.collector" Version="6.0.4" />
+<PackageReference Include="FluentAssertions" Version="8.8.0" />
+<PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.0.1" />
+<PackageReference Include="xunit" Version="2.9.3" />
+<PackageReference Include="xunit.runner.visualstudio" Version="3.1.5" />
+```
+
+### PCR.Infrastructure.IntegrationTests
+
+```xml
+<PackageReference Include="coverlet.collector" Version="6.0.4" />
+<PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="10.0.0" />
+<PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.0.1" />
+<PackageReference Include="xunit" Version="2.9.3" />
+<PackageReference Include="xunit.runner.visualstudio" Version="3.1.5" />
+```
+
+### PCR.Web.Tests
+
+```xml
+<PackageReference Include="bunit" Version="2.0.66" />
+<PackageReference Include="coverlet.collector" Version="6.0.4" />
+<PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.0.1" />
+<PackageReference Include="xunit" Version="2.9.3" />
+<PackageReference Include="xunit.runner.visualstudio" Version="3.1.5" />
 ```
 
 ---
