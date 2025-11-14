@@ -20,6 +20,7 @@ prototipo-pcr-blazor/
 │           │   ├── js/                 # Scripts JavaScript personalizados
 │           │   ├── css/                # Archivos CSS compilados
 │           │   └── lib/                # Librerías JavaScript de terceros
+│           │   └── data/               # Archivos .json estáticos para mocking
 │           ├── Services/
 │           ├── Utilities/
 │           └── ...

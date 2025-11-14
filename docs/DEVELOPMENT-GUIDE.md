@@ -169,6 +169,7 @@ prototipo-pcr-blazor/
 │           │   ├── js/                 # Scripts JavaScript personalizados
 │           │   ├── css/                # CSS compilado (Tailwind)
 │           │   ├── lib/                # Librerías JS de terceros
+│           │   ├── data/               # Archivos .json estáticos para mocking
 │           │   ├── favicon.png
 │           │   └── app.css
 │           ├── Services/               # Servicios del lado del cliente
